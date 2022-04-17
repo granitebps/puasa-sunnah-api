@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/routes"
 
 	"github.com/gofiber/fiber/v2"
@@ -34,7 +36,10 @@ func main() {
 	routes.FastingsRoutes(api)
 
 	app.Use(func(c *fiber.Ctx) error {
-		return c.SendStatus(404)
+		return c.Status(http.StatusNotFound).JSON(helpers.FailedAPIResponse(
+			"Endpoint not found",
+			http.StatusNotFound,
+		))
 	})
 
 	// Listen from a different goroutine
