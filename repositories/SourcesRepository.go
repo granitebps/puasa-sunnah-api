@@ -7,7 +7,7 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/types"
 )
 
-func parseJSONArray(jsonData []byte, data []types.Source) ([]types.Source, error) {
+func parseJSONSourceArray(jsonData []byte, data []types.Source) ([]types.Source, error) {
 	if err := json.Unmarshal(jsonData, &data); err != nil {
 		return data, err
 	}
@@ -24,7 +24,7 @@ func SourcesReadFile() ([]types.Source, error) {
 		return data, err
 	}
 
-	result, err := parseJSONArray(jsonData, data)
+	result, err := parseJSONSourceArray(jsonData, data)
 	if err != nil {
 		return data, err
 	}
