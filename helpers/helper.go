@@ -6,12 +6,14 @@ import (
 )
 
 type SuccessResponse struct {
+	Success bool        `json:"success"`
 	Message string      `json:"message"`
 	Code    int         `json:"code"`
 	Data    interface{} `json:"data"`
 }
 
 type FailedResponse struct {
+	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Code    int    `json:"code"`
 }
@@ -22,6 +24,7 @@ func SuccessAPIResponse(
 	data interface{},
 ) SuccessResponse {
 	responseData := SuccessResponse{
+		Success: true,
 		Data:    data,
 		Message: message,
 		Code:    code,
@@ -35,6 +38,7 @@ func FailedAPIResponse(
 	code int,
 ) FailedResponse {
 	responseData := FailedResponse{
+		Success: false,
 		Message: message,
 		Code:    code,
 	}
