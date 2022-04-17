@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/granitebps/puasa-sunnah-api/routes"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -18,7 +20,11 @@ func main() {
 		return c.SendString("Puasa Sunnah API")
 	})
 
-	app.Get("*", func(c *fiber.Ctx) error {
+	api := app.Group("api/v1")
+
+	routes.SourcesRoutes(api)
+
+	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
 	})
 
