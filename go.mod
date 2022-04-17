@@ -1,4 +1,4 @@
-module puasa-sunnah-api
+module github.com/granitebps/puasa-sunnah-api
 
 go 1.17
 
