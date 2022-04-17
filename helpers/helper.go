@@ -1,5 +1,10 @@
 package helpers
 
+import (
+	"io/ioutil"
+	"os"
+)
+
 type SuccessResponse struct {
 	Message string      `json:"message"`
 	Code    int         `json:"code"`
@@ -35,4 +40,21 @@ func FailedAPIResponse(
 	}
 
 	return responseData
+}
+
+func ReadJsonFile(filename string) ([]byte, error) {
+	var emptyData []byte
+
+	jsonFile, err := os.Open(filename)
+	if err != nil {
+		return emptyData, err
+	}
+	defer jsonFile.Close()
+
+	jsonData, err := ioutil.ReadAll(jsonFile)
+	if err != nil {
+		return emptyData, err
+	}
+
+	return jsonData, nil
 }
