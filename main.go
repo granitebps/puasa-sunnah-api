@@ -31,6 +31,7 @@ func main() {
 	routes.SourcesRoutes(api)
 	routes.CategoriesRoutes(api)
 	routes.TypesRoutes(api)
+	routes.FastingsRoutes(api)
 
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
