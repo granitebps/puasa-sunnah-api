@@ -29,6 +29,7 @@ func main() {
 	api := app.Group("api/v1")
 
 	routes.SourcesRoutes(api)
+	routes.CategoriesRoutes(api)
 
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
