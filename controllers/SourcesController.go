@@ -12,7 +12,7 @@ func SourcesIndex(c *fiber.Ctx) error {
 	data, err := services.SourcesGetAll()
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(helpers.FailedAPIResponse(
-			"Failed",
+			err.Error(),
 			http.StatusBadRequest,
 		))
 	}
