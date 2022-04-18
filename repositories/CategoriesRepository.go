@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"encoding/json"
+	"os"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/types"
@@ -18,7 +19,8 @@ func parseJSONCategoryArray(jsonData []byte, data []types.Category) ([]types.Cat
 func CategoriesReadFile() ([]types.Category, error) {
 	data := []types.Category{}
 
-	filename := "data/categories.json"
+	dir, _ := os.Getwd()
+	filename := dir + "/data/categories.json"
 	jsonData, err := helpers.ReadJsonFile(filename)
 	if err != nil {
 		return data, err
