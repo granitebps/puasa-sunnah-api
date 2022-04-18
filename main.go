@@ -10,6 +10,7 @@ import (
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/routes"
+	"github.com/joho/godotenv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
@@ -17,8 +18,16 @@ import (
 )
 
 func main() {
+	// Load ENV
+	err := godotenv.Load()
+	if err != nil {
+		log.Panic("Error loading .env file")
+	}
+	PORT := os.Getenv("PORT")
+
 	app := fiber.New()
 
+	// Middleware
 	app.Use(logger.New())
 	app.Use(limiter.New(limiter.Config{
 		Max: 60,
@@ -35,6 +44,7 @@ func main() {
 	routes.TypesRoutes(api)
 	routes.FastingsRoutes(api)
 
+	// Endpoint not found handler
 	app.Use(func(c *fiber.Ctx) error {
 		return c.Status(http.StatusNotFound).JSON(helpers.FailedAPIResponse(
 			"Endpoint not found",
@@ -44,7 +54,7 @@ func main() {
 
 	// Listen from a different goroutine
 	go func() {
-		if err := app.Listen(":3000"); err != nil {
+		if err := app.Listen(PORT); err != nil {
 			log.Panic(err)
 		}
 	}()

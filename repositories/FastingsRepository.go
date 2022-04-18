@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"encoding/json"
-	"path/filepath"
+	"os"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/types"
@@ -19,10 +19,7 @@ func parseJSONFastingArray(jsonData []byte, data []types.Fasting) ([]types.Fasti
 func FastingsReadFile() ([]types.Fasting, error) {
 	data := []types.Fasting{}
 
-	filename, err := filepath.Abs("./data/sunnah-fastings.json")
-	if err != nil {
-		return data, err
-	}
+	filename := os.Getenv("FASTING_FILEPATH")
 	jsonData, err := helpers.ReadJsonFile(filename)
 	if err != nil {
 		return data, err
