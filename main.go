@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/granitebps/puasa-sunnah-api/docs"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/routes"
 	"github.com/joho/godotenv"
@@ -18,7 +19,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 
 	"github.com/gofiber/swagger"
-	_ "github.com/granitebps/puasa-sunnah-api/docs"
 )
 
 // @title Puasa Sunnah API
@@ -26,7 +26,6 @@ import (
 // @contact.name Granite Bagas
 // @contact.email granitebagas28@gmail.com
 // @license.name MIT
-// @host localhost:3000
 // @BasePath /
 func main() {
 	// Load ENV
@@ -60,6 +59,8 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Puasa Sunnah API")
 	})
+
+	docs.SwaggerInfo.Host = os.Getenv("SWAGGER_HOST")
 
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
