@@ -5,4 +5,7 @@ build:
 	go build main.go
 
 doc:
-	./swag init
+	./bin/swag init
+
+air:
+	./bin/air
