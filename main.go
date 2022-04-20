@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/routes"
@@ -28,7 +29,20 @@ func main() {
 	app := fiber.New()
 
 	// Middleware
-	app.Use(logger.New())
+	// Define file to logs
+	now := time.Now().Format("2006-02-01")
+	logFileName := "./logs/" + now + ".log"
+	file, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer file.Close()
+
+	// Set config for logger
+	loggerConfig := logger.Config{
+		Output: file, // add file to save output
+	}
+	app.Use(logger.New(loggerConfig))
 	app.Use(limiter.New(limiter.Config{
 		Max: 60,
 	}))
