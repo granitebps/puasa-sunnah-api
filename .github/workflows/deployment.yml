@@ -1,0 +1,25 @@
+name: deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Production to Digital Ocean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/puasa-sunnah-api
+            git fetch origin main
+            git reset --hard origin/main
+            make doc
+            make build
+            sudo service psn restart

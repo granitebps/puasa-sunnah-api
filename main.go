@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/routes"
@@ -15,8 +16,18 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+
+	"github.com/gofiber/swagger"
+	_ "github.com/granitebps/puasa-sunnah-api/docs"
 )
 
+// @title Puasa Sunnah API
+// @description This is a Puasa Sunnah API Docs
+// @contact.name Granite Bagas
+// @contact.email granitebagas28@gmail.com
+// @license.name MIT
+// @host localhost:3000
+// @BasePath /
 func main() {
 	// Load ENV
 	err := godotenv.Load()
@@ -28,7 +39,20 @@ func main() {
 	app := fiber.New()
 
 	// Middleware
-	app.Use(logger.New())
+	// Define file to logs
+	now := time.Now().Format("2006-02-01")
+	logFileName := "./logs/" + now + ".log"
+	file, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer file.Close()
+
+	// Set config for logger
+	loggerConfig := logger.Config{
+		Output: file, // add file to save output
+	}
+	app.Use(logger.New(loggerConfig))
 	app.Use(limiter.New(limiter.Config{
 		Max: 60,
 	}))
@@ -36,6 +60,8 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Puasa Sunnah API")
 	})
+
+	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
 	api := app.Group("api/v1")
 

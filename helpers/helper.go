@@ -6,16 +6,16 @@ import (
 )
 
 type SuccessResponse struct {
-	Success bool        `json:"success"`
-	Message string      `json:"message"`
-	Code    int         `json:"code"`
+	Success bool        `json:"success" example:"true"`
+	Message string      `json:"message" example:"Success"`
+	Code    int         `json:"code" example:"200"`
 	Data    interface{} `json:"data"`
 }
 
 type FailedResponse struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-	Code    int    `json:"code"`
+	Success bool   `json:"success" example:"false"`
+	Message string `json:"message" example:"Failed"`
+	Code    int    `json:"code" example:"400"`
 }
 
 func SuccessAPIResponse(
