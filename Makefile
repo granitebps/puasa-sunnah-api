@@ -5,7 +5,10 @@ build:
 	go build main.go
 
 doc:
-	./bin/swag init
+	./bin/swag-mac init
+
+doc-deploy:
+	./bin/swag-linux init
 
 air:
 	./bin/air

@@ -8,7 +8,7 @@ git fetch origin main
 git reset --hard origin/main
 
 # Generate docs
-make doc
+make doc-deploy
 
 # Build the application
 make build
