@@ -8,10 +8,10 @@ git fetch origin main
 git reset --hard origin/main
 
 # Generate docs
-make doc-deploy
+./bin/swag-linux init
 
 # Build the application
-make build
+go build main.go
 
 # Restart the service
 sudo service psn restart
