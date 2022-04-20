@@ -22,7 +22,6 @@ import (
 )
 
 // @title Puasa Sunnah API
-// @version 1.0
 // @description This is a Puasa Sunnah API Docs
 // @contact.name Granite Bagas
 // @contact.email granitebagas28@gmail.com

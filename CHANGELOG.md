@@ -8,6 +8,8 @@ You can find and compare releases at the GitHub release page.
 
 ## [Unreleased]
 
+## [0.0.2] - 2022-04-20
+
 ### Added
 - Add Makefile file
 - Add README file
@@ -30,4 +32,5 @@ You can find and compare releases at the GitHub release page.
 - Prepare for deployment
 
 [Unreleased]: https://github.com/granitebps/puasa-sunnah-api/compare/main...dev
+[0.0.2]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/granitebps/puasa-sunnah-api/releases/tag/v0.0.1

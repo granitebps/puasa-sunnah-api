@@ -15,7 +15,7 @@
 - [Fiber](https://gofiber.io)
 
 ## Build Note
-- Version 0.0.1
+- Version 0.0.2
 - Go 1.17.3
 - Fiber 2.23.0
 
@@ -23,5 +23,5 @@
 - Clone the repo
 - Copy `.env.example` to `.env`
 - Generate API Docs using swagger with `make doc`
-- Run the application with `make start`
+- Run the application with `make start` or with `make air` to use hot reload
 - Build the application with `make build`
