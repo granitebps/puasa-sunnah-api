@@ -1,4 +1,4 @@
-# Puasa Sunnah API
+# Puasa Sunnah / Sunnah Fasting API
 
 <div align="center">
 
