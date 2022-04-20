@@ -3,3 +3,6 @@ start:
 
 build:
 	go build main.go
+
+doc:
+	./swag init

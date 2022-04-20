@@ -1,11 +1,11 @@
 package types
 
 type Fasting struct {
-	ID         uint   `json:"id"`
-	CategoryID uint   `json:"category_id"`
-	TypeID     uint   `json:"type_id"`
-	Date       string `json:"date"`
-	Year       uint   `json:"year"`
-	Month      uint   `json:"month"`
-	Day        uint   `json:"day"`
+	ID         uint   `json:"id" example:"1"`
+	CategoryID uint   `json:"category_id" example:"1"`
+	TypeID     uint   `json:"type_id" example:"1"`
+	Date       string `json:"date" example:"2020-01-01"`
+	Year       uint   `json:"year" example:"2020"`
+	Month      uint   `json:"month" example:"1"`
+	Day        uint   `json:"day" example:"1"`
 }
