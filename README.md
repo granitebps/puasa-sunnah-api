@@ -9,6 +9,7 @@
 
 ## Link
 - [API](https://api.puasa-sunnah.granitebps.com)
+- [API Docs](https://api.puasa-sunnah.granitebps.com/swagger)
 
 ## Framework
 - [Fiber](https://gofiber.io)
@@ -21,5 +22,6 @@
 ## How to
 - Clone the repo
 - Copy `.env.example` to `.env`
+- Generate API Docs using swagger with `make doc`
 - Run the application with `make start`
 - Build the application with `make build`
