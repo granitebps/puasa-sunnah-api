@@ -1,0 +1,19 @@
+version: 2
+
+jobs:
+  deploy:
+    docker:
+      - image: arvindr226/alpine-ssh
+    steps:
+      - checkout
+      - run: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./deploy-puasa-sunnah.sh"
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - deploy:
+        filters:
+          branches:
+            only:
+              - main
