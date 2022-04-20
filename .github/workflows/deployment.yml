@@ -16,10 +16,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /var/www/puasa-sunnah-api
-            git fetch origin main
-            git reset --hard origin/main
-            make doc
-            make build
-            sudo service psn restart
+          script: ./deploy-puasa-sunnah.sh
