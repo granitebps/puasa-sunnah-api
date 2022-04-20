@@ -11,7 +11,7 @@ git reset --hard origin/main
 ./bin/swag-linux init
 
 # Build the application
-go build main.go
+/usr/local/go/bin/go build main.go
 
 # Restart the service
 sudo service psn restart
