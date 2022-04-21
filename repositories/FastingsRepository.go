@@ -30,5 +30,17 @@ func FastingsReadFile() ([]types.Fasting, error) {
 		return data, err
 	}
 
+	// Append category
+	for i, v := range result {
+		category, _ := CategoriesGetByID(v.CategoryID)
+		result[i].Category = category
+	}
+
+	// Append type
+	for i, v := range result {
+		typeData, _ := TypesGetByID(v.TypeID)
+		result[i].Type = typeData
+	}
+
 	return result, nil
 }
