@@ -24,3 +24,4 @@ go.work
 main
 logs/
 docs/
+tmp/
