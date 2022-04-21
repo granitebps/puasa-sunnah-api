@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
@@ -31,4 +32,24 @@ func CategoriesReadFile() ([]types.Category, error) {
 	}
 
 	return result, nil
+}
+
+func CategoriesGetByID(ID uint) (types.Category, error) {
+	category := types.Category{}
+	categories, err := CategoriesReadFile()
+	if err != nil {
+		return category, err
+	}
+
+	for _, c := range categories {
+		if c.ID == ID {
+			category = c
+		}
+	}
+
+	if category.ID == 0 {
+		return category, errors.New("category not found")
+	}
+
+	return category, nil
 }

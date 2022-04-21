@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
@@ -31,4 +32,24 @@ func TypesReadFile() ([]types.Type, error) {
 	}
 
 	return result, nil
+}
+
+func TypesGetByID(ID uint) (types.Type, error) {
+	typeData := types.Type{}
+	typesData, err := TypesReadFile()
+	if err != nil {
+		return typeData, err
+	}
+
+	for _, t := range typesData {
+		if t.ID == ID {
+			typeData = t
+		}
+	}
+
+	if typeData.ID == 0 {
+		return typeData, errors.New("type not found")
+	}
+
+	return typeData, nil
 }
