@@ -8,4 +8,7 @@ type Fasting struct {
 	Year       uint   `json:"year" example:"2020"`
 	Month      uint   `json:"month" example:"1"`
 	Day        uint   `json:"day" example:"1"`
+
+	Category Category `json:"category"`
+	Type     Type     `json:"type"`
 }
