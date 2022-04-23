@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 
 	"github.com/gofiber/swagger"
 )
@@ -55,6 +56,7 @@ func main() {
 	app.Use(limiter.New(limiter.Config{
 		Max: 60,
 	}))
+	app.Use(recover.New())
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Puasa Sunnah API")

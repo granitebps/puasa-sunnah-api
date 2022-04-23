@@ -3,6 +3,7 @@ package helpers
 import (
 	"io/ioutil"
 	"os"
+	"strconv"
 )
 
 type SuccessResponse struct {
@@ -61,4 +62,9 @@ func ReadJsonFile(filename string) ([]byte, error) {
 	}
 
 	return jsonData, nil
+}
+
+func QueryToUint(query string) uint {
+	queryString, _ := strconv.Atoi(query)
+	return uint(queryString)
 }
