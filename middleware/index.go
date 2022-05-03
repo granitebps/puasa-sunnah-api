@@ -13,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
+	"github.com/gofiber/helmet/v2"
 )
 
 func InitMiddleware(app *fiber.App) *fiber.App {
@@ -46,6 +47,9 @@ func InitMiddleware(app *fiber.App) *fiber.App {
 
 	// Recover
 	app.Use(recover.New())
+
+	// Helmet
+	app.Use(helmet.New())
 
 	// Sentry
 	err := sentry.Init(sentry.ClientOptions{
