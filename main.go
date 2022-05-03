@@ -3,25 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
-	"github.com/getsentry/sentry-go"
-	"github.com/granitebps/puasa-sunnah-api/docs"
-	"github.com/granitebps/puasa-sunnah-api/helpers"
+	"github.com/granitebps/puasa-sunnah-api/middleware"
 	"github.com/granitebps/puasa-sunnah-api/routes"
 	"github.com/joho/godotenv"
 
-	"github.com/gofiber/contrib/fibersentry"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/limiter"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/recover"
-
-	"github.com/gofiber/swagger"
 )
 
 // @title Puasa Sunnah API
@@ -40,59 +30,11 @@ func main() {
 
 	app := fiber.New()
 
-	// Sentry
-	err = sentry.Init(sentry.ClientOptions{
-		Dsn:   os.Getenv("SENTRY_DSN"),
-		Debug: true,
-	})
-	if err != nil {
-		log.Fatalf("sentry.Init: %s", err)
-	}
+	// Initialize Middlewares
+	middleware.InitMiddleware(app)
 
-	// Define file to logs
-	now := time.Now().Format("2006-02-01")
-	logFileName := "./logs/" + now + ".log"
-	file, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer file.Close()
-	loggerConfig := logger.Config{
-		Output: file,
-	}
-
-	// Middleware
-	app.Use(logger.New(loggerConfig))
-	app.Use(limiter.New(limiter.Config{
-		Max: 60,
-	}))
-	app.Use(recover.New())
-	app.Use(fibersentry.New(fibersentry.Config{
-		Repanic: true,
-	}))
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Puasa Sunnah API")
-	})
-
-	docs.SwaggerInfo.Host = os.Getenv("SWAGGER_HOST")
-
-	app.Get("/swagger/*", swagger.HandlerDefault) // default
-
-	api := app.Group("api/v1")
-
-	routes.SourcesRoutes(api)
-	routes.CategoriesRoutes(api)
-	routes.TypesRoutes(api)
-	routes.FastingsRoutes(api)
-
-	// Endpoint not found handler
-	app.Use(func(c *fiber.Ctx) error {
-		return c.Status(http.StatusNotFound).JSON(helpers.FailedAPIResponse(
-			"Endpoint not found",
-			http.StatusNotFound,
-		))
-	})
+	// Initialize Routes
+	routes.InitRoutes(app)
 
 	// Listen from a different goroutine
 	go func() {
