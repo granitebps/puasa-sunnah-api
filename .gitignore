@@ -23,4 +23,5 @@ go.work
 .env
 main
 logs/
-docs/
+# docs/
+tmp/
