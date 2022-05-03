@@ -9,11 +9,13 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/granitebps/puasa-sunnah-api/docs"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/routes"
 	"github.com/joho/godotenv"
 
+	"github.com/gofiber/contrib/fibersentry"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -38,7 +40,15 @@ func main() {
 
 	app := fiber.New()
 
-	// Middleware
+	// Sentry
+	err = sentry.Init(sentry.ClientOptions{
+		Dsn:   os.Getenv("SENTRY_DSN"),
+		Debug: true,
+	})
+	if err != nil {
+		log.Fatalf("sentry.Init: %s", err)
+	}
+
 	// Define file to logs
 	now := time.Now().Format("2006-02-01")
 	logFileName := "./logs/" + now + ".log"
@@ -47,16 +57,19 @@ func main() {
 		log.Fatalf("error opening file: %v", err)
 	}
 	defer file.Close()
-
-	// Set config for logger
 	loggerConfig := logger.Config{
-		Output: file, // add file to save output
+		Output: file,
 	}
+
+	// Middleware
 	app.Use(logger.New(loggerConfig))
 	app.Use(limiter.New(limiter.Config{
 		Max: 60,
 	}))
 	app.Use(recover.New())
+	app.Use(fibersentry.New(fibersentry.Config{
+		Repanic: true,
+	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Puasa Sunnah API")
