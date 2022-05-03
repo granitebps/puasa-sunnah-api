@@ -1,0 +1,220 @@
+basePath: /
+definitions:
+  helpers.FailedResponse:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: Failed
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  helpers.SuccessResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data: {}
+      message:
+        example: Success
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  types.Category:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: lorem impsum
+        type: string
+    type: object
+  types.Fasting:
+    properties:
+      category:
+        $ref: '#/definitions/types.Category'
+      category_id:
+        example: 1
+        type: integer
+      date:
+        example: "2020-01-01"
+        type: string
+      day:
+        example: 1
+        type: integer
+      id:
+        example: 1
+        type: integer
+      month:
+        example: 1
+        type: integer
+      type:
+        $ref: '#/definitions/types.Type'
+      type_id:
+        example: 1
+        type: integer
+      year:
+        example: 2020
+        type: integer
+    type: object
+  types.Source:
+    properties:
+      id:
+        example: 1
+        type: integer
+      url:
+        example: https://granitebps.com
+        type: string
+    type: object
+  types.Type:
+    properties:
+      description:
+        example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: lorem
+        type: string
+    type: object
+info:
+  contact:
+    email: granitebagas28@gmail.com
+    name: Granite Bagas
+  description: This is a Puasa Sunnah API Docs
+  license:
+    name: MIT
+  title: Puasa Sunnah API
+paths:
+  /api/v1/categories:
+    get:
+      consumes:
+      - application/json
+      description: Get list of categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/types.Category'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.FailedResponse'
+      summary: List Categories
+      tags:
+      - Categories
+  /api/v1/fastings:
+    get:
+      consumes:
+      - application/json
+      description: Get list of sunnah fasting
+      parameters:
+      - description: Type ID
+        in: query
+        name: type_id
+        type: integer
+      - description: Category ID
+        in: query
+        name: category_id
+        type: integer
+      - description: Day in month
+        in: query
+        name: day
+        type: integer
+      - description: Month
+        in: query
+        name: month
+        type: integer
+      - description: Year
+        in: query
+        name: Year
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/types.Fasting'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.FailedResponse'
+      summary: List Sunnah Fastings
+      tags:
+      - Fastings
+  /api/v1/sources:
+    get:
+      consumes:
+      - application/json
+      description: Get list of sources
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/types.Source'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.FailedResponse'
+      summary: List Sources
+      tags:
+      - Sources
+  /api/v1/types:
+    get:
+      consumes:
+      - application/json
+      description: Get list of types
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/types.Type'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.FailedResponse'
+      summary: List Types
+      tags:
+      - Types
+swagger: "2.0"
