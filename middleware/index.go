@@ -7,7 +7,6 @@ import (
 	"github.com/getsentry/sentry-go"
 	"github.com/gofiber/contrib/fibersentry"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/etag"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -38,7 +37,7 @@ func InitMiddleware(app *fiber.App) *fiber.App {
 	app.Use(etag.New())
 
 	// Cache
-	app.Use(cache.New())
+	// app.Use(cache.New())
 
 	// Rate limit
 	app.Use(limiter.New(limiter.Config{
