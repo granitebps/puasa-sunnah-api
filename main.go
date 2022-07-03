@@ -20,6 +20,7 @@ import (
 // @contact.email granitebagas28@gmail.com
 // @license.name MIT
 // @BasePath /
+// @version 1.0
 func main() {
 	// Load ENV
 	err := godotenv.Load()
