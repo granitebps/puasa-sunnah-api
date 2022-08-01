@@ -25,7 +25,7 @@ func main() {
 	// Load ENV
 	err := godotenv.Load()
 	if err != nil {
-		log.Panic("Error loading .env file")
+		log.Panic(err)
 	}
 	PORT := os.Getenv("PORT")
 
