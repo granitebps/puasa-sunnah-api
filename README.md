@@ -25,3 +25,6 @@
 - Generate API Docs using swagger with `make doc`
 - Run the application with `make start` or with `make air` to use hot reload
 - Build the application with `make build`
+
+
+<!-- env GOOS=linux GOARCH=amd64 go build -->

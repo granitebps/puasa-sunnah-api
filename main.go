@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"regexp"
 	"syscall"
 
 	"github.com/granitebps/puasa-sunnah-api/middleware"
@@ -14,6 +15,20 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+const projectDirName = "puasa-sunnah-api" // change to relevant project name
+
+func LoadEnv() {
+	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
+	currentWorkDirectory, _ := os.Getwd()
+	rootPath := projectName.Find([]byte(currentWorkDirectory))
+
+	err := godotenv.Load(string(rootPath) + `/.env`)
+
+	if err != nil {
+		log.Panic(err)
+	}
+}
+
 // @title Puasa Sunnah API
 // @description This is a Puasa Sunnah API Docs
 // @contact.name Granite Bagas
@@ -22,11 +37,7 @@ import (
 // @BasePath /
 // @version 1.0
 func main() {
-	// Load ENV
-	err := godotenv.Load()
-	if err != nil {
-		log.Panic(err)
-	}
+	LoadEnv()
 	PORT := os.Getenv("PORT")
 
 	app := fiber.New()
