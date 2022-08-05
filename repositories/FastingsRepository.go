@@ -2,10 +2,10 @@ package repositories
 
 import (
 	"encoding/json"
-	"os"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/types"
+	"github.com/spf13/viper"
 )
 
 func parseJSONFastingArray(jsonData []byte, data []types.Fasting) ([]types.Fasting, error) {
@@ -19,7 +19,7 @@ func parseJSONFastingArray(jsonData []byte, data []types.Fasting) ([]types.Fasti
 func FastingsReadFile() ([]types.Fasting, error) {
 	data := []types.Fasting{}
 
-	filename := os.Getenv("FASTING_FILEPATH")
+	filename := viper.GetString("FASTING_FILEPATH")
 	jsonData, err := helpers.ReadJsonFile(filename)
 	if err != nil {
 		return data, err

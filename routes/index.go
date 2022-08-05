@@ -2,12 +2,12 @@ package routes
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"github.com/granitebps/puasa-sunnah-api/docs"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
+	"github.com/spf13/viper"
 )
 
 func InitRoutes(app *fiber.App) *fiber.App {
@@ -15,7 +15,7 @@ func InitRoutes(app *fiber.App) *fiber.App {
 		return c.SendString("Puasa Sunnah API")
 	})
 
-	docs.SwaggerInfo.Host = os.Getenv("SWAGGER_HOST")
+	docs.SwaggerInfo.Host = viper.GetString("SWAGGER_HOST")
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
 	api := app.Group("api/v1")

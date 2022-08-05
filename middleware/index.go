@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"log"
-	"os"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -15,6 +14,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/gofiber/helmet/v2"
+	"github.com/spf13/viper"
 )
 
 func InitMiddleware(app *fiber.App) *fiber.App {
@@ -59,7 +59,7 @@ func InitMiddleware(app *fiber.App) *fiber.App {
 
 	// Sentry
 	err := sentry.Init(sentry.ClientOptions{
-		Dsn:   os.Getenv("SENTRY_DSN"),
+		Dsn:   viper.GetString("SENTRY_DSN"),
 		Debug: true,
 	})
 	if err != nil {

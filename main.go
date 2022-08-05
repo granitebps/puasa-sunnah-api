@@ -5,25 +5,18 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"regexp"
 	"syscall"
 
 	"github.com/granitebps/puasa-sunnah-api/middleware"
 	"github.com/granitebps/puasa-sunnah-api/routes"
-	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-const projectDirName = "puasa-sunnah-api" // change to relevant project name
-
 func LoadEnv() {
-	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	currentWorkDirectory, _ := os.Getwd()
-	rootPath := projectName.Find([]byte(currentWorkDirectory))
-
-	err := godotenv.Load(string(rootPath) + `/.env`)
-
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
 	if err != nil {
 		log.Panic(err)
 	}
@@ -38,7 +31,8 @@ func LoadEnv() {
 // @version 1.0
 func main() {
 	LoadEnv()
-	PORT := os.Getenv("PORT")
+	PORT := viper.GetString("PORT")
+	fmt.Println(PORT)
 
 	app := fiber.New()
 

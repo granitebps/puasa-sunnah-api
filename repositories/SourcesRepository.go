@@ -2,10 +2,10 @@ package repositories
 
 import (
 	"encoding/json"
-	"os"
 
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/types"
+	"github.com/spf13/viper"
 )
 
 func parseJSONSourceArray(jsonData []byte, data []types.Source) ([]types.Source, error) {
@@ -19,7 +19,7 @@ func parseJSONSourceArray(jsonData []byte, data []types.Source) ([]types.Source,
 func SourcesReadFile() ([]types.Source, error) {
 	data := []types.Source{}
 
-	filename := os.Getenv("SOURCE_FILEPATH")
+	filename := viper.GetString("SOURCE_FILEPATH")
 	jsonData, err := helpers.ReadJsonFile(filename)
 	if err != nil {
 		return data, err
