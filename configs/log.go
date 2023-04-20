@@ -51,7 +51,7 @@ func initLog(logFolder string) *logrus.Logger {
 		log.Panicf("error opening file: %v", err)
 	}
 
-	log.SetOutput(f)
+	logger.SetOutput(f)
 
 	return logger
 }

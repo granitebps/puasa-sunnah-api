@@ -16,17 +16,6 @@ import (
 
 func InitMiddleware(app *fiber.App) *fiber.App {
 	// Logger
-	// now := time.Now().Format("2006-02-01")
-	// logFileName := "./logs/" + now + ".log"
-	// file, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	// if err != nil {
-	// 	log.Fatalf("error opening file: %v", err)
-	// }
-	// defer file.Close()
-	// loggerConfig := logger.Config{
-	// 	Output: file,
-	// }
-	// app.Use(logger.New(loggerConfig))
 	app.Use(logger.New())
 
 	// Request ID

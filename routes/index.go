@@ -6,22 +6,30 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
+	"github.com/granitebps/puasa-sunnah-api/configs"
+	"github.com/granitebps/puasa-sunnah-api/constants"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/middleware"
 )
 
-func InitRoutes() *fiber.App {
+func InitRoutes(log *configs.Log) *fiber.App {
 	app := fiber.New(fiber.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
-			// Status code defaults to 500
-			code := fiber.StatusInternalServerError
-			msg := "Internal Server Error"
+			log.Logger.Error(err)
 
-			// Retrieve the custom status code if it's a *fiber.Error
-			var e *fiber.Error
-			if errors.As(err, &e) {
-				code = e.Code
-				msg = e.Message
+			var code int
+			var msg string
+			if helpers.IsProduction() {
+				code = fiber.StatusInternalServerError
+				msg = constants.INTERNAL_SERVER_ERROR
+			} else {
+				var e *fiber.Error
+				if errors.As(err, &e) {
+					code = e.Code
+					msg = e.Message
+				} else {
+					msg = err.Error()
+				}
 			}
 
 			return ctx.Status(code).JSON(helpers.FailedAPIResponse(

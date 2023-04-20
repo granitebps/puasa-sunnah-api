@@ -4,6 +4,9 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
+
+	"github.com/spf13/viper"
 )
 
 type SuccessResponse struct {
@@ -67,4 +70,9 @@ func ReadJsonFile(filename string) ([]byte, error) {
 func QueryToUint(query string) uint {
 	queryString, _ := strconv.Atoi(query)
 	return uint(queryString)
+}
+
+func IsProduction() bool {
+	env := strings.ToLower(viper.GetString("APP_ENV"))
+	return env == "production" || env == "prod"
 }

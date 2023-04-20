@@ -15,14 +15,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func LoadEnv() {
-	viper.SetConfigFile(".env")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Panic(err)
-	}
-}
-
 // @title Puasa Sunnah API
 // @description This is a Puasa Sunnah API Docs
 // @contact.name Granite Bagas
@@ -37,7 +29,7 @@ func main() {
 	docs.SwaggerInfo.Host = viper.GetString("SWAGGER_HOST")
 
 	// Initialize Routes
-	app := routes.InitRoutes()
+	app := routes.InitRoutes(configApp.Log)
 
 	listenAndServe(app)
 }
