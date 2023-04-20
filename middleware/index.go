@@ -1,10 +1,8 @@
 package middleware
 
 import (
-	"log"
 	"time"
 
-	"github.com/getsentry/sentry-go"
 	"github.com/gofiber/contrib/fibersentry"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cache"
@@ -14,7 +12,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/gofiber/helmet/v2"
-	"github.com/spf13/viper"
 )
 
 func InitMiddleware(app *fiber.App) *fiber.App {
@@ -57,14 +54,6 @@ func InitMiddleware(app *fiber.App) *fiber.App {
 	// Helmet
 	app.Use(helmet.New())
 
-	// Sentry
-	err := sentry.Init(sentry.ClientOptions{
-		Dsn:   viper.GetString("SENTRY_DSN"),
-		Debug: true,
-	})
-	if err != nil {
-		log.Fatalf("sentry.Init: %s", err)
-	}
 	app.Use(fibersentry.New(fibersentry.Config{
 		Repanic: true,
 	}))

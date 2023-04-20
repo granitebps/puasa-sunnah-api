@@ -7,7 +7,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/granitebps/puasa-sunnah-api/middleware"
+	"github.com/granitebps/puasa-sunnah-api/config"
+	"github.com/granitebps/puasa-sunnah-api/docs"
 	"github.com/granitebps/puasa-sunnah-api/routes"
 	"github.com/spf13/viper"
 
@@ -30,17 +31,18 @@ func LoadEnv() {
 // @BasePath /
 // @version 1.0
 func main() {
-	LoadEnv()
-	PORT := viper.GetString("PORT")
-	fmt.Println(PORT)
+	config.InitConfig(".env")
 
-	app := fiber.New()
-
-	// Initialize Middlewares
-	middleware.InitMiddleware(app)
+	docs.SwaggerInfo.Host = viper.GetString("SWAGGER_HOST")
 
 	// Initialize Routes
-	routes.InitRoutes(app)
+	app := routes.InitRoutes()
+
+	listenAndServe(app)
+}
+
+func listenAndServe(app *fiber.App) {
+	PORT := viper.GetString("PORT")
 
 	// Listen from a different goroutine
 	go func() {
