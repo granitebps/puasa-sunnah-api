@@ -22,9 +22,18 @@
 ## How to
 - Clone the repo
 - Copy `.env.example` to `.env`
-- Generate API Docs using swagger with `make doc`
-- Run the application with `make start` or with `make air` to use hot reload
+- Generate API Docs using swagger with `swag init`
+- Run the application with `make start` or with `air` to use hot reload
 - Build the application with `make build`
+
+## Notes
+- Use `merry` to wrap all error
 
 
 <!-- env GOOS=linux GOARCH=amd64 go build -->
+
+### TODO
+- [] Refactor
+- [] Update response helper
+- [x] Log file
+- [] helper error using merry and fiber.NewError
