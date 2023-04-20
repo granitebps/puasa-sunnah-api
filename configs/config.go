@@ -1,16 +1,15 @@
-package config
+package configs
 
 import (
-	"fmt"
 	"log"
 
-	"github.com/getsentry/sentry-go"
+	"github.com/granitebps/puasa-sunnah-api/constants"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
 	// Database   *Database
-	// Log *Log
+	Log *Log
 	// NewRelic   *NewRelic
 	// HttpClient *HttpClient
 	// Cache      *Cache
@@ -31,26 +30,18 @@ func LoadConfig(file string) error {
 func InitConfig(path string) *Config {
 	err := LoadConfig(path)
 	if err != nil {
-		// TODO: Use logrus
 		log.Panic(err)
 	}
 
-	// log := NewLog(LOG_FOLDER)
+	logger := NewLog(constants.LOG_FOLDER)
 	// newrelic := initNewrelic()
-	// TODO: Parse log
-	InitSentry()
+	InitSentry(logger)
 
 	return &Config{
 		// Database:   NewDb(),
 		// Cache:      NewCache(newrelic.Application),
-		// Log:        log,
+		Log: logger,
 		// HttpClient: NewHttpClient(log),
 		// NewRelic:   newrelic,
 	}
-}
-
-func errorConfig(err error) {
-	fmt.Println("Error occured when setup config: ", err)
-	sentry.CaptureException(err)
-	panic(err)
 }

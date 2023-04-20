@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/granitebps/puasa-sunnah-api/config"
+	"github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/docs"
 	"github.com/granitebps/puasa-sunnah-api/routes"
 	"github.com/spf13/viper"
@@ -31,7 +31,8 @@ func LoadEnv() {
 // @BasePath /
 // @version 1.0
 func main() {
-	config.InitConfig(".env")
+	configApp := configs.InitConfig(".env")
+	configApp.Log.Logger.Info("Puasa Sunnah API")
 
 	docs.SwaggerInfo.Host = viper.GetString("SWAGGER_HOST")
 
