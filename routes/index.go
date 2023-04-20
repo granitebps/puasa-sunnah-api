@@ -2,12 +2,12 @@ package routes
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/constants"
+	e "github.com/granitebps/puasa-sunnah-api/errors"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/middleware"
 )
@@ -32,10 +32,11 @@ func InitRoutes(log *configs.Log) *fiber.App {
 				}
 			}
 
-			return ctx.Status(code).JSON(helpers.FailedAPIResponse(
-				msg,
-				code,
-			))
+			return helpers.FailedAPIResponse(
+				ctx,
+				e.WrapUserMessageAndCode(err, msg, code),
+				nil,
+			)
 		},
 	})
 
@@ -57,10 +58,11 @@ func InitRoutes(log *configs.Log) *fiber.App {
 
 	// Endpoint not found handler
 	app.Use(func(c *fiber.Ctx) error {
-		return c.Status(http.StatusNotFound).JSON(helpers.FailedAPIResponse(
-			"Endpoint not found",
-			http.StatusNotFound,
-		))
+		return helpers.FailedAPIResponse(
+			c,
+			e.WrapUserMessageAndCode(e.ErrEndpointNotFound, "", fiber.StatusNotFound),
+			nil,
+		)
 	})
 
 	return app

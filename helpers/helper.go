@@ -1,53 +1,54 @@
 package helpers
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"strconv"
 	"strings"
 
+	"github.com/ansel1/merry/v2"
+	"github.com/gofiber/fiber/v2"
+	"github.com/granitebps/puasa-sunnah-api/errors"
 	"github.com/spf13/viper"
 )
 
-type SuccessResponse struct {
+type APIResponse struct {
 	Success bool        `json:"success" example:"true"`
 	Message string      `json:"message" example:"Success"`
 	Code    int         `json:"code" example:"200"`
 	Data    interface{} `json:"data"`
 }
 
-type FailedResponse struct {
-	Success bool   `json:"success" example:"false"`
-	Message string `json:"message" example:"Failed"`
-	Code    int    `json:"code" example:"400"`
-}
-
-func SuccessAPIResponse(
-	message string,
-	code int,
-	data interface{},
-) SuccessResponse {
-	responseData := SuccessResponse{
+func SuccessAPIResponse(ctx *fiber.Ctx, message string, code int, data interface{}) error {
+	responseData := APIResponse{
 		Success: true,
 		Data:    data,
 		Message: message,
 		Code:    code,
 	}
 
-	return responseData
+	return ctx.Status(code).JSON(responseData)
 }
 
-func FailedAPIResponse(
-	message string,
-	code int,
-) FailedResponse {
-	responseData := FailedResponse{
-		Success: false,
-		Message: message,
-		Code:    code,
+func FailedAPIResponse(ctx *fiber.Ctx, err error, data interface{}) error {
+	msg := merry.UserMessage(err)
+	code := merry.HTTPCode(err)
+
+	if code == fiber.StatusInternalServerError && IsProduction() {
+		// TODO: Log
+		msg = errors.ErrInternalServerError.Error()
+	} else {
+		msg = err.Error()
 	}
 
-	return responseData
+	responseData := APIResponse{
+		Success: false,
+		Message: msg,
+		Code:    code,
+		Data:    data,
+	}
+
+	return ctx.Status(code).JSON(responseData)
 }
 
 func ReadJsonFile(filename string) ([]byte, error) {
@@ -59,7 +60,7 @@ func ReadJsonFile(filename string) ([]byte, error) {
 	}
 	defer jsonFile.Close()
 
-	jsonData, err := ioutil.ReadAll(jsonFile)
+	jsonData, err := io.ReadAll(jsonFile)
 	if err != nil {
 		return emptyData, err
 	}

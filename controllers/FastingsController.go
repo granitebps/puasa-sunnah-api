@@ -1,9 +1,8 @@
 package controlers
 
 import (
-	"net/http"
-
 	"github.com/gofiber/fiber/v2"
+	"github.com/granitebps/puasa-sunnah-api/errors"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/requests"
 	"github.com/granitebps/puasa-sunnah-api/services"
@@ -32,15 +31,17 @@ func FastingsIndex(c *fiber.Ctx) error {
 
 	data, err := services.FastingsGetAll(f)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(helpers.FailedAPIResponse(
-			err.Error(),
-			http.StatusBadRequest,
-		))
+		return helpers.FailedAPIResponse(
+			c,
+			errors.WrapUserMessageAndCode(err, "", 0),
+			nil,
+		)
 	}
 
-	return c.Status(http.StatusOK).JSON(helpers.SuccessAPIResponse(
+	return helpers.SuccessAPIResponse(
+		c,
 		"Success",
-		http.StatusOK,
+		fiber.StatusOK,
 		data,
-	))
+	)
 }
