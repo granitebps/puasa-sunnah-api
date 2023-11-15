@@ -3,7 +3,7 @@ package configs
 import (
 	"log"
 
-	"github.com/granitebps/puasa-sunnah-api/constants"
+	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/spf13/viper"
 )
 

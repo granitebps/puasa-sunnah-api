@@ -6,14 +6,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"github.com/granitebps/puasa-sunnah-api/configs"
-	"github.com/granitebps/puasa-sunnah-api/constants"
-	controlers "github.com/granitebps/puasa-sunnah-api/controllers"
+	"github.com/granitebps/puasa-sunnah-api/controllers"
 	e "github.com/granitebps/puasa-sunnah-api/errors"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/middleware"
+	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 )
 
-func InitRoutes(log *configs.Log, c *controlers.Controller) *fiber.App {
+func InitRoutes(log *configs.Log, c *controllers.Controller) *fiber.App {
 	app := fiber.New(fiber.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			log.Logger.Error(err)

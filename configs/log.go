@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/granitebps/puasa-sunnah-api/constants"
+	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -46,7 +46,7 @@ func initLog(logFolder string) *logrus.Logger {
 	logger.SetFormatter(new(CustomTextFormatter))
 	logger.SetReportCaller(true)
 
-	f, err := os.OpenFile(fmt.Sprintf("%s/%s.log", logFolder, time.Now().Format(constants.LOG_FORMAT_DATE)), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile(fmt.Sprintf("%s/%s.log", logFolder, time.Now().Format(constants.FORMAT_DATE)), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Panicf("error opening file: %v", err)
 	}

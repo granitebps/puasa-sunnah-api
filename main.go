@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -10,6 +9,7 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/controllers"
 	"github.com/granitebps/puasa-sunnah-api/docs"
+	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/repositories"
 	"github.com/granitebps/puasa-sunnah-api/routes"
 	"github.com/granitebps/puasa-sunnah-api/services"
@@ -48,11 +48,11 @@ func main() {
 	// Initialize Routes
 	app := routes.InitRoutes(configApp.Log, controller)
 
-	listenAndServe(app)
+	startServerWithGracefulShutdown(app)
 }
 
-func listenAndServe(app *fiber.App) {
-	PORT := viper.GetString("PORT")
+func startServerWithGracefulShutdown(app *fiber.App) {
+	PORT := viper.GetString(constants.APP_PORT)
 
 	// Listen from a different goroutine
 	go func() {
@@ -64,14 +64,14 @@ func listenAndServe(app *fiber.App) {
 	c := make(chan os.Signal, 1)                    // Create channel to signify a signal being sent
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM) // When an interrupt or termination signal is sent, notify the channel
 
-	_ = <-c // This blocks the main thread until an interrupt is received
-	fmt.Println("Gracefully shutting down...")
+	<-c // This blocks the main thread until an interrupt is received
+	log.Println("Gracefully shutting down...")
 	_ = app.Shutdown()
 
-	fmt.Println("Running cleanup tasks...")
+	log.Println("Running cleanup tasks...")
 
 	// Your cleanup tasks go here
 	// db.Close()
 	// redisConn.Close()
-	fmt.Println("Fiber was successful shutdown.")
+	log.Println("Fiber was successful shutdown.")
 }
