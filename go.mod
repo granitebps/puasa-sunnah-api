@@ -13,7 +13,6 @@ require (
 	github.com/gofiber/contrib/fibersentry v1.0.4
 	github.com/gofiber/contrib/jwt v1.0.7
 	github.com/gofiber/fiber/v2 v2.51.0
-	github.com/gofiber/helmet/v2 v2.2.26
 	github.com/golang-jwt/jwt/v5 v5.1.0
 	github.com/google/wire v0.5.0
 	github.com/newrelic/go-agent/v3 v3.27.0
