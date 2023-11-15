@@ -8,8 +8,11 @@ import (
 	"syscall"
 
 	"github.com/granitebps/puasa-sunnah-api/configs"
+	"github.com/granitebps/puasa-sunnah-api/controllers"
 	"github.com/granitebps/puasa-sunnah-api/docs"
+	"github.com/granitebps/puasa-sunnah-api/repositories"
 	"github.com/granitebps/puasa-sunnah-api/routes"
+	"github.com/granitebps/puasa-sunnah-api/services"
 	"github.com/spf13/viper"
 
 	"github.com/gofiber/fiber/v2"
@@ -28,8 +31,16 @@ func main() {
 
 	docs.SwaggerInfo.Host = viper.GetString("SWAGGER_HOST")
 
+	// Init repo
+	sourceRepo := repositories.NewSourceRepository(configApp)
+
+	// Init service
+	sourceService := services.NewSourceService(sourceRepo)
+
+	controller := controllers.NewController(sourceService)
+
 	// Initialize Routes
-	app := routes.InitRoutes(configApp.Log)
+	app := routes.InitRoutes(configApp.Log, controller)
 
 	listenAndServe(app)
 }

@@ -1,4 +1,4 @@
-package controlers
+package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
@@ -6,6 +6,16 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/services"
 )
+
+type SourceController struct {
+	SourceService *services.SourceService
+}
+
+func newSourceController(sourceService *services.SourceService) *SourceController {
+	return &SourceController{
+		SourceService: sourceService,
+	}
+}
 
 // ListSource godoc
 // @Summary      List Sources
@@ -16,18 +26,18 @@ import (
 // @Success      200  {object}   helpers.SuccessResponse{data=[]types.Source} "desc"
 // @Failure      400  {object}  helpers.FailedResponse
 // @Router       /api/v1/sources [get]
-func SourcesIndex(c *fiber.Ctx) error {
-	data, err := services.SourcesGetAll()
+func (c *SourceController) Index(ctx *fiber.Ctx) error {
+	data, err := c.SourceService.GetAll()
 	if err != nil {
 		return helpers.FailedAPIResponse(
-			c,
+			ctx,
 			errors.WrapUserMessageAndCode(err, "", 0),
 			nil,
 		)
 	}
 
 	return helpers.SuccessAPIResponse(
-		c,
+		ctx,
 		"Success",
 		fiber.StatusOK,
 		data,

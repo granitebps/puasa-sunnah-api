@@ -5,8 +5,18 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/types"
 )
 
-func SourcesGetAll() ([]types.Source, error) {
-	data, err := repositories.SourcesReadFile()
+type SourceService struct {
+	SourceRepo *repositories.SourceRepository
+}
+
+func NewSourceService(sourceRepo *repositories.SourceRepository) *SourceService {
+	return &SourceService{
+		SourceRepo: sourceRepo,
+	}
+}
+
+func (s *SourceService) GetAll() ([]types.Source, error) {
+	data, err := s.SourceRepo.ReadFile()
 	if err != nil {
 		return data, err
 	}
