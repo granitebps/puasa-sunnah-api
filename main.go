@@ -6,13 +6,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/granitebps/puasa-sunnah-api/configs"
-	"github.com/granitebps/puasa-sunnah-api/controllers"
-	"github.com/granitebps/puasa-sunnah-api/docs"
+	config "github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
-	"github.com/granitebps/puasa-sunnah-api/repositories"
-	"github.com/granitebps/puasa-sunnah-api/routes"
-	"github.com/granitebps/puasa-sunnah-api/services"
+	"github.com/granitebps/puasa-sunnah-api/pkg/core"
+	"github.com/granitebps/puasa-sunnah-api/route"
+	"github.com/granitebps/puasa-sunnah-api/src/middleware"
 	"github.com/spf13/viper"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,27 +24,23 @@ import (
 // @BasePath /
 // @version 1.0
 func main() {
-	configApp := configs.InitConfig(".env")
-	configApp.Log.Logger.Info("Puasa Sunnah API")
+	// Load ENV and setup some config
+	config.SetupConfig(".env")
 
-	docs.SwaggerInfo.Host = viper.GetString("SWAGGER_HOST")
+	// Initiate Fiber
+	app := fiber.New(config.FiberConfig())
 
-	// Init repo
-	sourceRepo := repositories.NewSourceRepository(configApp)
-	typesRepo := repositories.NewTypesRepository(configApp)
-	categoryRepo := repositories.NewCategoryRepository(configApp)
-	fastingRepo := repositories.NewFastingRepository(configApp)
+	// Setup core package
+	conf := core.SetupCore()
 
-	// Init service
-	sourceService := services.NewSourceService(sourceRepo)
-	typesService := services.NewTypesService(typesRepo)
-	categoryService := services.NewCategoryService(categoryRepo)
-	fastingService := services.NewFastingService(fastingRepo, categoryRepo, typesRepo)
+	// Setup middleware
+	middleware.SetupMiddleware(app, conf)
 
-	controller := controllers.NewController(sourceService, typesService, categoryService, fastingService)
+	// Setup Dependency Injection
+	contr := SetupDependencies(conf)
 
-	// Initialize Routes
-	app := routes.InitRoutes(configApp.Log, controller)
+	// Setup route
+	route.SetupRoute(app, contr)
 
 	startServerWithGracefulShutdown(app)
 }

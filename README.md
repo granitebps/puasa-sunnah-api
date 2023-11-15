@@ -34,6 +34,6 @@
 
 ### TODO
 - [] Refactor
-- [] Update response helper
+- [] Update response helper and log if 500
 - [x] Log file
-- [] helper error using merry and fiber.NewError
+- [x] helper error using merry and fiber.NewError
