@@ -7,6 +7,16 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/services"
 )
 
+type CategoryController struct {
+	CategoryService *services.CategoryService
+}
+
+func newCategoryController(categoryService *services.CategoryService) *CategoryController {
+	return &CategoryController{
+		CategoryService: categoryService,
+	}
+}
+
 // ListCategory godoc
 // @Summary      List Categories
 // @Description  Get list of categories
@@ -16,18 +26,18 @@ import (
 // @Success      200  {object}   helpers.SuccessResponse{data=[]types.Category} "desc"
 // @Failure      400  {object}  helpers.FailedResponse
 // @Router       /api/v1/categories [get]
-func CategoriesIndex(c *fiber.Ctx) error {
-	data, err := services.CategoriesGetAll()
+func (c *CategoryController) Index(ctx *fiber.Ctx) error {
+	data, err := c.CategoryService.GetAll()
 	if err != nil {
 		return helpers.FailedAPIResponse(
-			c,
+			ctx,
 			errors.WrapUserMessageAndCode(err, "", 0),
 			nil,
 		)
 	}
 
 	return helpers.SuccessAPIResponse(
-		c,
+		ctx,
 		"Success",
 		fiber.StatusOK,
 		data,

@@ -53,7 +53,7 @@ func InitRoutes(log *configs.Log, c *controlers.Controller) *fiber.App {
 	api := app.Group("api/v1")
 
 	SourcesRoutes(api, c)
-	CategoriesRoutes(api)
+	CategoriesRoutes(api, c)
 	TypesRoutes(api, c)
 	FastingsRoutes(api)
 

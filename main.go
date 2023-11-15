@@ -34,12 +34,14 @@ func main() {
 	// Init repo
 	sourceRepo := repositories.NewSourceRepository(configApp)
 	typesRepo := repositories.NewTypesRepository(configApp)
+	categoryRepo := repositories.NewCategoryRepository(configApp)
 
 	// Init service
 	sourceService := services.NewSourceService(sourceRepo)
 	typesService := services.NewTypesService(typesRepo)
+	categoryService := services.NewCategoryService(categoryRepo)
 
-	controller := controllers.NewController(sourceService, typesService)
+	controller := controllers.NewController(sourceService, typesService, categoryService)
 
 	// Initialize Routes
 	app := routes.InitRoutes(configApp.Log, controller)

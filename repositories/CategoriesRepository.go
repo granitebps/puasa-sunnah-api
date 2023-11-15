@@ -4,20 +4,24 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/ansel1/merry/v2"
+	"github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/types"
 	"github.com/spf13/viper"
 )
 
-func parseJSONCategoryArray(jsonData []byte, data []types.Category) ([]types.Category, error) {
-	if err := json.Unmarshal(jsonData, &data); err != nil {
-		return data, err
-	}
-
-	return data, nil
+type CategoryRepository struct {
+	Config *configs.Config
 }
 
-func CategoriesReadFile() ([]types.Category, error) {
+func NewCategoryRepository(c *configs.Config) *CategoryRepository {
+	return &CategoryRepository{
+		Config: c,
+	}
+}
+
+func (r *CategoryRepository) ReadFile() ([]types.Category, error) {
 	data := []types.Category{}
 
 	filename := viper.GetString("CATEGORY_FILEPATH")
@@ -26,17 +30,17 @@ func CategoriesReadFile() ([]types.Category, error) {
 		return data, err
 	}
 
-	result, err := parseJSONCategoryArray(jsonData, data)
+	err = json.Unmarshal(jsonData, &data)
 	if err != nil {
-		return data, err
+		return data, merry.Wrap(err)
 	}
 
-	return result, nil
+	return data, nil
 }
 
-func CategoriesGetByID(ID uint) (types.Category, error) {
+func (r *CategoryRepository) GetByID(ID uint) (types.Category, error) {
 	category := types.Category{}
-	categories, err := CategoriesReadFile()
+	categories, err := r.ReadFile()
 	if err != nil {
 		return category, err
 	}
