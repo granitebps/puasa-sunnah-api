@@ -7,10 +7,36 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/types"
 )
 
-func FastingsGetAll(q requests.FastingRequest) ([]types.Fasting, error) {
-	data, err := repositories.FastingsReadFile()
+type FastingService struct {
+	FastingRepo  *repositories.FastingRepository
+	CategoryRepo *repositories.CategoryRepository
+	TypesRepo    *repositories.TypesRepository
+}
+
+func NewFastingService(fastingRepo *repositories.FastingRepository, categoryRepo *repositories.CategoryRepository, typesRepo *repositories.TypesRepository) *FastingService {
+	return &FastingService{
+		FastingRepo:  fastingRepo,
+		CategoryRepo: categoryRepo,
+		TypesRepo:    typesRepo,
+	}
+}
+
+func (s *FastingService) GetAll(q requests.FastingRequest) ([]types.Fasting, error) {
+	data, err := s.FastingRepo.ReadFile()
 	if err != nil {
 		return data, err
+	}
+
+	// Append category
+	for i, v := range data {
+		category, _ := s.CategoryRepo.GetByID(v.CategoryID)
+		data[i].Category = category
+	}
+
+	// Append type
+	for i, v := range data {
+		typeData, _ := s.TypesRepo.GetByID(v.TypeID)
+		data[i].Type = typeData
 	}
 
 	filteredData := FastingsFilter(q, data)

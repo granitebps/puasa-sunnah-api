@@ -5,8 +5,8 @@ import (
 	controlers "github.com/granitebps/puasa-sunnah-api/controllers"
 )
 
-func FastingsRoutes(app fiber.Router) {
+func FastingsRoutes(app fiber.Router, c *controlers.Controller) {
 	api := app.Group("fastings")
 
-	api.Get("/", controlers.FastingsIndex)
+	api.Get("/", c.FastingController.Index)
 }

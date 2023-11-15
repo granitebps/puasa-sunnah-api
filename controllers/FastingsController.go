@@ -8,6 +8,16 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/services"
 )
 
+type FastingController struct {
+	FastingService *services.FastingService
+}
+
+func newFastingController(fastingService *services.FastingService) *FastingController {
+	return &FastingController{
+		FastingService: fastingService,
+	}
+}
+
 // ListFasting godoc
 // @Summary      List Sunnah Fastings
 // @Description  Get list of sunnah fasting
@@ -22,24 +32,24 @@ import (
 // @Success      200  {object}   helpers.SuccessResponse{data=[]types.Fasting} "desc"
 // @Failure      400  {object}  helpers.FailedResponse
 // @Router       /api/v1/fastings [get]
-func FastingsIndex(c *fiber.Ctx) error {
+func (c *FastingController) Index(ctx *fiber.Ctx) error {
 	f := requests.FastingRequest{}
 
-	if err := c.QueryParser(&f); err != nil {
+	if err := ctx.QueryParser(&f); err != nil {
 		return err
 	}
 
-	data, err := services.FastingsGetAll(f)
+	data, err := c.FastingService.GetAll(f)
 	if err != nil {
 		return helpers.FailedAPIResponse(
-			c,
+			ctx,
 			errors.WrapUserMessageAndCode(err, "", 0),
 			nil,
 		)
 	}
 
 	return helpers.SuccessAPIResponse(
-		c,
+		ctx,
 		"Success",
 		fiber.StatusOK,
 		data,

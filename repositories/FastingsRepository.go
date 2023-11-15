@@ -3,20 +3,24 @@ package repositories
 import (
 	"encoding/json"
 
+	"github.com/ansel1/merry/v2"
+	"github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/types"
 	"github.com/spf13/viper"
 )
 
-func parseJSONFastingArray(jsonData []byte, data []types.Fasting) ([]types.Fasting, error) {
-	if err := json.Unmarshal(jsonData, &data); err != nil {
-		return data, err
-	}
-
-	return data, nil
+type FastingRepository struct {
+	Config *configs.Config
 }
 
-func FastingsReadFile() ([]types.Fasting, error) {
+func NewFastingRepository(c *configs.Config) *FastingRepository {
+	return &FastingRepository{
+		Config: c,
+	}
+}
+
+func (r *FastingRepository) ReadFile() ([]types.Fasting, error) {
 	data := []types.Fasting{}
 
 	filename := viper.GetString("FASTING_FILEPATH")
@@ -25,22 +29,10 @@ func FastingsReadFile() ([]types.Fasting, error) {
 		return data, err
 	}
 
-	result, err := parseJSONFastingArray(jsonData, data)
+	err = json.Unmarshal(jsonData, &data)
 	if err != nil {
-		return data, err
+		return data, merry.Wrap(err)
 	}
 
-	// Append category
-	for i, v := range result {
-		category, _ := CategoriesGetByID(v.CategoryID)
-		result[i].Category = category
-	}
-
-	// Append type
-	for i, v := range result {
-		typeData, _ := TypesGetByID(v.TypeID)
-		result[i].Type = typeData
-	}
-
-	return result, nil
+	return data, nil
 }

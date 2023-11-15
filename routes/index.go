@@ -55,7 +55,7 @@ func InitRoutes(log *configs.Log, c *controlers.Controller) *fiber.App {
 	SourcesRoutes(api, c)
 	CategoriesRoutes(api, c)
 	TypesRoutes(api, c)
-	FastingsRoutes(api)
+	FastingsRoutes(api, c)
 
 	// Endpoint not found handler
 	app.Use(func(c *fiber.Ctx) error {
