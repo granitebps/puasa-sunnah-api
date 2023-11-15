@@ -5,8 +5,8 @@ import (
 	controlers "github.com/granitebps/puasa-sunnah-api/controllers"
 )
 
-func TypesRoutes(app fiber.Router) {
+func TypesRoutes(app fiber.Router, c *controlers.Controller) {
 	api := app.Group("types")
 
-	api.Get("/", controlers.TypesIndex)
+	api.Get("/", c.TypesController.Index)
 }

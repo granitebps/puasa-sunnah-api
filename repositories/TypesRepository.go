@@ -4,41 +4,45 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/ansel1/merry/v2"
+	"github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/helpers"
 	"github.com/granitebps/puasa-sunnah-api/types"
 	"github.com/spf13/viper"
 )
 
-func parseJSONTypeArray(jsonData []byte, data []types.Type) ([]types.Type, error) {
-	if err := json.Unmarshal(jsonData, &data); err != nil {
-		return data, err
-	}
-
-	return data, nil
+type TypesRepository struct {
+	Config *configs.Config
 }
 
-func TypesReadFile() ([]types.Type, error) {
+func NewTypesRepository(c *configs.Config) *TypesRepository {
+	return &TypesRepository{
+		Config: c,
+	}
+}
+
+func (r *TypesRepository) ReadFile() ([]types.Type, error) {
 	data := []types.Type{}
 
 	filename := viper.GetString("TYPE_FILEPATH")
 	jsonData, err := helpers.ReadJsonFile(filename)
 	if err != nil {
-		return data, err
+		return data, merry.Wrap(err)
 	}
 
-	result, err := parseJSONTypeArray(jsonData, data)
+	err = json.Unmarshal(jsonData, &data)
 	if err != nil {
-		return data, err
+		return data, merry.Wrap(err)
 	}
 
-	return result, nil
+	return data, nil
 }
 
-func TypesGetByID(ID uint) (types.Type, error) {
+func (r *TypesRepository) GetByID(ID uint) (types.Type, error) {
 	typeData := types.Type{}
-	typesData, err := TypesReadFile()
+	typesData, err := r.ReadFile()
 	if err != nil {
-		return typeData, err
+		return typeData, merry.Wrap(err)
 	}
 
 	for _, t := range typesData {
@@ -48,7 +52,7 @@ func TypesGetByID(ID uint) (types.Type, error) {
 	}
 
 	if typeData.ID == 0 {
-		return typeData, errors.New("type not found")
+		return typeData, merry.Wrap(errors.New("type not found"))
 	}
 
 	return typeData, nil

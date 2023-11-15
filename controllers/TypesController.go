@@ -7,6 +7,16 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/services"
 )
 
+type TypesController struct {
+	TypesService *services.TypesService
+}
+
+func newTypesController(typesService *services.TypesService) *TypesController {
+	return &TypesController{
+		TypesService: typesService,
+	}
+}
+
 // ListTypes godoc
 // @Summary      List Types
 // @Description  Get list of types
@@ -16,18 +26,18 @@ import (
 // @Success      200  {object}   helpers.SuccessResponse{data=[]types.Type} "desc"
 // @Failure      400  {object}  helpers.FailedResponse
 // @Router       /api/v1/types [get]
-func TypesIndex(c *fiber.Ctx) error {
-	data, err := services.TypesGetAll()
+func (c *TypesController) Index(ctx *fiber.Ctx) error {
+	data, err := c.TypesService.GetAll()
 	if err != nil {
 		return helpers.FailedAPIResponse(
-			c,
+			ctx,
 			errors.WrapUserMessageAndCode(err, "", 0),
 			nil,
 		)
 	}
 
 	return helpers.SuccessAPIResponse(
-		c,
+		ctx,
 		"Success",
 		fiber.StatusOK,
 		data,
