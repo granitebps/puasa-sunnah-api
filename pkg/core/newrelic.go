@@ -15,7 +15,7 @@ func SetupNewrelicApp() *newrelic.Application {
 		newrelic.ConfigAppName(viper.GetString(constants.NEWRELIC_APP_NAME)),
 		newrelic.ConfigLicense(viper.GetString(constants.NEWRELIC_LICENSE)),
 		// newrelic.ConfigDebugLogger(os.Stdout),
-		// newrelic.ConfigAppLogForwardingEnabled(true),
+		newrelic.ConfigAppLogForwardingEnabled(true),
 		newrelic.ConfigDistributedTracerEnabled(true),
 	)
 	if err != nil {
