@@ -1,21 +1,23 @@
-OS_NAME := $(shell uname -s | tr A-Z a-z)
-ifeq ($(OS_NAME), darwin)
-DOC = ./bin/swag-mac init
-else
-DOC = ./bin/swag-linux init
-endif
+APP_NAME = api
+BUILD_DIR = $(PWD)/build
 
-start:
-	go run main.go
-
-build:
-	go build main.go
-
-doc:
-	$(DOC)
+swag:
+	swag init
 
 air:
-	./bin/air
+	air
+
+build:
+	CGO_ENABLED=0 go build -ldflags="-w -s" -o $(BUILD_DIR)/$(APP_NAME) .
+
+lint:
+	golangci-lint run ./...
+
+security:
+	gosec ./...
+
+wire:
+	wire
 
 ## test: runs all tests
 test:
