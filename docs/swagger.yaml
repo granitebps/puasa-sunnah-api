@@ -1,30 +1,5 @@
 basePath: /
 definitions:
-  helpers.FailedResponse:
-    properties:
-      code:
-        example: 400
-        type: integer
-      message:
-        example: Failed
-        type: string
-      success:
-        example: false
-        type: boolean
-    type: object
-  helpers.SuccessResponse:
-    properties:
-      code:
-        example: 200
-        type: integer
-      data: {}
-      message:
-        example: Success
-        type: string
-      success:
-        example: true
-        type: boolean
-    type: object
   types.Category:
     properties:
       id:
@@ -83,6 +58,16 @@ definitions:
         example: lorem
         type: string
     type: object
+  utils.JSONResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+      timestamp:
+        type: integer
+    type: object
 info:
   contact:
     email: granitebagas28@gmail.com
@@ -91,6 +76,7 @@ info:
   license:
     name: MIT
   title: Puasa Sunnah API
+  version: "1.0"
 paths:
   /api/v1/categories:
     get:
@@ -104,7 +90,7 @@ paths:
           description: desc
           schema:
             allOf:
-            - $ref: '#/definitions/helpers.SuccessResponse'
+            - $ref: '#/definitions/utils.JSONResponse'
             - properties:
                 data:
                   items:
@@ -114,7 +100,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/helpers.FailedResponse'
+            $ref: '#/definitions/utils.JSONResponse'
       summary: List Categories
       tags:
       - Categories
@@ -151,7 +137,7 @@ paths:
           description: desc
           schema:
             allOf:
-            - $ref: '#/definitions/helpers.SuccessResponse'
+            - $ref: '#/definitions/utils.JSONResponse'
             - properties:
                 data:
                   items:
@@ -161,7 +147,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/helpers.FailedResponse'
+            $ref: '#/definitions/utils.JSONResponse'
       summary: List Sunnah Fastings
       tags:
       - Fastings
@@ -177,7 +163,7 @@ paths:
           description: desc
           schema:
             allOf:
-            - $ref: '#/definitions/helpers.SuccessResponse'
+            - $ref: '#/definitions/utils.JSONResponse'
             - properties:
                 data:
                   items:
@@ -187,7 +173,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/helpers.FailedResponse'
+            $ref: '#/definitions/utils.JSONResponse'
       summary: List Sources
       tags:
       - Sources
@@ -203,7 +189,7 @@ paths:
           description: desc
           schema:
             allOf:
-            - $ref: '#/definitions/helpers.SuccessResponse'
+            - $ref: '#/definitions/utils.JSONResponse'
             - properties:
                 data:
                   items:
@@ -213,7 +199,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/helpers.FailedResponse'
+            $ref: '#/definitions/utils.JSONResponse'
       summary: List Types
       tags:
       - Types

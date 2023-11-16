@@ -1,0 +1,19 @@
+package constants
+
+// Environment Variable Constant
+// Put env name in here to prevent typo
+const (
+	APP_NAME  = "APP_NAME"
+	APP_ENV   = "APP_ENV"
+	APP_DEBUG = "APP_DEBUG"
+	APP_PORT  = "APP_PORT"
+	APP_URL   = "APP_URL"
+
+	SENTRY_DSN = "SENTRY_DSN"
+
+	NEWRELIC_ENABLED  = "NEWRELIC_ENABLED"
+	NEWRELIC_APP_NAME = "NEWRELIC_APP_NAME"
+	NEWRELIC_LICENSE  = "NEWRELIC_LICENSE"
+
+	HEALTHCHECK_URL = "HEALTHCHECK_URL"
+)

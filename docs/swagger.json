@@ -9,7 +9,8 @@
         },
         "license": {
             "name": "MIT"
-        }
+        },
+        "version": "1.0"
     },
     "basePath": "/",
     "paths": {
@@ -32,7 +33,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.SuccessResponse"
+                                    "$ref": "#/definitions/utils.JSONResponse"
                                 },
                                 {
                                     "type": "object",
@@ -51,7 +52,7 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.FailedResponse"
+                            "$ref": "#/definitions/utils.JSONResponse"
                         }
                     }
                 }
@@ -108,7 +109,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.SuccessResponse"
+                                    "$ref": "#/definitions/utils.JSONResponse"
                                 },
                                 {
                                     "type": "object",
@@ -127,7 +128,7 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.FailedResponse"
+                            "$ref": "#/definitions/utils.JSONResponse"
                         }
                     }
                 }
@@ -152,7 +153,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.SuccessResponse"
+                                    "$ref": "#/definitions/utils.JSONResponse"
                                 },
                                 {
                                     "type": "object",
@@ -171,7 +172,7 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.FailedResponse"
+                            "$ref": "#/definitions/utils.JSONResponse"
                         }
                     }
                 }
@@ -196,7 +197,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/helpers.SuccessResponse"
+                                    "$ref": "#/definitions/utils.JSONResponse"
                                 },
                                 {
                                     "type": "object",
@@ -215,7 +216,7 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/helpers.FailedResponse"
+                            "$ref": "#/definitions/utils.JSONResponse"
                         }
                     }
                 }
@@ -223,41 +224,6 @@
         }
     },
     "definitions": {
-        "helpers.FailedResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 400
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Failed"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                }
-            }
-        },
-        "helpers.SuccessResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 200
-                },
-                "data": {},
-                "message": {
-                    "type": "string",
-                    "example": "Success"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": true
-                }
-            }
-        },
         "types.Category": {
             "type": "object",
             "properties": {
@@ -337,6 +303,21 @@
                 "name": {
                     "type": "string",
                     "example": "lorem"
+                }
+            }
+        },
+        "utils.JSONResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "timestamp": {
+                    "type": "integer"
                 }
             }
         }
