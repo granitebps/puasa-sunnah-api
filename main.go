@@ -10,6 +10,7 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
 	"github.com/granitebps/puasa-sunnah-api/route"
+	"github.com/granitebps/puasa-sunnah-api/scheduler"
 	"github.com/granitebps/puasa-sunnah-api/src/middleware"
 	"github.com/spf13/viper"
 
@@ -41,6 +42,9 @@ func main() {
 
 	// Setup route
 	route.SetupRoute(app, contr)
+
+	// Setup scheduler
+	scheduler.SetupScheduler(conf)
 
 	startServerWithGracefulShutdown(app)
 }
