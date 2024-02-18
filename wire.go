@@ -22,6 +22,7 @@ func SetupDependencies(c *core.Core) *controller.ControllerStruct {
 		service.NewSourceService,
 		service.NewTypesService,
 		service.NewFastingService,
+		service.NewAdminService,
 
 		controller.NewController,
 	)
