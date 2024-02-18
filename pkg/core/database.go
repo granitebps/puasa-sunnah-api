@@ -84,10 +84,22 @@ func SetupMySql() *gorm.DB {
 	sDatabase.SetConnMaxLifetime(1 * time.Minute)
 
 	// Auto migrate
-	database.AutoMigrate(&model.Category{})
-	database.AutoMigrate(&model.Type{})
-	database.AutoMigrate(&model.Source{})
-	database.AutoMigrate(&model.Fasting{})
+	err = database.AutoMigrate(&model.Category{})
+	if err != nil {
+		log.Panic(err)
+	}
+	err = database.AutoMigrate(&model.Type{})
+	if err != nil {
+		log.Panic(err)
+	}
+	err = database.AutoMigrate(&model.Source{})
+	if err != nil {
+		log.Panic(err)
+	}
+	err = database.AutoMigrate(&model.Fasting{})
+	if err != nil {
+		log.Panic(err)
+	}
 
 	return database
 }

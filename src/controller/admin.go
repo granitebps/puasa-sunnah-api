@@ -14,10 +14,10 @@ type AdminController struct {
 	Core         *core.Core
 }
 
-func newAdminController(c *core.Core, AdminService *service.AdminService) *AdminController {
+func newAdminController(c *core.Core, adminService *service.AdminService) *AdminController {
 	return &AdminController{
 		Core:         c,
-		AdminService: AdminService,
+		AdminService: adminService,
 	}
 }
 
