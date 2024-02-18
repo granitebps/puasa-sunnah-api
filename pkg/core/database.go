@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
+	"github.com/granitebps/puasa-sunnah-api/src/model"
 	_ "github.com/newrelic/go-agent/v3/integrations/nrmysql"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -83,8 +84,10 @@ func SetupMySql() *gorm.DB {
 	sDatabase.SetConnMaxLifetime(1 * time.Minute)
 
 	// Auto migrate
-	// database.AutoMigrate(&model.Blog{})
-	// database.AutoMigrate(&model.User{})
+	database.AutoMigrate(&model.Category{})
+	database.AutoMigrate(&model.Type{})
+	database.AutoMigrate(&model.Source{})
+	database.AutoMigrate(&model.Fasting{})
 
 	return database
 }
