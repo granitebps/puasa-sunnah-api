@@ -1,5 +1,21 @@
 basePath: /
 definitions:
+  requests.CreateCategoryRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  transformer.CategoryTransformer:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: lorem impsum
+        type: string
+    type: object
   types.Category:
     properties:
       id:
@@ -78,6 +94,39 @@ info:
   title: Puasa Sunnah API
   version: "1.0"
 paths:
+  /api/v1/admin/categories:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting category
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.CategoryTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create category
+      tags:
+      - Admin
   /api/v1/categories:
     get:
       consumes:
@@ -203,4 +252,7 @@ paths:
       summary: List Types
       tags:
       - Types
+securityDefinitions:
+  BasicAuth:
+    type: basic
 swagger: "2.0"
