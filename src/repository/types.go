@@ -6,7 +6,7 @@ import (
 
 	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
-	"github.com/granitebps/puasa-sunnah-api/types"
+	"github.com/granitebps/puasa-sunnah-api/src/types"
 	"github.com/spf13/viper"
 )
 

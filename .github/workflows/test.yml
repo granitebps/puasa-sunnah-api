@@ -1,0 +1,23 @@
+name: Test
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.19.x'
+      - name: Install dependencies
+        run: go get .
+      - name: Build
+        run: make build
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3.7.0
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...

@@ -4,7 +4,7 @@ import (
 	"github.com/ansel1/merry"
 	"github.com/gofiber/fiber/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
-	"github.com/granitebps/puasa-sunnah-api/requests"
+	"github.com/granitebps/puasa-sunnah-api/src/requests"
 	"github.com/granitebps/puasa-sunnah-api/src/service"
 )
 

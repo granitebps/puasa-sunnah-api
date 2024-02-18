@@ -2,9 +2,9 @@ package service
 
 import (
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
-	"github.com/granitebps/puasa-sunnah-api/requests"
 	"github.com/granitebps/puasa-sunnah-api/src/repository"
-	"github.com/granitebps/puasa-sunnah-api/types"
+	"github.com/granitebps/puasa-sunnah-api/src/requests"
+	"github.com/granitebps/puasa-sunnah-api/src/types"
 )
 
 type FastingService struct {
