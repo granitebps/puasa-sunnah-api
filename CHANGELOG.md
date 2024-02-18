@@ -8,6 +8,11 @@ You can find and compare releases at the GitHub release page.
 
 ## [Unreleased]
 
+## [1.0.0] - 2023-11-16
+
+### Changed
+- Massive refactoring
+
 ## [0.1.0] - 2022-05-03
 
 ### Added
@@ -44,6 +49,7 @@ You can find and compare releases at the GitHub release page.
 - Prepare for deployment
 
 [Unreleased]: https://github.com/granitebps/puasa-sunnah-api/compare/main...dev
+[1.0.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/granitebps/puasa-sunnah-api/releases/tag/v0.0.1

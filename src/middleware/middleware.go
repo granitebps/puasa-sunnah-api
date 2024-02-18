@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/ansel1/merry/v2"
+	_ "github.com/granitebps/puasa-sunnah-api/docs"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 

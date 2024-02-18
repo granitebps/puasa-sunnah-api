@@ -6,7 +6,7 @@ import (
 
 	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
-	"github.com/granitebps/puasa-sunnah-api/types"
+	"github.com/granitebps/puasa-sunnah-api/src/types"
 	"github.com/spf13/viper"
 )
 
@@ -33,7 +33,7 @@ func (r *CategoryRepository) ReadFile() ([]types.Category, error) {
 	return data, nil
 }
 
-func (r *CategoryRepository) GetByID(ID uint) (types.Category, error) {
+func (r *CategoryRepository) GetByID(id uint) (types.Category, error) {
 	category := types.Category{}
 	categories, err := r.ReadFile()
 	if err != nil {
@@ -41,7 +41,7 @@ func (r *CategoryRepository) GetByID(ID uint) (types.Category, error) {
 	}
 
 	for _, c := range categories {
-		if c.ID == ID {
+		if c.ID == id {
 			category = c
 		}
 	}
