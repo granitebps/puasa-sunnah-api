@@ -24,6 +24,7 @@ import (
 // @license.name MIT
 // @BasePath /
 // @version 1.0
+// @securityDefinitions.basic BasicAuth
 func main() {
 	// Load ENV and setup some config
 	config.SetupConfig(".env")
