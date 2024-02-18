@@ -1,9 +1,12 @@
 package route
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/ansel1/merry/v2"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/controller"
@@ -28,4 +31,26 @@ func v1Route(route fiber.Router, c *controller.ControllerStruct) {
 	CategoriesRoutes(v1, c)
 	TypesRoutes(v1, c)
 	FastingsRoutes(v1, c)
+
+	// Admin route
+	adminRoute(v1, c)
+}
+
+func adminRoute(route fiber.Router, c *controller.ControllerStruct) {
+	admin := route.Group("admin")
+
+	// Add basic auth
+	admin.Use(basicauth.New(basicauth.Config{
+		Users: map[string]string{
+			viper.GetString(constants.ADMIN_USERNAME): viper.GetString(constants.ADMIN_PASSWORD),
+		},
+		Unauthorized: func(c *fiber.Ctx) error {
+			err := errors.New("Unauthorized")
+			err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnauthorized), merry.WithUserMessage("Unauthorized"))
+
+			return utils.ReturnErrorResponse(c, err, nil)
+		},
+	}))
+
+	AdminRoutes(admin, c)
 }
