@@ -33,7 +33,7 @@ func (r *TypesRepository) ReadFile() ([]types.Type, error) {
 	return data, nil
 }
 
-func (r *TypesRepository) GetByID(ID uint) (types.Type, error) {
+func (r *TypesRepository) GetByID(id uint) (types.Type, error) {
 	typeData := types.Type{}
 	typesData, err := r.ReadFile()
 	if err != nil {
@@ -41,7 +41,7 @@ func (r *TypesRepository) GetByID(ID uint) (types.Type, error) {
 	}
 
 	for _, t := range typesData {
-		if t.ID == ID {
+		if t.ID == id {
 			typeData = t
 		}
 	}

@@ -33,7 +33,7 @@ func (r *CategoryRepository) ReadFile() ([]types.Category, error) {
 	return data, nil
 }
 
-func (r *CategoryRepository) GetByID(ID uint) (types.Category, error) {
+func (r *CategoryRepository) GetByID(id uint) (types.Category, error) {
 	category := types.Category{}
 	categories, err := r.ReadFile()
 	if err != nil {
@@ -41,7 +41,7 @@ func (r *CategoryRepository) GetByID(ID uint) (types.Category, error) {
 	}
 
 	for _, c := range categories {
-		if c.ID == ID {
+		if c.ID == id {
 			category = c
 		}
 	}
