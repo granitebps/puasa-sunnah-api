@@ -16,7 +16,7 @@ import (
 // Injectors from wire.go:
 
 func SetupDependencies(c *core.Core) *controller.ControllerStruct {
-	sourceRepository := repository.NewSourceRepository()
+	sourceRepository := repository.NewSourceRepository(c)
 	sourceService := service.NewSourceService(sourceRepository)
 	typesRepository := repository.NewTypesRepository()
 	typesService := service.NewTypesService(typesRepository)
