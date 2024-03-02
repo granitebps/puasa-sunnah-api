@@ -28,10 +28,10 @@ func (s *FastingService) GetAll(q requests.FastingRequest) ([]types.Fasting, err
 	}
 
 	// Append category
-	for i, v := range data {
-		category, _ := s.CategoryRepo.GetByID(v.CategoryID)
-		data[i].Category = category
-	}
+	// for i, v := range data {
+	// 	category, _ := s.CategoryRepo.GetByID(v.CategoryID)
+	// 	data[i].Category = category
+	// }
 
 	// Append type
 	for i, v := range data {
