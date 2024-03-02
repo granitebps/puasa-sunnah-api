@@ -2,13 +2,10 @@ package repository
 
 import (
 	"context"
-	"encoding/json"
+
 	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
-	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
-	"github.com/granitebps/puasa-sunnah-api/src/types"
-	"github.com/spf13/viper"
 )
 
 type CategoryRepository struct {
@@ -21,21 +18,11 @@ func NewCategoryRepository(c *core.Core) *CategoryRepository {
 	}
 }
 
-func (r *CategoryRepository) ReadFile() ([]types.Category, error) {
-	data := []types.Category{}
-
-	filename := viper.GetString("CATEGORY_FILEPATH")
-	jsonData, err := utils.ReadJsonFile(filename)
-	if err != nil {
-		return data, err
-	}
-
-	err = json.Unmarshal(jsonData, &data)
-	if err != nil {
-		return data, merry.Wrap(err)
-	}
-
-	return data, nil
+func (r *CategoryRepository) GetAll(ctx context.Context) (res []model.Category, err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Find(&res).Error
+	return
 }
 
 func (r *CategoryRepository) GetByID(ctx context.Context, id uint) (res model.Category, err error) {

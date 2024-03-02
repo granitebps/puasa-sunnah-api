@@ -23,11 +23,11 @@ func newCategoryController(categoryService *service.CategoryService) *CategoryCo
 // @Tags         Categories
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}   utils.JSONResponse{data=[]types.Category} "desc"
+// @Success      200  {object}   utils.JSONResponse{data=[]transformer.CategoryTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/categories [get]
 func (c *CategoryController) Index(ctx *fiber.Ctx) error {
-	data, err := c.CategoryService.GetAll()
+	data, err := c.CategoryService.GetAll(ctx.UserContext())
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
