@@ -10,4 +10,8 @@ func AdminRoutes(app fiber.Router, c *controller.ControllerStruct) {
 
 	category.Post("", c.AdminController.CreateCategory)
 	category.Put(":id", c.AdminController.UpdateCategory)
+
+	source := app.Group("sources")
+	source.Post("", c.AdminController.CreateSource)
+	source.Put(":id", c.AdminController.UpdateSource)
 }

@@ -12,11 +12,16 @@ import (
 
 type AdminService struct {
 	CategoryRepo *repository.CategoryRepository
+	SourceRepo   *repository.SourceRepository
 }
 
-func NewAdminService(categoryRepo *repository.CategoryRepository) *AdminService {
+func NewAdminService(
+	categoryRepo *repository.CategoryRepository,
+	sourceRepo *repository.SourceRepository,
+) *AdminService {
 	return &AdminService{
 		CategoryRepo: categoryRepo,
+		SourceRepo:   sourceRepo,
 	}
 }
 
@@ -54,6 +59,44 @@ func (s *AdminService) UpdateCategory(ctx context.Context, id uint, req *request
 
 	trans.ID = cat.ID
 	trans.Name = cat.Name
+
+	return
+}
+
+func (s *AdminService) CreateSource(ctx context.Context, req *requests.SourceRequest) (trans transformer.SourceTransformer, err error) {
+	source := model.Source{
+		Url: req.Url,
+	}
+
+	err = s.SourceRepo.Create(ctx, &source)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	trans.ID = source.ID
+	trans.URL = source.Url
+
+	return
+}
+
+func (s *AdminService) UpdateSource(ctx context.Context, id uint, req *requests.SourceRequest) (trans transformer.SourceTransformer, err error) {
+	source, err := s.SourceRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	source.Url = req.Url
+
+	err = s.SourceRepo.Update(ctx, &source)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	trans.ID = source.ID
+	trans.URL = source.Url
 
 	return
 }
