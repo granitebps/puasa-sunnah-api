@@ -169,7 +169,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/types.Category"
+                                                "$ref": "#/definitions/transformer.CategoryTransformer"
                                             }
                                         }
                                     }

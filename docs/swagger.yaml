@@ -181,7 +181,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Category'
+                    $ref: '#/definitions/transformer.CategoryTransformer'
                   type: array
               type: object
         "400":
