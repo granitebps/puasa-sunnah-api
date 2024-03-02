@@ -7,6 +7,13 @@ definitions:
     required:
     - name
     type: object
+  requests.SourceRequest:
+    properties:
+      url:
+        type: string
+    required:
+    - url
+    type: object
   transformer.CategoryTransformer:
     properties:
       id:
@@ -163,6 +170,77 @@ paths:
       security:
       - BasicAuth: []
       summary: Update category
+      tags:
+      - Admin
+  /api/v1/admin/sources:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting source
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SourceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.SourceTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create source
+      tags:
+      - Admin
+  /api/v1/admin/sources/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting source
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SourceRequest'
+      - description: Source ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.SourceTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update source
       tags:
       - Admin
   /api/v1/categories:
