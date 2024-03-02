@@ -3,8 +3,6 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"errors"
-
 	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
@@ -40,29 +38,36 @@ func (r *CategoryRepository) ReadFile() ([]types.Category, error) {
 	return data, nil
 }
 
-func (r *CategoryRepository) GetByID(id uint) (types.Category, error) {
-	category := types.Category{}
-	categories, err := r.ReadFile()
+func (r *CategoryRepository) GetByID(ctx context.Context, id uint) (res model.Category, err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		First(&res, id).Error
 	if err != nil {
-		return category, err
+		err = merry.Wrap(err)
+		return
 	}
 
-	for _, c := range categories {
-		if c.ID == id {
-			category = c
-		}
-	}
-
-	if category.ID == 0 {
-		return category, errors.New("category not found")
-	}
-
-	return category, nil
+	return
 }
 
 func (r *CategoryRepository) Create(ctx context.Context, category *model.Category) (err error) {
 	err = r.Core.Database.Db.
 		WithContext(ctx).
 		Create(&category).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+	return
+}
+
+func (r *CategoryRepository) Update(ctx context.Context, category *model.Category) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Save(&category).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
 	return
 }

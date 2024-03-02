@@ -1,5 +1,5 @@
 package requests
 
-type CreateCategoryRequest struct {
+type CategoryRequest struct {
 	Name string `json:"name" validate:"required"`
 }

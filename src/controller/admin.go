@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/ansel1/merry/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
@@ -27,13 +29,13 @@ func newAdminController(c *core.Core, adminService *service.AdminService) *Admin
 // @Tags         Admin
 // @Accept       json
 // @Produce      json
-// @param payload body requests.CreateCategoryRequest true "JSON payload"
+// @param payload body requests.CategoryRequest true "JSON payload"
 // @Success      200  {object}   utils.JSONResponse{data=transformer.CategoryTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/admin/categories [post]
 // @Security BasicAuth
 func (c *AdminController) CreateCategory(ctx *fiber.Ctx) error {
-	var req requests.CreateCategoryRequest
+	var req requests.CategoryRequest
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
 	if err != nil {
 		err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnprocessableEntity))
@@ -47,4 +49,41 @@ func (c *AdminController) CreateCategory(ctx *fiber.Ctx) error {
 	}
 
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success create category", data)
+}
+
+// Update Category	godoc
+// @Summary      	Update category
+// @Description  	Update fasting category
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @param 		 	payload body requests.CategoryRequest true "JSON payload"
+// @Param 			id path int true "Category ID"
+// @Success      	200  {object}  utils.JSONResponse{data=transformer.CategoryTransformer} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/categories/:id [put]
+// @Security 		BasicAuth
+func (c *AdminController) UpdateCategory(ctx *fiber.Ctx) error {
+	var req requests.CategoryRequest
+
+	errorField, err := c.Core.Validator.Validate(ctx, &req)
+	if err != nil {
+		err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnprocessableEntity))
+		return utils.ReturnErrorResponse(ctx, err, errorField)
+	}
+
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	data, err := c.AdminService.UpdateCategory(ctx.UserContext(), uint(id), &req)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update category", data)
 }

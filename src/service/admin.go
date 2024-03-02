@@ -20,7 +20,7 @@ func NewAdminService(categoryRepo *repository.CategoryRepository) *AdminService 
 	}
 }
 
-func (s *AdminService) CreateCategory(ctx context.Context, req *requests.CreateCategoryRequest) (trans transformer.CategoryTransformer, err error) {
+func (s *AdminService) CreateCategory(ctx context.Context, req *requests.CategoryRequest) (trans transformer.CategoryTransformer, err error) {
 	category := model.Category{
 		Name: req.Name,
 	}
@@ -33,6 +33,27 @@ func (s *AdminService) CreateCategory(ctx context.Context, req *requests.CreateC
 
 	trans.ID = category.ID
 	trans.Name = category.Name
+
+	return
+}
+
+func (s *AdminService) UpdateCategory(ctx context.Context, id uint, req *requests.CategoryRequest) (trans transformer.CategoryTransformer, err error) {
+	cat, err := s.CategoryRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	cat.Name = req.Name
+
+	err = s.CategoryRepo.Update(ctx, &cat)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	trans.ID = cat.ID
+	trans.Name = cat.Name
 
 	return
 }
