@@ -16,6 +16,15 @@ definitions:
         example: lorem impsum
         type: string
     type: object
+  transformer.SourceTransformer:
+    properties:
+      id:
+        example: 1
+        type: integer
+      url:
+        example: https://granitebps.com
+        type: string
+    type: object
   types.Category:
     properties:
       id:
@@ -52,15 +61,6 @@ definitions:
       year:
         example: 2020
         type: integer
-    type: object
-  types.Source:
-    properties:
-      id:
-        example: 1
-        type: integer
-      url:
-        example: https://granitebps.com
-        type: string
     type: object
   types.Type:
     properties:
@@ -254,7 +254,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Source'
+                    $ref: '#/definitions/transformer.SourceTransformer'
                   type: array
               type: object
         "400":

@@ -289,7 +289,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/types.Source"
+                                                "$ref": "#/definitions/transformer.SourceTransformer"
                                             }
                                         }
                                     }
@@ -376,6 +376,19 @@ const docTemplate = `{
                 }
             }
         },
+        "transformer.SourceTransformer": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "url": {
+                    "type": "string",
+                    "example": "https://granitebps.com"
+                }
+            }
+        },
         "types.Category": {
             "type": "object",
             "properties": {
@@ -425,19 +438,6 @@ const docTemplate = `{
                 "year": {
                     "type": "integer",
                     "example": 2020
-                }
-            }
-        },
-        "types.Source": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "url": {
-                    "type": "string",
-                    "example": "https://granitebps.com"
                 }
             }
         },
