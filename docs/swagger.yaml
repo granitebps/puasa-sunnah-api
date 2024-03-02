@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  requests.CreateCategoryRequest:
+  requests.CategoryRequest:
     properties:
       name:
         type: string
@@ -105,7 +105,7 @@ paths:
         name: payload
         required: true
         schema:
-          $ref: '#/definitions/requests.CreateCategoryRequest'
+          $ref: '#/definitions/requests.CategoryRequest'
       produces:
       - application/json
       responses:
@@ -125,6 +125,44 @@ paths:
       security:
       - BasicAuth: []
       summary: Create category
+      tags:
+      - Admin
+  /api/v1/admin/categories/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting category
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CategoryRequest'
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.CategoryTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update category
       tags:
       - Admin
   /api/v1/categories:
