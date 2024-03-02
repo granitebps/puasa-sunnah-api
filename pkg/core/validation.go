@@ -61,6 +61,8 @@ func validationRuleMessage(field, rule, def, param string) string {
 		return fmt.Sprintf("The %s field must be a valid email address.", field)
 	case "min":
 		return fmt.Sprintf("The %s field must be at least %s characters.", field, param)
+	case "url":
+		return fmt.Sprintf("The %s field must be a valid URL.", field)
 	default:
 		return def
 	}
