@@ -14,6 +14,16 @@ definitions:
     required:
     - url
     type: object
+  requests.TypeRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
   transformer.CategoryTransformer:
     properties:
       id:
@@ -253,6 +263,77 @@ paths:
       security:
       - BasicAuth: []
       summary: Update source
+      tags:
+      - Admin
+  /api/v1/admin/types:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting type
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.TypeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.TypeTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create type
+      tags:
+      - Admin
+  /api/v1/admin/types/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting type
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.TypeRequest'
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.TypeTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update type
       tags:
       - Admin
   /api/v1/categories:
