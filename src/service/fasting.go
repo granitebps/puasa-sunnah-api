@@ -34,10 +34,10 @@ func (s *FastingService) GetAll(q requests.FastingRequest) ([]types.Fasting, err
 	// }
 
 	// Append type
-	for i, v := range data {
-		typeData, _ := s.TypesRepo.GetByID(v.TypeID)
-		data[i].Type = typeData
-	}
+	// for i, v := range data {
+	// 	typeData, _ := s.TypesRepo.GetByID(v.TypeID)
+	// 	data[i].Type = typeData
+	// }
 
 	filteredData := FastingsFilter(q, data)
 
