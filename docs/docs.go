@@ -487,7 +487,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/types.Fasting"
+                                                "$ref": "#/definitions/transformer.FastingTransformer"
                                             }
                                         }
                                     }
@@ -619,7 +619,6 @@ const docTemplate = `{
         "requests.TypeRequest": {
             "type": "object",
             "required": [
-                "description",
                 "name"
             ],
             "properties": {
@@ -641,6 +640,45 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "lorem impsum"
+                }
+            }
+        },
+        "transformer.FastingTransformer": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/transformer.CategoryTransformer"
+                },
+                "category_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
+                "day": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "month": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "type": {
+                    "$ref": "#/definitions/transformer.TypeTransformer"
+                },
+                "type_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "year": {
+                    "type": "integer",
+                    "example": 2020
                 }
             }
         },
@@ -671,75 +709,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "lorem ipsum"
-                }
-            }
-        },
-        "types.Category": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "type": "string",
-                    "example": "lorem impsum"
-                }
-            }
-        },
-        "types.Fasting": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "$ref": "#/definitions/types.Category"
-                },
-                "category_id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "date": {
-                    "type": "string",
-                    "example": "2020-01-01"
-                },
-                "day": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "month": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "type": {
-                    "$ref": "#/definitions/types.Type"
-                },
-                "type_id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "year": {
-                    "type": "integer",
-                    "example": 2020
-                }
-            }
-        },
-        "types.Type": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "type": "string",
-                    "example": "lorem"
                 }
             }
         },

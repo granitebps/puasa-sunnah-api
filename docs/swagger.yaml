@@ -21,7 +21,6 @@ definitions:
       name:
         type: string
     required:
-    - description
     - name
     type: object
   transformer.CategoryTransformer:
@@ -32,6 +31,34 @@ definitions:
       name:
         example: lorem impsum
         type: string
+    type: object
+  transformer.FastingTransformer:
+    properties:
+      category:
+        $ref: '#/definitions/transformer.CategoryTransformer'
+      category_id:
+        example: 1
+        type: integer
+      date:
+        example: "2020-01-01"
+        type: string
+      day:
+        example: 1
+        type: integer
+      id:
+        example: 1
+        type: integer
+      month:
+        example: 1
+        type: integer
+      type:
+        $ref: '#/definitions/transformer.TypeTransformer'
+      type_id:
+        example: 1
+        type: integer
+      year:
+        example: 2020
+        type: integer
     type: object
   transformer.SourceTransformer:
     properties:
@@ -52,55 +79,6 @@ definitions:
         type: integer
       name:
         example: lorem ipsum
-        type: string
-    type: object
-  types.Category:
-    properties:
-      id:
-        example: 1
-        type: integer
-      name:
-        example: lorem impsum
-        type: string
-    type: object
-  types.Fasting:
-    properties:
-      category:
-        $ref: '#/definitions/types.Category'
-      category_id:
-        example: 1
-        type: integer
-      date:
-        example: "2020-01-01"
-        type: string
-      day:
-        example: 1
-        type: integer
-      id:
-        example: 1
-        type: integer
-      month:
-        example: 1
-        type: integer
-      type:
-        $ref: '#/definitions/types.Type'
-      type_id:
-        example: 1
-        type: integer
-      year:
-        example: 2020
-        type: integer
-    type: object
-  types.Type:
-    properties:
-      description:
-        example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        type: string
-      id:
-        example: 1
-        type: integer
-      name:
-        example: lorem
         type: string
     type: object
   utils.JSONResponse:
@@ -399,7 +377,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Fasting'
+                    $ref: '#/definitions/transformer.FastingTransformer'
                   type: array
               type: object
         "400":
