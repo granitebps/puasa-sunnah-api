@@ -16,6 +16,9 @@ type Fasting struct {
 	Day        uint32         `json:"day" gorm:"column:day;not null"`
 	CreatedAt  time.Time      `json:"created_at"`
 	UpdatedAt  time.Time      `json:"updated_at"`
+
+	Category Category `json:"category" gorm:"foreignKey:CategoryID;references:ID"`
+	Type     Type     `json:"type" gorm:"foreignKey:TypeID;references:ID"`
 }
 
 func (Fasting) TableName() string {

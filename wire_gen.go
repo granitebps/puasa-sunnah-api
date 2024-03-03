@@ -22,7 +22,7 @@ func SetupDependencies(c *core.Core) *controller.ControllerStruct {
 	typesService := service.NewTypesService(typesRepository)
 	categoryRepository := repository.NewCategoryRepository(c)
 	categoryService := service.NewCategoryService(categoryRepository)
-	fastingRepository := repository.NewFastingRepository()
+	fastingRepository := repository.NewFastingRepository(c)
 	fastingService := service.NewFastingService(fastingRepository, categoryRepository, typesRepository)
 	adminService := service.NewAdminService(categoryRepository, sourceRepository, typesRepository)
 	controllerStruct := controller.NewController(c, sourceService, typesService, categoryService, fastingService, adminService)

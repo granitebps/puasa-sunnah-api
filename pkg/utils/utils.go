@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"io"
 	"os"
 	"path/filepath"
@@ -46,4 +47,11 @@ func ReadJsonFile(filename string) ([]byte, error) {
 	}
 
 	return jsonData, nil
+}
+
+// Convert struct to json string.
+// Error ignored
+func StructToJSONString(s any) string {
+	jsonString, _ := json.Marshal(s)
+	return string(jsonString)
 }
