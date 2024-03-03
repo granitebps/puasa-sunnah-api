@@ -454,7 +454,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/types.Type"
+                                                "$ref": "#/definitions/transformer.TypeTransformer"
                                             }
                                         }
                                     }
@@ -518,6 +518,23 @@ const docTemplate = `{
                 "url": {
                     "type": "string",
                     "example": "https://granitebps.com"
+                }
+            }
+        },
+        "transformer.TypeTransformer": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "lorem ipsum"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "lorem ipsum"
                 }
             }
         },

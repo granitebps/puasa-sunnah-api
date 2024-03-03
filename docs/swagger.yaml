@@ -32,6 +32,18 @@ definitions:
         example: https://granitebps.com
         type: string
     type: object
+  transformer.TypeTransformer:
+    properties:
+      description:
+        example: lorem ipsum
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: lorem ipsum
+        type: string
+    type: object
   types.Category:
     properties:
       id:
@@ -358,7 +370,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Type'
+                    $ref: '#/definitions/transformer.TypeTransformer'
                   type: array
               type: object
         "400":
