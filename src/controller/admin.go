@@ -152,3 +152,67 @@ func (c *AdminController) UpdateSource(ctx *fiber.Ctx) error {
 
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update source", data)
 }
+
+// Create Type	godoc
+// @Summary      	Create type
+// @Description  	Create fasting type
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @param 			payload body requests.TypeRequest true "JSON payload"
+// @Success      	200  {object}   utils.JSONResponse{data=transformer.TypeTransformer} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/types [post]
+// @Security 		BasicAuth
+func (c *AdminController) CreateType(ctx *fiber.Ctx) error {
+	var req requests.TypeRequest
+	errorField, err := c.Core.Validator.Validate(ctx, &req)
+	if err != nil {
+		err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnprocessableEntity))
+		return utils.ReturnErrorResponse(ctx, err, errorField)
+	}
+
+	data, err := c.AdminService.CreateType(ctx.UserContext(), &req)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success create type", data)
+}
+
+// Update Type	godoc
+// @Summary      	Update type
+// @Description  	Update fasting type
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @param 		 	payload body requests.TypeRequest true "JSON payload"
+// @Param 			id path int true "Type ID"
+// @Success      	200  {object}  utils.JSONResponse{data=transformer.TypeTransformer} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/types/:id [put]
+// @Security 		BasicAuth
+func (c *AdminController) UpdateType(ctx *fiber.Ctx) error {
+	var req requests.TypeRequest
+	errorField, err := c.Core.Validator.Validate(ctx, &req)
+	if err != nil {
+		err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnprocessableEntity))
+		return utils.ReturnErrorResponse(ctx, err, errorField)
+	}
+
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	data, err := c.AdminService.UpdateType(ctx.UserContext(), uint(id), &req)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update type", data)
+}

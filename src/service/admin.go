@@ -13,15 +13,18 @@ import (
 type AdminService struct {
 	CategoryRepo *repository.CategoryRepository
 	SourceRepo   *repository.SourceRepository
+	TypeRepo     *repository.TypesRepository
 }
 
 func NewAdminService(
 	categoryRepo *repository.CategoryRepository,
 	sourceRepo *repository.SourceRepository,
+	typeRepo *repository.TypesRepository,
 ) *AdminService {
 	return &AdminService{
 		CategoryRepo: categoryRepo,
 		SourceRepo:   sourceRepo,
+		TypeRepo:     typeRepo,
 	}
 }
 
@@ -97,6 +100,48 @@ func (s *AdminService) UpdateSource(ctx context.Context, id uint, req *requests.
 
 	trans.ID = source.ID
 	trans.URL = source.Url
+
+	return
+}
+
+func (s *AdminService) CreateType(ctx context.Context, req *requests.TypeRequest) (trans transformer.TypeTransformer, err error) {
+	types := model.Type{
+		Name:        req.Name,
+		Description: req.Description,
+	}
+
+	err = s.TypeRepo.Create(ctx, &types)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	trans.ID = types.ID
+	trans.Name = types.Name
+	trans.Description = types.Description
+
+	return
+}
+
+func (s *AdminService) UpdateType(ctx context.Context, id uint, req *requests.TypeRequest) (trans transformer.TypeTransformer, err error) {
+	types, err := s.TypeRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	types.Name = req.Name
+	types.Description = req.Description
+
+	err = s.TypeRepo.Update(ctx, &types)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	trans.ID = types.ID
+	trans.Name = types.Name
+	trans.Description = types.Description
 
 	return
 }

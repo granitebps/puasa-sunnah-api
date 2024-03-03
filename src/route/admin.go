@@ -14,4 +14,8 @@ func AdminRoutes(app fiber.Router, c *controller.ControllerStruct) {
 	source := app.Group("sources")
 	source.Post("", c.AdminController.CreateSource)
 	source.Put(":id", c.AdminController.UpdateSource)
+
+	types := app.Group("types")
+	types.Post("", c.AdminController.CreateType)
+	types.Put(":id", c.AdminController.UpdateType)
 }

@@ -18,13 +18,13 @@ import (
 func SetupDependencies(c *core.Core) *controller.ControllerStruct {
 	sourceRepository := repository.NewSourceRepository(c)
 	sourceService := service.NewSourceService(sourceRepository)
-	typesRepository := repository.NewTypesRepository()
+	typesRepository := repository.NewTypesRepository(c)
 	typesService := service.NewTypesService(typesRepository)
 	categoryRepository := repository.NewCategoryRepository(c)
 	categoryService := service.NewCategoryService(categoryRepository)
 	fastingRepository := repository.NewFastingRepository()
 	fastingService := service.NewFastingService(fastingRepository, categoryRepository, typesRepository)
-	adminService := service.NewAdminService(categoryRepository, sourceRepository)
+	adminService := service.NewAdminService(categoryRepository, sourceRepository, typesRepository)
 	controllerStruct := controller.NewController(c, sourceService, typesService, categoryService, fastingService, adminService)
 	return controllerStruct
 }
