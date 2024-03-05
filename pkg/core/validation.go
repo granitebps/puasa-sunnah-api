@@ -3,6 +3,7 @@ package core
 import (
 	"errors"
 	"fmt"
+	"log"
 	"regexp"
 	"strconv"
 	"time"
@@ -26,7 +27,11 @@ func SetupValidator() *AppValidator {
 	v := validator.New()
 
 	// You can add your custom validator in here
-	v.RegisterValidation("isYear", validateYear)
+	err := v.RegisterValidation("isYear", validateYear)
+	if err != nil {
+		err = merry.Wrap(err)
+		log.Panic(err)
+	}
 
 	return &AppValidator{
 		Validator: v,
