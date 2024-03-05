@@ -7,6 +7,32 @@ definitions:
     required:
     - name
     type: object
+  requests.FastingCreateUpdateRequest:
+    properties:
+      category_id:
+        type: integer
+      date:
+        type: string
+      day:
+        maximum: 31
+        minimum: 1
+        type: integer
+      month:
+        maximum: 12
+        minimum: 1
+        type: integer
+      type_id:
+        type: integer
+      year:
+        type: integer
+    required:
+    - category_id
+    - date
+    - day
+    - month
+    - type_id
+    - year
+    type: object
   requests.SourceRequest:
     properties:
       url:
@@ -170,6 +196,77 @@ paths:
       security:
       - BasicAuth: []
       summary: Update category
+      tags:
+      - Admin
+  /api/v1/admin/fastings:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.FastingCreateUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.FastingTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create fasting
+      tags:
+      - Admin
+  /api/v1/admin/fastings/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.FastingCreateUpdateRequest'
+      - description: Fasting ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.FastingTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update fasting
       tags:
       - Admin
   /api/v1/admin/sources:
@@ -349,10 +446,6 @@ paths:
       - description: Type ID
         in: query
         name: type_id
-        type: integer
-      - description: Category ID
-        in: query
-        name: category_id
         type: integer
       - description: Day in month
         in: query
