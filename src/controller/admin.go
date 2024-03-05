@@ -216,3 +216,67 @@ func (c *AdminController) UpdateType(ctx *fiber.Ctx) error {
 
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update type", data)
 }
+
+// Create Fasting	godoc
+// @Summary      	Create fasting
+// @Description  	Create fasting
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @param 			payload body requests.FastingCreateUpdateRequest true "JSON payload"
+// @Success      	200  {object}   utils.JSONResponse{data=transformer.FastingTransformer} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/fastings [post]
+// @Security 		BasicAuth
+func (c *AdminController) CreateFasting(ctx *fiber.Ctx) error {
+	var req requests.FastingCreateUpdateRequest
+	errorField, err := c.Core.Validator.Validate(ctx, &req)
+	if err != nil {
+		err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnprocessableEntity))
+		return utils.ReturnErrorResponse(ctx, err, errorField)
+	}
+
+	data, err := c.AdminService.CreateFasting(ctx.UserContext(), &req)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success create fasting", data)
+}
+
+// Update Fasting	godoc
+// @Summary      	Update fasting
+// @Description  	Update fasting
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @param 		 	payload body requests.FastingCreateUpdateRequest true "JSON payload"
+// @Param 			id path int true "Fasting ID"
+// @Success      	200  {object}  utils.JSONResponse{data=transformer.FastingTransformer} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/fastings/:id [put]
+// @Security 		BasicAuth
+func (c *AdminController) UpdateFasting(ctx *fiber.Ctx) error {
+	var req requests.FastingCreateUpdateRequest
+	errorField, err := c.Core.Validator.Validate(ctx, &req)
+	if err != nil {
+		err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnprocessableEntity))
+		return utils.ReturnErrorResponse(ctx, err, errorField)
+	}
+
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	data, err := c.AdminService.UpdateFasting(ctx.UserContext(), &req, uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update fasting", data)
+}

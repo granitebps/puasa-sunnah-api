@@ -24,7 +24,7 @@ func SetupDependencies(c *core.Core) *controller.ControllerStruct {
 	categoryService := service.NewCategoryService(categoryRepository)
 	fastingRepository := repository.NewFastingRepository(c)
 	fastingService := service.NewFastingService(fastingRepository, categoryRepository, typesRepository)
-	adminService := service.NewAdminService(categoryRepository, sourceRepository, typesRepository)
+	adminService := service.NewAdminService(categoryRepository, sourceRepository, typesRepository, fastingRepository)
 	controllerStruct := controller.NewController(c, sourceService, typesService, categoryService, fastingService, adminService)
 	return controllerStruct
 }
