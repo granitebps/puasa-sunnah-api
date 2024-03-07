@@ -13,7 +13,7 @@ require (
 	github.com/gofiber/contrib/fibernewrelic v1.2.1
 	github.com/gofiber/contrib/fibersentry v1.0.4
 	github.com/gofiber/fiber/v2 v2.52.1
-	github.com/golang-jwt/jwt/v5 v5.2.0
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/wire v0.6.0
 	github.com/newrelic/go-agent/v3 v3.30.0
 	github.com/newrelic/go-agent/v3/integrations/nrmysql v1.2.2
