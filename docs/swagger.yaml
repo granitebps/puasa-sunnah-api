@@ -1,6 +1,55 @@
 basePath: /
 definitions:
-  types.Category:
+  requests.CategoryRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  requests.FastingCreateUpdateRequest:
+    properties:
+      category_id:
+        type: integer
+      date:
+        type: string
+      day:
+        maximum: 31
+        minimum: 1
+        type: integer
+      month:
+        maximum: 12
+        minimum: 1
+        type: integer
+      type_id:
+        type: integer
+      year:
+        type: integer
+    required:
+    - category_id
+    - date
+    - day
+    - month
+    - type_id
+    - year
+    type: object
+  requests.SourceRequest:
+    properties:
+      url:
+        type: string
+    required:
+    - url
+    type: object
+  requests.TypeRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  transformer.CategoryTransformer:
     properties:
       id:
         example: 1
@@ -9,10 +58,10 @@ definitions:
         example: lorem impsum
         type: string
     type: object
-  types.Fasting:
+  transformer.FastingTransformer:
     properties:
       category:
-        $ref: '#/definitions/types.Category'
+        $ref: '#/definitions/transformer.CategoryTransformer'
       category_id:
         example: 1
         type: integer
@@ -29,7 +78,7 @@ definitions:
         example: 1
         type: integer
       type:
-        $ref: '#/definitions/types.Type'
+        $ref: '#/definitions/transformer.TypeTransformer'
       type_id:
         example: 1
         type: integer
@@ -37,7 +86,7 @@ definitions:
         example: 2020
         type: integer
     type: object
-  types.Source:
+  transformer.SourceTransformer:
     properties:
       id:
         example: 1
@@ -46,16 +95,16 @@ definitions:
         example: https://granitebps.com
         type: string
     type: object
-  types.Type:
+  transformer.TypeTransformer:
     properties:
       description:
-        example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        example: lorem ipsum
         type: string
       id:
         example: 1
         type: integer
       name:
-        example: lorem
+        example: lorem ipsum
         type: string
     type: object
   utils.JSONResponse:
@@ -78,6 +127,290 @@ info:
   title: Puasa Sunnah API
   version: "1.0"
 paths:
+  /api/v1/admin/categories:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting category
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.CategoryTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create category
+      tags:
+      - Admin
+  /api/v1/admin/categories/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting category
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CategoryRequest'
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.CategoryTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update category
+      tags:
+      - Admin
+  /api/v1/admin/fastings:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.FastingCreateUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.FastingTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create fasting
+      tags:
+      - Admin
+  /api/v1/admin/fastings/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.FastingCreateUpdateRequest'
+      - description: Fasting ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.FastingTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update fasting
+      tags:
+      - Admin
+  /api/v1/admin/sources:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting source
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SourceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.SourceTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create source
+      tags:
+      - Admin
+  /api/v1/admin/sources/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting source
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.SourceRequest'
+      - description: Source ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.SourceTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update source
+      tags:
+      - Admin
+  /api/v1/admin/types:
+    post:
+      consumes:
+      - application/json
+      description: Create fasting type
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.TypeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.TypeTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Create type
+      tags:
+      - Admin
+  /api/v1/admin/types/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update fasting type
+      parameters:
+      - description: JSON payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/requests.TypeRequest'
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.JSONResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/transformer.TypeTransformer'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Update type
+      tags:
+      - Admin
   /api/v1/categories:
     get:
       consumes:
@@ -94,7 +427,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Category'
+                    $ref: '#/definitions/transformer.CategoryTransformer'
                   type: array
               type: object
         "400":
@@ -113,10 +446,6 @@ paths:
       - description: Type ID
         in: query
         name: type_id
-        type: integer
-      - description: Category ID
-        in: query
-        name: category_id
         type: integer
       - description: Day in month
         in: query
@@ -141,7 +470,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Fasting'
+                    $ref: '#/definitions/transformer.FastingTransformer'
                   type: array
               type: object
         "400":
@@ -167,7 +496,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Source'
+                    $ref: '#/definitions/transformer.SourceTransformer'
                   type: array
               type: object
         "400":
@@ -193,7 +522,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/types.Type'
+                    $ref: '#/definitions/transformer.TypeTransformer'
                   type: array
               type: object
         "400":
@@ -203,4 +532,7 @@ paths:
       summary: List Types
       tags:
       - Types
+securityDefinitions:
+  BasicAuth:
+    type: basic
 swagger: "2.0"

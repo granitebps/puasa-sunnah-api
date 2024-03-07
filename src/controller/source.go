@@ -23,11 +23,11 @@ func newSourceController(sourceService *service.SourceService) *SourceController
 // @Tags         Sources
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}   utils.JSONResponse{data=[]types.Source} "desc"
+// @Success      200  {object}   utils.JSONResponse{data=[]transformer.SourceTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/sources [get]
 func (c *SourceController) Index(ctx *fiber.Ctx) error {
-	data, err := c.SourceService.GetAll()
+	data, err := c.SourceService.GetAll(ctx.UserContext())
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)

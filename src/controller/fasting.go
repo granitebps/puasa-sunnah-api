@@ -25,22 +25,21 @@ func newFastingController(fastingService *service.FastingService) *FastingContro
 // @Accept       json
 // @Produce      json
 // @Param 		 type_id query int false "Type ID"
-// @Param 		 category_id query int false "Category ID"
 // @Param 		 day query int false "Day in month"
 // @Param 		 month query int false "Month"
 // @Param 		 Year query int false "Year"
-// @Success      200  {object}   utils.JSONResponse{data=[]types.Fasting} "desc"
+// @Success      200  {object}   utils.JSONResponse{data=[]transformer.FastingTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/fastings [get]
 func (c *FastingController) Index(ctx *fiber.Ctx) error {
-	f := requests.FastingRequest{}
+	var f requests.FastingRequest
 
 	if err := ctx.QueryParser(&f); err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	data, err := c.FastingService.GetAll(f)
+	data, err := c.FastingService.GetAll(ctx.UserContext(), &f)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)

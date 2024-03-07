@@ -1,8 +1,11 @@
 package service
 
 import (
+	"context"
+
+	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/src/repository"
-	"github.com/granitebps/puasa-sunnah-api/src/types"
+	"github.com/granitebps/puasa-sunnah-api/src/transformer"
 )
 
 type CategoryService struct {
@@ -15,11 +18,19 @@ func NewCategoryService(categoryRepo *repository.CategoryRepository) *CategorySe
 	}
 }
 
-func (s *CategoryService) GetAll() ([]types.Category, error) {
-	data, err := s.CategoryRepo.ReadFile()
+func (s *CategoryService) GetAll(ctx context.Context) (res []transformer.CategoryTransformer, err error) {
+	data, err := s.CategoryRepo.GetAll(ctx)
 	if err != nil {
-		return data, err
+		err = merry.Wrap(err)
+		return
 	}
 
-	return data, nil
+	for _, c := range data {
+		res = append(res, transformer.CategoryTransformer{
+			ID:   c.ID,
+			Name: c.Name,
+		})
+	}
+
+	return
 }

@@ -10,6 +10,7 @@ type Core struct {
 	Newrelic  *newrelic.Application
 	Log       *logrus.Logger
 	Client    *resty.Request
+	Database  *Database
 	Validator *AppValidator
 }
 
@@ -17,12 +18,14 @@ func SetupCore() *Core {
 	nr := SetupNewrelicApp()
 	log := SetupLog()
 	client := SetupResty()
+	db := SetupDb()
 	v := SetupValidator()
 
 	return &Core{
 		Newrelic:  nr,
 		Log:       log,
 		Client:    client,
+		Database:  db,
 		Validator: v,
 	}
 }

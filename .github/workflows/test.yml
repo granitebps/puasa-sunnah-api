@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: go get .
       - name: Build
-        run: make build
+        run: make build-app
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v4
         with:
