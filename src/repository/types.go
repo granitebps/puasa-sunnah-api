@@ -1,54 +1,63 @@
 package repository
 
 import (
-	"encoding/json"
-	"errors"
+	"context"
 
 	"github.com/ansel1/merry/v2"
-	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
-	"github.com/granitebps/puasa-sunnah-api/types"
-	"github.com/spf13/viper"
+	"github.com/granitebps/puasa-sunnah-api/pkg/core"
+	"github.com/granitebps/puasa-sunnah-api/src/model"
 )
 
-type TypesRepository struct{}
-
-func NewTypesRepository() *TypesRepository {
-	return &TypesRepository{}
+type TypesRepository struct {
+	Core *core.Core
 }
 
-func (r *TypesRepository) ReadFile() ([]types.Type, error) {
-	data := []types.Type{}
-
-	filename := viper.GetString("TYPE_FILEPATH")
-	jsonData, err := utils.ReadJsonFile(filename)
-	if err != nil {
-		return data, merry.Wrap(err)
+func NewTypesRepository(c *core.Core) *TypesRepository {
+	return &TypesRepository{
+		Core: c,
 	}
-
-	err = json.Unmarshal(jsonData, &data)
-	if err != nil {
-		return data, merry.Wrap(err)
-	}
-
-	return data, nil
 }
 
-func (r *TypesRepository) GetByID(ID uint) (types.Type, error) {
-	typeData := types.Type{}
-	typesData, err := r.ReadFile()
+func (r *TypesRepository) GetAll(ctx context.Context) (res []model.Type, err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Find(&res).Error
 	if err != nil {
-		return typeData, merry.Wrap(err)
+		err = merry.Wrap(err)
+		return
 	}
+	return
+}
 
-	for _, t := range typesData {
-		if t.ID == ID {
-			typeData = t
-		}
+func (r *TypesRepository) GetByID(ctx context.Context, id uint) (res model.Type, err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		First(&res, id).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
 	}
+	return
+}
 
-	if typeData.ID == 0 {
-		return typeData, merry.Wrap(errors.New("type not found"))
+func (r *TypesRepository) Create(ctx context.Context, types *model.Type) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Create(&types).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
 	}
+	return
+}
 
-	return typeData, nil
+func (r *TypesRepository) Update(ctx context.Context, types *model.Type) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Save(&types).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+	return
 }

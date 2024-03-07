@@ -23,11 +23,11 @@ func newTypesController(typesService *service.TypesService) *TypesController {
 // @Tags         Types
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}   utils.JSONResponse{data=[]types.Type} "desc"
+// @Success      200  {object}   utils.JSONResponse{data=[]transformer.TypeTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/types [get]
 func (c *TypesController) Index(ctx *fiber.Ctx) error {
-	data, err := c.TypesService.GetAll()
+	data, err := c.TypesService.GetAll(ctx.UserContext())
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)

@@ -9,9 +9,9 @@ import (
 	config "github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
-	"github.com/granitebps/puasa-sunnah-api/route"
 	"github.com/granitebps/puasa-sunnah-api/scheduler"
 	"github.com/granitebps/puasa-sunnah-api/src/middleware"
+	"github.com/granitebps/puasa-sunnah-api/src/route"
 	"github.com/spf13/viper"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,6 +24,7 @@ import (
 // @license.name MIT
 // @BasePath /
 // @version 1.0
+// @securityDefinitions.basic BasicAuth
 func main() {
 	// Load ENV and setup some config
 	config.SetupConfig(".env")

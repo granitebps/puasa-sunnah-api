@@ -1,10 +1,13 @@
 package service
 
 import (
-	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
-	"github.com/granitebps/puasa-sunnah-api/requests"
+	"context"
+	"time"
+
+	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/src/repository"
-	"github.com/granitebps/puasa-sunnah-api/types"
+	"github.com/granitebps/puasa-sunnah-api/src/requests"
+	"github.com/granitebps/puasa-sunnah-api/src/transformer"
 )
 
 type FastingService struct {
@@ -21,54 +24,34 @@ func NewFastingService(fastingRepo *repository.FastingRepository, categoryRepo *
 	}
 }
 
-func (s *FastingService) GetAll(q requests.FastingRequest) ([]types.Fasting, error) {
-	data, err := s.FastingRepo.ReadFile()
+func (s *FastingService) GetAll(ctx context.Context, req *requests.FastingRequest) (res []transformer.FastingTransformer, err error) {
+	data, err := s.FastingRepo.GetAll(ctx, req)
 	if err != nil {
-		return data, err
+		err = merry.Wrap(err)
+		return
 	}
 
-	// Append category
-	for i, v := range data {
-		category, _ := s.CategoryRepo.GetByID(v.CategoryID)
-		data[i].Category = category
+	for _, f := range data {
+		dateTime := time.Time(f.Date)
+		formattedDate := dateTime.Format("2006-01-02")
+		res = append(res, transformer.FastingTransformer{
+			ID:         f.ID,
+			CategoryID: f.CategoryID,
+			TypeID:     f.TypeID,
+			Date:       formattedDate,
+			Year:       uint(f.Year),
+			Month:      uint(f.Month),
+			Day:        uint(f.Day),
+			Category: transformer.CategoryTransformer{
+				ID:   f.Category.ID,
+				Name: f.Category.Name,
+			},
+			Type: transformer.TypeTransformer{
+				ID:   f.Type.ID,
+				Name: f.Type.Name,
+			},
+		})
 	}
 
-	// Append type
-	for i, v := range data {
-		typeData, _ := s.TypesRepo.GetByID(v.TypeID)
-		data[i].Type = typeData
-	}
-
-	filteredData := FastingsFilter(q, data)
-
-	return filteredData, nil
-}
-
-func FastingsFilter(r requests.FastingRequest, d []types.Fasting) []types.Fasting {
-	var result []types.Fasting
-
-	for _, f := range d {
-		checkTypeID := true
-		checkDay := true
-		checkMonth := true
-		checkYear := true
-		if r.TypeID != "" {
-			checkTypeID = f.TypeID == utils.QueryToUint(r.TypeID)
-		}
-		if r.Day != "" {
-			checkDay = f.Day == utils.QueryToUint(r.Day)
-		}
-		if r.Month != "" {
-			checkMonth = f.Month == utils.QueryToUint(r.Month)
-		}
-		if r.Year != "" {
-			checkYear = f.Year == utils.QueryToUint(r.Year)
-		}
-
-		if checkTypeID && checkDay && checkMonth && checkYear {
-			result = append(result, f)
-		}
-	}
-
-	return result
+	return
 }

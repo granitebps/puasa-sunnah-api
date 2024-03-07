@@ -1,54 +1,60 @@
 package repository
 
 import (
-	"encoding/json"
-	"errors"
+	"context"
 
 	"github.com/ansel1/merry/v2"
-	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
-	"github.com/granitebps/puasa-sunnah-api/types"
-	"github.com/spf13/viper"
+	"github.com/granitebps/puasa-sunnah-api/pkg/core"
+	"github.com/granitebps/puasa-sunnah-api/src/model"
 )
 
-type CategoryRepository struct{}
-
-func NewCategoryRepository() *CategoryRepository {
-	return &CategoryRepository{}
+type CategoryRepository struct {
+	Core *core.Core
 }
 
-func (r *CategoryRepository) ReadFile() ([]types.Category, error) {
-	data := []types.Category{}
-
-	filename := viper.GetString("CATEGORY_FILEPATH")
-	jsonData, err := utils.ReadJsonFile(filename)
-	if err != nil {
-		return data, err
+func NewCategoryRepository(c *core.Core) *CategoryRepository {
+	return &CategoryRepository{
+		Core: c,
 	}
-
-	err = json.Unmarshal(jsonData, &data)
-	if err != nil {
-		return data, merry.Wrap(err)
-	}
-
-	return data, nil
 }
 
-func (r *CategoryRepository) GetByID(ID uint) (types.Category, error) {
-	category := types.Category{}
-	categories, err := r.ReadFile()
+func (r *CategoryRepository) GetAll(ctx context.Context) (res []model.Category, err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Find(&res).Error
+	return
+}
+
+func (r *CategoryRepository) GetByID(ctx context.Context, id uint) (res model.Category, err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		First(&res, id).Error
 	if err != nil {
-		return category, err
+		err = merry.Wrap(err)
+		return
 	}
 
-	for _, c := range categories {
-		if c.ID == ID {
-			category = c
-		}
-	}
+	return
+}
 
-	if category.ID == 0 {
-		return category, errors.New("category not found")
+func (r *CategoryRepository) Create(ctx context.Context, category *model.Category) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Create(&category).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
 	}
+	return
+}
 
-	return category, nil
+func (r *CategoryRepository) Update(ctx context.Context, category *model.Category) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Save(&category).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+	return
 }
