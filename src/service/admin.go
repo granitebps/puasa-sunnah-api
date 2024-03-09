@@ -160,9 +160,16 @@ func (s *AdminService) CreateFasting(ctx context.Context, req *requests.FastingC
 		return
 	}
 
+	// Check if fasting date is valid
 	date, err := time.Parse("2006-01-02", req.Date)
 	if err != nil {
 		err = merry.Wrap(err, merry.WithUserMessage("Invalid date format"), merry.WithHTTPCode(fiber.StatusBadRequest))
+		return
+	}
+
+	// Check validity between date and day, month, year
+	if date.Year() != int(req.Year) || int(date.Month()) != int(req.Month) || date.Day() != int(req.Day) {
+		err = merry.New("Invalid date", merry.WithHTTPCode(fiber.StatusBadRequest))
 		return
 	}
 
