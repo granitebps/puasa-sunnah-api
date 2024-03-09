@@ -8,6 +8,15 @@ You can find and compare releases at the GitHub release page.
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-03-07
+
+### Changed
+- Update to Golang version 1.21
+- Another refactoring
+
+### Added
+- Add Gorm to connect to MySQL
+
 ## [1.0.0] - 2023-11-16
 
 ### Changed

@@ -41,6 +41,7 @@ func (r *FastingRepository) GetAll(ctx context.Context, req *requests.FastingReq
 	}
 
 	err = query.
+		Order("created_at ASC").
 		Find(&res).Error
 	if err != nil {
 		err = merry.Wrap(err)
