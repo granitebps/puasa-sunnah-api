@@ -8,6 +8,7 @@ type FastingTransformer struct {
 	Year       uint   `json:"year" example:"2020"`
 	Month      uint   `json:"month" example:"1"`
 	Day        uint   `json:"day" example:"1"`
+	HumanDate  string `json:"human_date"`
 
 	Category CategoryTransformer `json:"category"`
 	Type     TypeTransformer     `json:"type"`
