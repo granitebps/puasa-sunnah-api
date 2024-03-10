@@ -32,6 +32,8 @@ pipeline {
             }
         }
 
+        /*
+        // Commenting out the build step for now
         stage('Build') {
             steps {
                 // Set up Go environment
@@ -41,9 +43,10 @@ pipeline {
                 }
 
                 // Build the Golang application with optimizations and set the output filename
-                sh 'go build -ldflags="-w -s" -o puasa-sunnah-api .'
+                sh 'go build -o puasa-sunnah-api -ldflags="-s -w" ./...'
             }
         }
+        */
 
         stage('Test') {
             steps {
