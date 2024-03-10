@@ -24,3 +24,4 @@ go.work
 tmp
 storage/logs
 build
+*.sql

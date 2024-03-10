@@ -10,6 +10,9 @@ air:
 build-app:
 	CGO_ENABLED=0 go build -ldflags="-w -s" -o $(BUILD_DIR)/$(APP_NAME) .
 
+build-backup:
+	CGO_ENABLED=0 go build -ldflags="-w -s" -o $(BUILD_DIR)/backup cmd/backup.go
+
 lint:
 	golangci-lint run ./...
 
