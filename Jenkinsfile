@@ -41,7 +41,7 @@ pipeline {
                 }
 
                 // Build the Golang application with optimizations and set the output filename
-                sh 'go build -o puasa-sunnah-api -ldflags="-s -w" ./...'
+                sh 'go build -ldflags="-w -s" -o puasa-sunnah-api .'
             }
         }
 
