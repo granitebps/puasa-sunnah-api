@@ -1,7 +1,9 @@
 pipeline {
-    agent {
-        // Use a node with Golang installed
-        label 'golang'
+    agent any
+
+    tools {
+        // Specify the desired Go version defined in the Global Tool Configuration
+        go '1.21'
     }
 
     environment {
