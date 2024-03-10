@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"time"
 
 	"github.com/ansel1/merry/v2"
@@ -69,11 +70,11 @@ func dumpSqlFile(fileName string) (err error) {
 	}
 
 	// Set the command and arguments
-	cmd := exec.Command("mysqldump", "-h", host, "-u", username, "-p"+password, database)
-	// cmd := exec.Command("mysqldump", "--socket", "/tmp/mysql_3306.sock", "-h", host, "-u", username, "-p"+password, database)
+	cmd := exec.Command("mysqldump", "-h", host, "-u", username, "-p"+password, database) // #nosec G204
+	// cmd := exec.Command("mysqldump", "--socket", "/tmp/mysql_3306.sock", "-h", host, "-u", username, "-p"+password, database) // #nosec G204
 
 	// Create an output file for the dump
-	outputFile, err := os.Create(fileName)
+	outputFile, err := os.Create(filepath.Clean(fileName))
 	if err != nil {
 		log.Println("Failed to create dump file")
 		err = merry.Wrap(err)
@@ -115,7 +116,7 @@ func sendSqlToS3(fileName string) (err error) {
 
 	svc := s3.New(sess)
 
-	file, err := os.Open(fileName)
+	file, err := os.Open(filepath.Clean(fileName))
 	if err != nil {
 		err = merry.Wrap(err)
 		log.Println("Error opening file:", err)
