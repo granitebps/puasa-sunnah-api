@@ -7,13 +7,11 @@ echo "Deploying application ..."
 git fetch origin main
 git reset --hard origin/main
 
-# Generate docs
-./bin/swag-linux init
-
 # Build the application
-/usr/local/go/bin/go build main.go
+make build-app
+make build-backup
 
 # Restart the service
-sudo service psn restart
+sudo service puasasunnah restart
 
 echo "Application deployed!"
