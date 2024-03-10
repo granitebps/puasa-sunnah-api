@@ -33,3 +33,6 @@ cover:
 ## coverage: displays test coverage
 coverage:
 	go test -cover ./...
+
+vet:
+	go vet .
