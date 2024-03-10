@@ -10,6 +10,10 @@ import (
 	"time"
 
 	"github.com/ansel1/merry/v2"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/getsentry/sentry-go"
 	config "github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/spf13/viper"
@@ -25,6 +29,13 @@ func main() {
 	sqlFileName := fmt.Sprintf("%s_%s.sql", dateTime, database)
 
 	err := dumpSqlFile(sqlFileName)
+	if err != nil {
+		err = merry.Wrap(err)
+		sentry.CaptureException(err)
+		os.Exit(1)
+	}
+
+	err = sendSqlToS3(sqlFileName)
 	if err != nil {
 		err = merry.Wrap(err)
 		sentry.CaptureException(err)
@@ -75,4 +86,63 @@ func dumpSqlFile(fileName string) (err error) {
 	log.Printf("Database dumped successfully to dump %s\n", fileName)
 
 	return nil
+}
+
+func sendSqlToS3(fileName string) (err error) {
+	region := viper.GetString("AWS_DEFAULT_REGION")
+	bucket := viper.GetString("AWS_BUCKET")
+	accessKey := viper.GetString("AWS_ACCESS_KEY_ID")
+	secretKey := viper.GetString("AWS_SECRET_ACCESS_KEY")
+
+	sess, err := session.NewSession(&aws.Config{
+		Region:      aws.String(region),
+		Credentials: credentials.NewStaticCredentials(accessKey, secretKey, ""),
+	})
+	if err != nil {
+		err = merry.Wrap(err)
+		log.Println("Error creating session:", err)
+		return
+	}
+
+	svc := s3.New(sess)
+
+	file, err := os.Open(fileName)
+	if err != nil {
+		err = merry.Wrap(err)
+		log.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	// Read the contents of the file into a buffer
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, file)
+	if err != nil {
+		err = merry.Wrap(err)
+		log.Println("Error reading file:", err)
+		return
+	}
+
+	// This uploads the contents of the buffer to S3
+	_, err = svc.PutObject(&s3.PutObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(fileName),
+		Body:   bytes.NewReader(buf.Bytes()),
+	})
+	if err != nil {
+		fmt.Println("Error uploading file:", err)
+		return
+	}
+
+	// Delete the file after it's uploaded
+	err = os.Remove(fileName)
+	if err != nil {
+		err = merry.Wrap(err)
+		log.Println("Error deleting file:", err)
+		return
+	}
+
+	log.Printf("File uploaded to AWS S3 bucket: %s\n", bucket)
+
+	return
 }
