@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"log"
@@ -16,6 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/getsentry/sentry-go"
 	config "github.com/granitebps/puasa-sunnah-api/configs"
+	"github.com/mailgun/mailgun-go/v4"
 	"github.com/spf13/viper"
 )
 
@@ -36,6 +38,13 @@ func main() {
 	}
 
 	err = sendSqlToS3(sqlFileName)
+	if err != nil {
+		err = merry.Wrap(err)
+		sentry.CaptureException(err)
+		os.Exit(1)
+	}
+
+	err = sendEmailNotification(sqlFileName)
 	if err != nil {
 		err = merry.Wrap(err)
 		sentry.CaptureException(err)
@@ -143,6 +152,39 @@ func sendSqlToS3(fileName string) (err error) {
 	}
 
 	log.Printf("File uploaded to AWS S3 bucket: %s\n", bucket)
+
+	return
+}
+
+func sendEmailNotification(fileName string) (err error) {
+	secret := viper.GetString("MAILGUN_SECRET")
+	domain := viper.GetString("MAILGUN_DOMAIN")
+	appName := viper.GetString("APP_NAME")
+	appEnv := viper.GetString("APP_ENV")
+
+	// Create an instance of the Mailgun Client
+	mg := mailgun.NewMailgun(domain, secret)
+
+	sender := "info@granitebps.com"
+	subject := fmt.Sprintf("Successful new backup of %s (%s)", appName, appEnv)
+	body := fmt.Sprintf("Hello! Great news, a new backup of %s (%s) was successfully created with filename %s!", appName, appEnv, fileName)
+	recipient := "granitebagas28@gmail.com"
+
+	// The message object allows you to add attachments and Bcc recipients
+	message := mg.NewMessage(sender, subject, body, recipient)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	// Send the message with a 10 second timeout
+	_, _, err = mg.Send(ctx, message)
+	if err != nil {
+		err = merry.Wrap(err)
+		log.Println("Error sending email:", err)
+		return
+	}
+
+	log.Println("Email notification sent successfully")
 
 	return
 }
