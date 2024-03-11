@@ -18,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/getsentry/sentry-go"
 	config "github.com/granitebps/puasa-sunnah-api/configs"
+	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/mailgun/mailgun-go/v4"
 	"github.com/spf13/viper"
 )
@@ -27,7 +28,7 @@ func main() {
 
 	config.SetupConfig(".env")
 
-	database := viper.GetString("DB_NAME")
+	database := viper.GetString(constants.DB_NAME)
 	dateTime := time.Now().Format("2006-01-02_15-04-05")
 	sqlFileName := fmt.Sprintf("%s_%s.sql", dateTime, database)
 
@@ -56,10 +57,10 @@ func main() {
 }
 
 func dumpSqlFile(fileName string) (err error) {
-	host := viper.GetString("DB_HOST")
-	username := viper.GetString("DB_USER")
-	password := viper.GetString("DB_PASS")
-	database := viper.GetString("DB_NAME")
+	host := viper.GetString(constants.DB_HOST)
+	username := viper.GetString(constants.DB_USER)
+	password := viper.GetString(constants.DB_PASS)
+	database := viper.GetString(constants.DB_NAME)
 
 	// Check if mysqldump is available in PATH
 	_, err = exec.LookPath("mysqldump")
@@ -99,10 +100,10 @@ func dumpSqlFile(fileName string) (err error) {
 }
 
 func sendSqlToS3(fileName string) (err error) {
-	region := viper.GetString("AWS_DEFAULT_REGION")
-	bucket := viper.GetString("AWS_BUCKET")
-	accessKey := viper.GetString("AWS_ACCESS_KEY_ID")
-	secretKey := viper.GetString("AWS_SECRET_ACCESS_KEY")
+	region := viper.GetString(constants.AWS_DEFAULT_REGION)
+	bucket := viper.GetString(constants.AWS_BUCKET)
+	accessKey := viper.GetString(constants.AWS_ACCESS_KEY_ID)
+	secretKey := viper.GetString(constants.AWS_SECRET_ACCESS_KEY)
 
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String(region),
@@ -158,10 +159,10 @@ func sendSqlToS3(fileName string) (err error) {
 }
 
 func sendEmailNotification(fileName string) (err error) {
-	secret := viper.GetString("MAILGUN_SECRET")
-	domain := viper.GetString("MAILGUN_DOMAIN")
-	appName := viper.GetString("APP_NAME")
-	appEnv := viper.GetString("APP_ENV")
+	secret := viper.GetString(constants.MAILGUN_SECRET)
+	domain := viper.GetString(constants.MAILGUN_DOMAIN)
+	appName := viper.GetString(constants.APP_NAME)
+	appEnv := viper.GetString(constants.APP_ENV)
 
 	// Create an instance of the Mailgun Client
 	mg := mailgun.NewMailgun(domain, secret)
