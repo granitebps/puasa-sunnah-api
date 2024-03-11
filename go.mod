@@ -14,7 +14,6 @@ require (
 	github.com/gofiber/contrib/fibernewrelic v1.2.1
 	github.com/gofiber/contrib/fibersentry v1.0.4
 	github.com/gofiber/fiber/v2 v2.52.2
-	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/wire v0.6.0
 	github.com/mailgun/mailgun-go/v4 v4.12.0
 	github.com/newrelic/go-agent/v3 v3.30.0
@@ -95,7 +94,7 @@ require (
 	github.com/gofiber/swagger v1.0.0
 	github.com/klauspost/compress v1.17.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.52.0 // indirect
+	github.com/valyala/fasthttp v1.52.0
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 )

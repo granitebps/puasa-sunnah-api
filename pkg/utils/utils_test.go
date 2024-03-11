@@ -1,12 +1,15 @@
 package utils_test
 
 import (
+	"errors"
 	"testing"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
+	"github.com/valyala/fasthttp"
 )
 
 func TestCamelToSnake(t *testing.T) {
@@ -45,5 +48,30 @@ func TestStructToJSONString(t *testing.T) {
 		expected := "{\"name\":\"test\"}"
 		actual := utils.StructToJSONString(test)
 		assert.Equal(t, expected, actual)
+	})
+}
+
+func TestReturnSuccessResponse(t *testing.T) {
+	t.Run("shoud return no error for success response", func(t *testing.T) {
+		app := fiber.New()
+		ctx := app.AcquireCtx(&fasthttp.RequestCtx{})
+
+		message := "Success message"
+		data := map[string]interface{}{"key": "value"}
+		err := utils.ReturnSuccessResponse(ctx, 0, message, data)
+
+		assert.NoError(t, err)
+	})
+}
+
+func TestReturnErrorResponse(t *testing.T) {
+	t.Run("shoud return no error for error response", func(t *testing.T) {
+		app := fiber.New()
+		ctx := app.AcquireCtx(&fasthttp.RequestCtx{})
+
+		errMsg := errors.New("Error message")
+		err := utils.ReturnErrorResponse(ctx, errMsg, nil)
+
+		assert.NoError(t, err)
 	})
 }
