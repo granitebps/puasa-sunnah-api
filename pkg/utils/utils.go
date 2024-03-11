@@ -2,9 +2,6 @@ package utils
 
 import (
 	"encoding/json"
-	"io"
-	"os"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -30,23 +27,6 @@ func QueryToUint(query string) uint {
 func IsProduction() bool {
 	env := strings.ToLower(viper.GetString(constants.APP_ENV))
 	return env == "production" || env == "prod"
-}
-
-func ReadJsonFile(filename string) ([]byte, error) {
-	var emptyData []byte
-
-	jsonFile, err := os.Open(filepath.Clean(filename))
-	if err != nil {
-		return emptyData, err
-	}
-	defer jsonFile.Close()
-
-	jsonData, err := io.ReadAll(jsonFile)
-	if err != nil {
-		return emptyData, err
-	}
-
-	return jsonData, nil
 }
 
 // Convert struct to json string.
