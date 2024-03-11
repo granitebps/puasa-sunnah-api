@@ -16,6 +16,8 @@ jobs:
         run: go get .
       - name: Build
         run: make build-app
+      - name: Test
+        run: make coverage
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v4
         with:
