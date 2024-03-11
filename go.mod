@@ -3,6 +3,7 @@ module github.com/granitebps/puasa-sunnah-api
 go 1.21
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/ansel1/merry v1.8.0
 	github.com/ansel1/merry/v2 v2.2.0
 	github.com/aws/aws-sdk-go v1.50.35
