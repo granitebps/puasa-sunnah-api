@@ -8,7 +8,7 @@ require (
 	github.com/getsentry/sentry-go v0.27.0
 	github.com/go-co-op/gocron v1.37.0
 	github.com/go-playground/validator/v10 v10.18.0
-	github.com/go-resty/resty/v2 v2.11.0
+	github.com/go-resty/resty/v2 v2.12.0
 	github.com/goccy/go-json v0.10.2
 	github.com/gofiber/contrib/fibernewrelic v1.2.1
 	github.com/gofiber/contrib/fibersentry v1.0.4
@@ -67,9 +67,9 @@ require (
 	github.com/tinylib/msgp v1.1.9 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.20.0 // indirect
+	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
-	golang.org/x/net v0.21.0 // indirect
+	golang.org/x/net v0.22.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.18.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240228224816-df926f6c8641 // indirect
@@ -86,5 +86,5 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.52.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/sys v0.17.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
 )
