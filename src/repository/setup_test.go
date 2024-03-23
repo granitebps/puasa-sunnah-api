@@ -7,14 +7,19 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
+	"github.com/granitebps/puasa-sunnah-api/src/repository"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var (
-	dbMock *gorm.DB
-	mock   sqlmock.Sqlmock
-	c      *core.Core
+	dbMock      *gorm.DB
+	mock        sqlmock.Sqlmock
+	c           *core.Core
+	typesRepo   *repository.TypesRepository
+	sourceRepo  *repository.SourceRepository
+	catRepo     *repository.CategoryRepository
+	fastingRepo *repository.FastingRepository
 )
 
 func TestMain(m *testing.M) {
@@ -24,6 +29,10 @@ func TestMain(m *testing.M) {
 			Db: dbMock,
 		},
 	}
+	typesRepo = repository.NewTypesRepository(c)
+	sourceRepo = repository.NewSourceRepository(c)
+	catRepo = repository.NewCategoryRepository(c)
+	fastingRepo = repository.NewFastingRepository(c)
 
 	os.Exit(m.Run())
 }

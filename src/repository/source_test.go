@@ -8,7 +8,6 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
-	"github.com/granitebps/puasa-sunnah-api/src/repository"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,8 +18,7 @@ func TestSourceGetAll(t *testing.T) {
 			AddRow(1, "https://example.com")
 		mock.ExpectQuery(query).WillReturnRows(rows)
 
-		repo := repository.NewSourceRepository(c)
-		sources, err := repo.GetAll(context.Background())
+		sources, err := sourceRepo.GetAll(context.Background())
 		assert.NoError(t, err)
 		assert.Len(t, sources, 1)
 		assert.Equal(t, sources[0].ID, uint(1))
@@ -31,8 +29,7 @@ func TestSourceGetAll(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(query).WillReturnError(errMock)
 
-		repo := repository.NewSourceRepository(c)
-		sources, err := repo.GetAll(context.Background())
+		sources, err := sourceRepo.GetAll(context.Background())
 		assert.ErrorIs(t, err, errMock)
 		assert.Len(t, sources, 0)
 	})
@@ -45,8 +42,7 @@ func TestSourceGetByID(t *testing.T) {
 			AddRow(1, "https://example.com")
 		mock.ExpectQuery(query).WillReturnRows(rows)
 
-		repo := repository.NewSourceRepository(c)
-		source, err := repo.GetByID(context.Background(), 1)
+		source, err := sourceRepo.GetByID(context.Background(), 1)
 		assert.NoError(t, err)
 		assert.Equal(t, source.ID, uint(1))
 		assert.Equal(t, source.Url, "https://example.com")
@@ -56,8 +52,7 @@ func TestSourceGetByID(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(`SELECT`).WillReturnError(errMock)
 
-		repo := repository.NewSourceRepository(c)
-		source, err := repo.GetByID(context.Background(), 1)
+		source, err := sourceRepo.GetByID(context.Background(), 1)
 		assert.ErrorIs(t, err, errMock)
 		assert.Equal(t, source.ID, uint(0))
 	})
@@ -73,8 +68,7 @@ func TestSourceCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewSourceRepository(c)
-		err := repo.Create(context.Background(), &sourceData)
+		err := sourceRepo.Create(context.Background(), &sourceData)
 		assert.NoError(t, err)
 		assert.Equal(t, sourceData.ID, uint(1))
 	})
@@ -84,8 +78,7 @@ func TestSourceCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewSourceRepository(c)
-		err := repo.Create(context.Background(), &sourceData)
+		err := sourceRepo.Create(context.Background(), &sourceData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }
@@ -101,8 +94,7 @@ func TestSourceUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewSourceRepository(c)
-		err := repo.Update(context.Background(), &sourceData)
+		err := sourceRepo.Update(context.Background(), &sourceData)
 		assert.NoError(t, err)
 	})
 	t.Run("should handle failed query", func(t *testing.T) {
@@ -111,8 +103,7 @@ func TestSourceUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewSourceRepository(c)
-		err := repo.Update(context.Background(), &sourceData)
+		err := sourceRepo.Update(context.Background(), &sourceData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }

@@ -8,7 +8,6 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
-	"github.com/granitebps/puasa-sunnah-api/src/repository"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,8 +18,7 @@ func TestCategoryGetAll(t *testing.T) {
 			AddRow(1, "Category Name")
 		mock.ExpectQuery(query).WillReturnRows(rows)
 
-		repo := repository.NewCategoryRepository(c)
-		sources, err := repo.GetAll(context.Background())
+		sources, err := catRepo.GetAll(context.Background())
 		assert.NoError(t, err)
 		assert.Len(t, sources, 1)
 		assert.Equal(t, sources[0].ID, uint(1))
@@ -31,8 +29,7 @@ func TestCategoryGetAll(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(query).WillReturnError(errMock)
 
-		repo := repository.NewCategoryRepository(c)
-		sources, err := repo.GetAll(context.Background())
+		sources, err := catRepo.GetAll(context.Background())
 		assert.ErrorIs(t, err, errMock)
 		assert.Len(t, sources, 0)
 	})
@@ -45,8 +42,7 @@ func TestCategoryGetByID(t *testing.T) {
 			AddRow(1, "Category Name")
 		mock.ExpectQuery(query).WillReturnRows(rows)
 
-		repo := repository.NewCategoryRepository(c)
-		source, err := repo.GetByID(context.Background(), 1)
+		source, err := catRepo.GetByID(context.Background(), 1)
 		assert.NoError(t, err)
 		assert.Equal(t, source.ID, uint(1))
 		assert.Equal(t, source.Name, "Category Name")
@@ -56,8 +52,7 @@ func TestCategoryGetByID(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(`SELECT`).WillReturnError(errMock)
 
-		repo := repository.NewCategoryRepository(c)
-		cat, err := repo.GetByID(context.Background(), 1)
+		cat, err := catRepo.GetByID(context.Background(), 1)
 		assert.ErrorIs(t, err, errMock)
 		assert.Equal(t, cat.ID, uint(0))
 	})
@@ -71,8 +66,7 @@ func TestCategoryCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewCategoryRepository(c)
-		err := repo.Create(context.Background(), &catData)
+		err := catRepo.Create(context.Background(), &catData)
 		assert.NoError(t, err)
 		assert.Equal(t, catData.ID, uint(1))
 	})
@@ -82,8 +76,7 @@ func TestCategoryCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewCategoryRepository(c)
-		err := repo.Create(context.Background(), &catData)
+		err := catRepo.Create(context.Background(), &catData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }
@@ -99,8 +92,7 @@ func TestCategoryUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewCategoryRepository(c)
-		err := repo.Update(context.Background(), &catData)
+		err := catRepo.Update(context.Background(), &catData)
 		assert.NoError(t, err)
 	})
 	t.Run("should handle failed query", func(t *testing.T) {
@@ -109,8 +101,7 @@ func TestCategoryUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewCategoryRepository(c)
-		err := repo.Update(context.Background(), &catData)
+		err := catRepo.Update(context.Background(), &catData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }

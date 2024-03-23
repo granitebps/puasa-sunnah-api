@@ -8,7 +8,6 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
-	"github.com/granitebps/puasa-sunnah-api/src/repository"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,8 +18,7 @@ func TestTypesGetAll(t *testing.T) {
 			AddRow(1, "John Doe", "Test")
 		mock.ExpectQuery(query).WillReturnRows(rows)
 
-		repo := repository.NewTypesRepository(c)
-		types, err := repo.GetAll(context.Background())
+		types, err := typesRepo.GetAll(context.Background())
 		assert.NoError(t, err)
 		assert.Len(t, types, 1)
 		assert.Equal(t, types[0].ID, uint(1))
@@ -32,8 +30,7 @@ func TestTypesGetAll(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(query).WillReturnError(errMock)
 
-		repo := repository.NewTypesRepository(c)
-		types, err := repo.GetAll(context.Background())
+		types, err := typesRepo.GetAll(context.Background())
 		assert.ErrorIs(t, err, errMock)
 		assert.Len(t, types, 0)
 	})
@@ -46,8 +43,7 @@ func TestTypesGetByID(t *testing.T) {
 			AddRow(1, "John Doe", "Test")
 		mock.ExpectQuery(query).WillReturnRows(rows)
 
-		repo := repository.NewTypesRepository(c)
-		typeData, err := repo.GetByID(context.Background(), 1)
+		typeData, err := typesRepo.GetByID(context.Background(), 1)
 		assert.NoError(t, err)
 		assert.Equal(t, typeData.ID, uint(1))
 		assert.Equal(t, typeData.Name, "John Doe")
@@ -58,8 +54,7 @@ func TestTypesGetByID(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(`SELECT`).WillReturnError(errMock)
 
-		repo := repository.NewTypesRepository(c)
-		typeData, err := repo.GetByID(context.Background(), 1)
+		typeData, err := typesRepo.GetByID(context.Background(), 1)
 		assert.ErrorIs(t, err, errMock)
 		assert.Equal(t, typeData.ID, uint(0))
 	})
@@ -76,8 +71,7 @@ func TestTypesCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewTypesRepository(c)
-		err := repo.Create(context.Background(), &typeData)
+		err := typesRepo.Create(context.Background(), &typeData)
 		assert.NoError(t, err)
 		assert.Equal(t, typeData.ID, uint(1))
 	})
@@ -87,8 +81,7 @@ func TestTypesCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewTypesRepository(c)
-		err := repo.Create(context.Background(), &typeData)
+		err := typesRepo.Create(context.Background(), &typeData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }
@@ -105,8 +98,7 @@ func TestTypesUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewTypesRepository(c)
-		err := repo.Update(context.Background(), &typeData)
+		err := typesRepo.Update(context.Background(), &typeData)
 		assert.NoError(t, err)
 	})
 	t.Run("should handle failed query", func(t *testing.T) {
@@ -115,8 +107,7 @@ func TestTypesUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewTypesRepository(c)
-		err := repo.Update(context.Background(), &typeData)
+		err := typesRepo.Update(context.Background(), &typeData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }

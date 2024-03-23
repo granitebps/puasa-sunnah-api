@@ -9,7 +9,6 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
-	"github.com/granitebps/puasa-sunnah-api/src/repository"
 	"github.com/granitebps/puasa-sunnah-api/src/requests"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/datatypes"
@@ -32,14 +31,13 @@ func TestFastingGetAll(t *testing.T) {
 		mock.ExpectQuery(queryCat).WillReturnRows(rowsCat)
 		mock.ExpectQuery(queryType).WillReturnRows(rowsType)
 
-		repo := repository.NewFastingRepository(c)
 		req := requests.FastingRequest{
 			TypeID: "1",
 			Day:    "1",
 			Month:  "1",
 			Year:   "2021",
 		}
-		fastings, err := repo.GetAll(context.Background(), &req)
+		fastings, err := fastingRepo.GetAll(context.Background(), &req)
 		assert.NoError(t, err)
 		assert.Len(t, fastings, 1)
 		assert.Equal(t, fastings[0].ID, uint(1))
@@ -55,9 +53,8 @@ func TestFastingGetAll(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(queryFasting).WillReturnError(errMock)
 
-		repo := repository.NewFastingRepository(c)
 		req := requests.FastingRequest{}
-		fastings, err := repo.GetAll(context.Background(), &req)
+		fastings, err := fastingRepo.GetAll(context.Background(), &req)
 		assert.ErrorIs(t, err, errMock)
 		assert.Len(t, fastings, 0)
 	})
@@ -80,8 +77,7 @@ func TestFastingGetByID(t *testing.T) {
 		mock.ExpectQuery(queryCat).WillReturnRows(rowsCat)
 		mock.ExpectQuery(queryType).WillReturnRows(rowsType)
 
-		repo := repository.NewFastingRepository(c)
-		fasting, err := repo.GetByID(context.Background(), 1)
+		fasting, err := fastingRepo.GetByID(context.Background(), 1)
 		assert.NoError(t, err)
 		assert.Equal(t, fasting.ID, uint(1))
 		assert.Equal(t, fasting.CategoryID, uint(1))
@@ -96,8 +92,7 @@ func TestFastingGetByID(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(queryFasting).WillReturnError(errMock)
 
-		repo := repository.NewFastingRepository(c)
-		fasting, err := repo.GetByID(context.Background(), 1)
+		fasting, err := fastingRepo.GetByID(context.Background(), 1)
 		assert.ErrorIs(t, err, errMock)
 		assert.Equal(t, fasting.ID, uint(0))
 	})
@@ -120,8 +115,7 @@ func TestFastingGetByDateAndType(t *testing.T) {
 		mock.ExpectQuery(queryCat).WillReturnRows(rowsCat)
 		mock.ExpectQuery(queryType).WillReturnRows(rowsType)
 
-		repo := repository.NewFastingRepository(c)
-		fasting, err := repo.GetByDateAndType(context.Background(), "2021-01-01", 1)
+		fasting, err := fastingRepo.GetByDateAndType(context.Background(), "2021-01-01", 1)
 		assert.NoError(t, err)
 		assert.Equal(t, fasting.ID, uint(1))
 		assert.Equal(t, fasting.CategoryID, uint(1))
@@ -136,8 +130,7 @@ func TestFastingGetByDateAndType(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(queryFasting).WillReturnError(errMock)
 
-		repo := repository.NewFastingRepository(c)
-		fasting, err := repo.GetByDateAndType(context.Background(), "2021-01-01", 1)
+		fasting, err := fastingRepo.GetByDateAndType(context.Background(), "2021-01-01", 1)
 		assert.ErrorIs(t, err, errMock)
 		assert.Equal(t, fasting.ID, uint(0))
 	})
@@ -158,8 +151,7 @@ func TestFastingCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewFastingRepository(c)
-		err := repo.Create(context.Background(), &fastingData)
+		err := fastingRepo.Create(context.Background(), &fastingData)
 		assert.NoError(t, err)
 		assert.Equal(t, fastingData.ID, uint(1))
 	})
@@ -169,8 +161,7 @@ func TestFastingCreate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewFastingRepository(c)
-		err := repo.Create(context.Background(), &fastingData)
+		err := fastingRepo.Create(context.Background(), &fastingData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }
@@ -191,8 +182,7 @@ func TestFastingUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
 
-		repo := repository.NewFastingRepository(c)
-		err := repo.Update(context.Background(), &fastingData)
+		err := fastingRepo.Update(context.Background(), &fastingData)
 		assert.NoError(t, err)
 	})
 	t.Run("should handle failed query", func(t *testing.T) {
@@ -201,8 +191,7 @@ func TestFastingUpdate(t *testing.T) {
 		mock.ExpectExec(query).WillReturnError(errMock)
 		mock.ExpectRollback()
 
-		repo := repository.NewFastingRepository(c)
-		err := repo.Update(context.Background(), &fastingData)
+		err := fastingRepo.Update(context.Background(), &fastingData)
 		assert.ErrorIs(t, err, errMock)
 	})
 }
