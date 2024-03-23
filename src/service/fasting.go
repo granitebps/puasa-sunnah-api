@@ -42,6 +42,7 @@ func (s *FastingService) GetAll(ctx context.Context, req *requests.FastingReques
 			Year:       uint(f.Year),
 			Month:      uint(f.Month),
 			Day:        uint(f.Day),
+			HumanDate:  dateTime.Format("Monday, 02 January 2006"),
 			Category: transformer.CategoryTransformer{
 				ID:   f.Category.ID,
 				Name: f.Category.Name,
