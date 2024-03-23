@@ -7,14 +7,17 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
+	"github.com/granitebps/puasa-sunnah-api/src/repository"
+	"github.com/granitebps/puasa-sunnah-api/src/service"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var (
-	dbMock *gorm.DB
-	mock   sqlmock.Sqlmock
-	c      *core.Core
+	dbMock       *gorm.DB
+	mock         sqlmock.Sqlmock
+	c            *core.Core
+	typesService *service.TypesService
 )
 
 func TestMain(m *testing.M) {
@@ -24,6 +27,8 @@ func TestMain(m *testing.M) {
 			Db: dbMock,
 		},
 	}
+
+	typesService = service.NewTypesService(repository.NewTypesRepository(c))
 
 	os.Exit(m.Run())
 }

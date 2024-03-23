@@ -7,8 +7,6 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/granitebps/puasa-sunnah-api/src/repository"
-	"github.com/granitebps/puasa-sunnah-api/src/service"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,9 +17,7 @@ func TestTypesGetAll(t *testing.T) {
 			AddRow(1, "John Doe", "Test")
 		mock.ExpectQuery(query).WillReturnRows(rows)
 
-		repo := repository.NewTypesRepository(c)
-		serv := service.NewTypesService(repo)
-		types, err := serv.GetAll(context.Background())
+		types, err := typesService.GetAll(context.Background())
 		assert.NoError(t, err)
 		assert.Len(t, types, 1)
 		assert.Equal(t, types[0].ID, uint(1))
@@ -33,9 +29,7 @@ func TestTypesGetAll(t *testing.T) {
 		errMock := errors.New("failed query")
 		mock.ExpectQuery(query).WillReturnError(errMock)
 
-		repo := repository.NewTypesRepository(c)
-		serv := service.NewTypesService(repo)
-		types, err := serv.GetAll(context.Background())
+		types, err := typesService.GetAll(context.Background())
 		assert.ErrorIs(t, err, errMock)
 		assert.Len(t, types, 0)
 	})
