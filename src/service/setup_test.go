@@ -14,10 +14,11 @@ import (
 )
 
 var (
-	dbMock       *gorm.DB
-	mock         sqlmock.Sqlmock
-	c            *core.Core
-	typesService *service.TypesService
+	dbMock        *gorm.DB
+	mock          sqlmock.Sqlmock
+	c             *core.Core
+	typesService  *service.TypesService
+	sourceService *service.SourceService
 )
 
 func TestMain(m *testing.M) {
@@ -29,6 +30,7 @@ func TestMain(m *testing.M) {
 	}
 
 	typesService = service.NewTypesService(repository.NewTypesRepository(c))
+	sourceService = service.NewSourceService(repository.NewSourceRepository(c))
 
 	os.Exit(m.Run())
 }
