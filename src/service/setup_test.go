@@ -20,6 +20,7 @@ var (
 	typesService    *service.TypesService
 	sourceService   *service.SourceService
 	categoryService *service.CategoryService
+	fastingService  *service.FastingService
 )
 
 func TestMain(m *testing.M) {
@@ -30,9 +31,15 @@ func TestMain(m *testing.M) {
 		},
 	}
 
-	typesService = service.NewTypesService(repository.NewTypesRepository(c))
-	sourceService = service.NewSourceService(repository.NewSourceRepository(c))
-	categoryService = service.NewCategoryService(repository.NewCategoryRepository(c))
+	typesRepo := repository.NewTypesRepository(c)
+	sourceRepo := repository.NewSourceRepository(c)
+	categoryRepo := repository.NewCategoryRepository(c)
+	fastingRepo := repository.NewFastingRepository(c)
+
+	typesService = service.NewTypesService(typesRepo)
+	sourceService = service.NewSourceService(sourceRepo)
+	categoryService = service.NewCategoryService(categoryRepo)
+	fastingService = service.NewFastingService(fastingRepo, categoryRepo, typesRepo)
 
 	os.Exit(m.Run())
 }
