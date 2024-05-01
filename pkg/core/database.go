@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/go-gorm/caches/v4"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
 	_ "github.com/newrelic/go-agent/v3/integrations/nrmysql"
@@ -49,7 +50,7 @@ func SetupMySql() *gorm.DB {
 	if name != "" {
 		dsn = dsn + "/" + name
 	}
-	dsn += "?parseTime=true"
+	dsn += "?parseTime=true&interpolateParams=true"
 
 	db, err := sql.Open("nrmysql", dsn)
 	if err != nil {
@@ -66,10 +67,15 @@ func SetupMySql() *gorm.DB {
 	}), &gorm.Config{
 		SkipDefaultTransaction: true,
 		Logger:                 logger.Default.LogMode(mode),
+		PrepareStmt:            true,
 	})
 	if err != nil {
 		log.Panic(err)
 	}
+
+	cachesPlugin := &caches.Caches{Conf: &caches.Config{
+		Easer: true,
+	}}
 
 	database.Set("gorm:auto_preload", true)
 	database.Session(&gorm.Session{
@@ -82,6 +88,12 @@ func SetupMySql() *gorm.DB {
 	sDatabase.SetMaxIdleConns(5)
 	sDatabase.SetConnMaxIdleTime(1 * time.Minute)
 	sDatabase.SetConnMaxLifetime(1 * time.Minute)
+
+	// Cache
+	err = database.Use(cachesPlugin)
+	if err != nil {
+		log.Panic(err)
+	}
 
 	// Auto migrate
 	err = database.AutoMigrate(&model.Category{})

@@ -8,6 +8,19 @@ You can find and compare releases at the GitHub release page.
 
 ## [Unreleased]
 
+## [1.2.0] - 2024-05-01
+
+### Fixed
+- Order fasting by date
+- Add check between day,month,year to date
+
+### Added
+- Add database backup
+- Add human date to fasting api
+- Add 2023 data
+- Add 2024 data
+- Add test
+
 ## [1.1.0] - 2024-03-07
 
 ### Changed
@@ -58,6 +71,8 @@ You can find and compare releases at the GitHub release page.
 - Prepare for deployment
 
 [Unreleased]: https://github.com/granitebps/puasa-sunnah-api/compare/main...dev
+[1.2.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.0.1...v0.0.2

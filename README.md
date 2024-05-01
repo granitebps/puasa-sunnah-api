@@ -17,9 +17,9 @@
 - [Fiber](https://gofiber.io)
 
 ## Build Note
-- Version 1.1.0
+- Version 1.2.0
 - Go 1.21
-- Fiber 2.52.1
+- Fiber 2.52.4
 
 ## How to
 - Clone the repo

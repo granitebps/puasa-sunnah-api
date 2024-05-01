@@ -2,11 +2,9 @@ package repository
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
-	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
 	"github.com/granitebps/puasa-sunnah-api/src/requests"
 )
@@ -41,6 +39,7 @@ func (r *FastingRepository) GetAll(ctx context.Context, req *requests.FastingReq
 	}
 
 	err = query.
+		Order("created_at ASC").
 		Find(&res).Error
 	if err != nil {
 		err = merry.Wrap(err)
@@ -95,7 +94,6 @@ func (r *FastingRepository) Create(ctx context.Context, fasting *model.Fasting) 
 }
 
 func (r *FastingRepository) Update(ctx context.Context, fasting *model.Fasting) (err error) {
-	fmt.Println(utils.StructToJSONString(fasting))
 	err = r.Core.Database.Db.
 		WithContext(ctx).
 		Updates(&fasting).Error
