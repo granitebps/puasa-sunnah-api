@@ -21,6 +21,7 @@ var (
 	sourceService   *service.SourceService
 	categoryService *service.CategoryService
 	fastingService  *service.FastingService
+	adminService    *service.AdminService
 )
 
 func TestMain(m *testing.M) {
@@ -40,6 +41,7 @@ func TestMain(m *testing.M) {
 	sourceService = service.NewSourceService(sourceRepo)
 	categoryService = service.NewCategoryService(categoryRepo)
 	fastingService = service.NewFastingService(fastingRepo, categoryRepo, typesRepo)
+	adminService = service.NewAdminService(categoryRepo, sourceRepo, typesRepo, fastingRepo)
 
 	os.Exit(m.Run())
 }

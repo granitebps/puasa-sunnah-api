@@ -57,6 +57,14 @@ test: run-test $(TPARSE) ## Run Tests & parse details
 run-test: $(GOTESTSUM)
 	@ gotestsum $(TESTS_ARGS) -short
 
+## coverage: displays test coverage
+coverage:
+	go test -cover ./...
+
+## cover: opens coverage in browser
+cover:
+	go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out
+
 # clean ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clear: clean-artifacts
@@ -66,15 +74,3 @@ clean-artifacts: ## Removes Artifacts
 	@ rm -f *.out
 	@ rm -f *.html
 	@ echo "done."
-
-# ## test: runs all tests
-# test:
-# 	go test -v ./...
-
-# ## cover: opens coverage in browser
-# cover:
-# 	go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out
-
-# ## coverage: displays test coverage
-# coverage:
-# 	go test -cover ./...

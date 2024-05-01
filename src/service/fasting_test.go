@@ -42,6 +42,7 @@ func TestFastingGetAll(t *testing.T) {
 		assert.Equal(t, fastings[0].CategoryID, uint(1))
 		assert.Equal(t, fastings[0].TypeID, uint(1))
 		assert.Equal(t, fastings[0].Date, now.Format("2006-01-02"))
+		assert.Equal(t, fastings[0].HumanDate, now.Format("Monday, 02 January 2006"))
 		assert.Equal(t, fastings[0].Year, uint(2021))
 		assert.Equal(t, fastings[0].Month, uint(1))
 		assert.Equal(t, fastings[0].Day, uint(1))
