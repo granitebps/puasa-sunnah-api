@@ -146,3 +146,74 @@ func TestAdminUpdateSource(t *testing.T) {
 		assert.Equal(t, res.ID, uint(0))
 	})
 }
+
+func TestAdminCreateType(t *testing.T) {
+	query := regexp.QuoteMeta("INSERT INTO `types`")
+	req := requests.TypeRequest{
+		Name:        "Type Name",
+		Description: "Type Description",
+	}
+	t.Run("should create type", func(t *testing.T) {
+		mock.ExpectBegin()
+		mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
+
+		res, err := adminService.CreateType(context.Background(), &req)
+		assert.NoError(t, err)
+		assert.Equal(t, res.ID, uint(1))
+		assert.Equal(t, res.Name, "Type Name")
+		assert.Equal(t, res.Description, "Type Description")
+	})
+	t.Run("should handle failed query", func(t *testing.T) {
+		errMock := errors.New("failed query")
+		mock.ExpectBegin()
+		mock.ExpectExec(query).WillReturnError(errMock)
+		mock.ExpectRollback()
+
+		res, err := adminService.CreateType(context.Background(), &req)
+		assert.ErrorIs(t, err, errMock)
+		assert.Equal(t, res.ID, uint(0))
+	})
+}
+
+func TestAdminUpdateType(t *testing.T) {
+	query := regexp.QuoteMeta("SELECT * FROM `types`")
+	req := requests.TypeRequest{
+		Name:        "Type Name",
+		Description: "Type Description",
+	}
+	t.Run("should update type", func(t *testing.T) {
+		rows := sqlmock.NewRows([]string{"id", "name", "description"}).
+			AddRow(1, "Type Name", "Type Description")
+		mock.ExpectQuery(query).WillReturnRows(rows)
+		mock.ExpectBegin()
+		mock.ExpectExec(regexp.QuoteMeta("UPDATE `types`")).WillReturnResult(sqlmock.NewResult(1, 1))
+		mock.ExpectCommit()
+
+		res, err := adminService.UpdateType(context.Background(), 1, &req)
+		assert.NoError(t, err)
+		assert.Equal(t, res.Name, "Type Name")
+		assert.Equal(t, res.Description, "Type Description")
+	})
+	t.Run("should handle failed query get by ID", func(t *testing.T) {
+		errMock := errors.New("failed query")
+		mock.ExpectQuery(query).WillReturnError(errMock)
+
+		res, err := adminService.UpdateType(context.Background(), 1, &req)
+		assert.ErrorIs(t, err, errMock)
+		assert.Equal(t, res.ID, uint(0))
+	})
+	t.Run("should handle failed query update", func(t *testing.T) {
+		errMock := errors.New("failed query")
+		rows := sqlmock.NewRows([]string{"id", "name", "description"}).
+			AddRow(1, "Type Name", "Type Description")
+		mock.ExpectQuery(query).WillReturnRows(rows)
+		mock.ExpectBegin()
+		mock.ExpectExec(regexp.QuoteMeta("UPDATE `types`")).WillReturnError(errMock)
+		mock.ExpectRollback()
+
+		res, err := adminService.UpdateType(context.Background(), 1, &req)
+		assert.ErrorIs(t, err, errMock)
+		assert.Equal(t, res.ID, uint(0))
+	})
+}
