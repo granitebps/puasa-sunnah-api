@@ -18,7 +18,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/google/wire v0.6.0
 	github.com/mailgun/mailgun-go/v4 v4.12.0
-	github.com/newrelic/go-agent/v3 v3.32.0
+	github.com/newrelic/go-agent/v3 v3.33.0
 	github.com/newrelic/go-agent/v3/integrations/nrmysql v1.2.2
 	github.com/newrelic/go-agent/v3/integrations/nrpkgerrors v1.1.0
 	github.com/rs/zerolog v1.32.0
