@@ -173,6 +173,8 @@ github.com/newrelic/go-agent/v3 v3.30.0 h1:ZXHCT/Cot4iIPwcegCZURuRQOsfmGA6wilW+S
 github.com/newrelic/go-agent/v3 v3.30.0/go.mod h1:9utrgxlSryNqRrTvII2XBL+0lpofXbqXApvVWPpbzUg=
 github.com/newrelic/go-agent/v3 v3.32.0 h1:99Et9lXXzeQV1CfYldfeTXv+d9W9KatpMbb50kIscWo=
 github.com/newrelic/go-agent/v3 v3.32.0/go.mod h1:SMdqPzE/ghkWdY0rYGSD7Clw2daK/XH6pUnVd4albg4=
+github.com/newrelic/go-agent/v3 v3.33.0 h1:0Phrvp6KWOcJPsIxskL9ZrVddhrZDl1xokNtTjN4GpQ=
+github.com/newrelic/go-agent/v3 v3.33.0/go.mod h1:SMdqPzE/ghkWdY0rYGSD7Clw2daK/XH6pUnVd4albg4=
 github.com/newrelic/go-agent/v3/integrations/nrmysql v1.2.2 h1:JtaJdL4y1hj5mH0JA2XIIIZtOsivsCmG0wsp3cGtoNo=
 github.com/newrelic/go-agent/v3/integrations/nrmysql v1.2.2/go.mod h1:0JZ1gqlaBi9FUrQsg9LLZR357oDH4fGYYTbQQPhOd8o=
 github.com/newrelic/go-agent/v3/integrations/nrpkgerrors v1.1.0 h1:TmAihIxCqgz3v9OR19J7mK2ggEQjGdhz2FEOvszU1SI=

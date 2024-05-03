@@ -811,6 +811,9 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 1
                 },
+                "human_date": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer",
                     "example": 1

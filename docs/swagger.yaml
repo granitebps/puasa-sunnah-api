@@ -71,6 +71,8 @@ definitions:
       day:
         example: 1
         type: integer
+      human_date:
+        type: string
       id:
         example: 1
         type: integer

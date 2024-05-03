@@ -24,6 +24,8 @@ deps_i:
 
 # Pre-push command ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+pre-push: swag lint security vet wire test
+
 swag:
 	swag init
 

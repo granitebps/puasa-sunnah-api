@@ -5,6 +5,7 @@ import (
 
 	"github.com/ansel1/merry/v2"
 	_ "github.com/granitebps/puasa-sunnah-api/docs"
+	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 
@@ -19,6 +20,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
+	"github.com/gofiber/fiber/v2/middleware/timeout"
 	"github.com/gofiber/swagger"
 )
 
@@ -58,6 +60,12 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 	a.Use(fibernewrelic.New(fibernewrelic.Config{
 		Application: c.Newrelic,
 	}))
+
+	a.Use(
+		timeout.NewWithContext(func(c *fiber.Ctx) error {
+			return c.Next()
+		}, constants.TIMEOUT),
+	)
 
 	// Uncomment these code if you want to implement https://docs.gofiber.io/api/middleware/monitor
 	// a.Get("/metrics", monitor.New(monitor.Config{
