@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"time"
 
 	"github.com/ansel1/merry/v2"
 	"github.com/goccy/go-json"
@@ -18,7 +17,7 @@ func FiberConfig() fiber.Config {
 		AppName:     viper.GetString(constants.APP_NAME),
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
-		ReadTimeout: time.Second * 60,
+		ReadTimeout: constants.TIMEOUT,
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			// Status code defaults to 500
 			code := fiber.StatusInternalServerError
