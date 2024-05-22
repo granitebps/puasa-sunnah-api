@@ -12,7 +12,7 @@ require (
 	github.com/go-gorm/caches/v4 v4.0.5
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/go-resty/resty/v2 v2.12.0
-	github.com/goccy/go-json v0.10.2
+	github.com/goccy/go-json v0.10.3
 	github.com/gofiber/contrib/fibernewrelic v1.2.2
 	github.com/gofiber/contrib/fibersentry v1.0.5
 	github.com/gofiber/fiber/v2 v2.52.4
