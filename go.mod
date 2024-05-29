@@ -6,7 +6,7 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/ansel1/merry v1.8.0
 	github.com/ansel1/merry/v2 v2.2.1
-	github.com/aws/aws-sdk-go v1.50.35
+	github.com/aws/aws-sdk-go v1.53.11
 	github.com/getsentry/sentry-go v0.27.0
 	github.com/go-co-op/gocron v1.37.0
 	github.com/go-gorm/caches/v4 v4.0.5
