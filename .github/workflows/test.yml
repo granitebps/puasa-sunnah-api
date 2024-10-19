@@ -16,8 +16,6 @@ jobs:
         run: go get .
       - name: Build
         run: make build-app
-      - name: Install test dependencies
-        run: make deps_i
       - name: Test
         run: make test
       - name: Run golangci-lint
