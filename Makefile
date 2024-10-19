@@ -23,7 +23,6 @@ deps_i:
 	@ go install github.com/air-verse/air@latest
 	@ go install github.com/swaggo/swag/cmd/swag@latest
 	@ go install github.com/securego/gosec/v2/cmd/gosec@latest
-	@ go install gotest.tools/gotestsum@latest
 # curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.61.0
 
 # Pre-push command ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
