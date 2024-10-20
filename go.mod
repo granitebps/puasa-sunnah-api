@@ -16,11 +16,14 @@ require (
 	github.com/gofiber/contrib/fibernewrelic v1.3.0
 	github.com/gofiber/contrib/fibersentry v1.0.6
 	github.com/gofiber/fiber/v2 v2.52.5
+	github.com/gofiber/storage/redis/v3 v3.1.2
 	github.com/google/wire v0.6.0
 	github.com/mailgun/mailgun-go/v4 v4.12.0
 	github.com/newrelic/go-agent/v3 v3.35.0
 	github.com/newrelic/go-agent/v3/integrations/nrmysql v1.2.2
 	github.com/newrelic/go-agent/v3/integrations/nrpkgerrors v1.1.0
+	github.com/newrelic/go-agent/v3/integrations/nrredis-v9 v1.0.0
+	github.com/redis/go-redis/v9 v9.7.0
 	github.com/rs/zerolog v1.33.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0
@@ -34,7 +37,9 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.6 // indirect
 	github.com/go-chi/chi/v5 v5.0.12 // indirect
