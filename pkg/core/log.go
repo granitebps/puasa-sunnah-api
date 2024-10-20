@@ -73,7 +73,7 @@ func createLogWriter() *os.File {
 
 func createLogFolder(logFolder string) {
 	if _, err := os.Stat(logFolder); errors.Is(err, os.ErrNotExist) {
-		err := os.MkdirAll(logFolder, os.ModePerm)
+		err := os.MkdirAll(logFolder, 0640)
 		if err != nil {
 			log.Panic(err)
 		}

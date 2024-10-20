@@ -1,3 +1,9 @@
 linters:
   enable:
     - gocritic
+    - gosec
+
+linters-settings:
+  gosec:
+    excludes:
+      - G115
