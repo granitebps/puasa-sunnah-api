@@ -12,6 +12,7 @@ import (
 	"github.com/gofiber/contrib/fibernewrelic"
 	"github.com/gofiber/contrib/fibersentry"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/etag"
@@ -71,4 +72,11 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 	// a.Get("/metrics", monitor.New(monitor.Config{
 	// 	Title: fmt.Sprintf("%s Monitor", c.AppName),
 	// }))
+
+	// Response Cache
+	a.Use(cache.New(cache.Config{
+		Expiration:   24 * time.Hour, // 24 hour
+		Storage:      c.Cache.RedisStorage,
+		CacheControl: true,
+	}))
 }
