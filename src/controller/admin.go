@@ -153,6 +153,34 @@ func (c *AdminController) UpdateSource(ctx *fiber.Ctx) error {
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update source", data)
 }
 
+// Delete Source	godoc
+// @Summary      	Delete source
+// @Description  	Delete fasting source
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Source ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/sources/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteSource(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteSource(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete source", nil)
+}
+
 // Create Type	godoc
 // @Summary      	Create type
 // @Description  	Create fasting type

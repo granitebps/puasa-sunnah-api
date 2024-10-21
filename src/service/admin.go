@@ -110,6 +110,22 @@ func (s *AdminService) UpdateSource(ctx context.Context, id uint, req *requests.
 	return
 }
 
+func (s *AdminService) DeleteSource(ctx context.Context, id uint) (err error) {
+	source, err := s.SourceRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.SourceRepo.Delete(ctx, &source)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}
+
 func (s *AdminService) CreateType(ctx context.Context, req *requests.TypeRequest) (trans transformer.TypeTransformer, err error) {
 	types := model.Type{
 		Name:        req.Name,

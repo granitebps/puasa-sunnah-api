@@ -305,6 +305,32 @@ paths:
       tags:
       - Admin
   /api/v1/admin/sources/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fasting source
+      parameters:
+      - description: Source ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Delete source
+      tags:
+      - Admin
     put:
       consumes:
       - application/json
