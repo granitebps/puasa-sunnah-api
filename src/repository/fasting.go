@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
@@ -25,21 +27,26 @@ func (r *FastingRepository) GetAll(ctx context.Context, req *requests.FastingReq
 		Preload("Category").
 		Preload("Type")
 
+	year := req.Year
+	month := req.Month
+	if year == "" {
+		year = fmt.Sprintf("%d", time.Now().Year())
+	}
+	if month == "" {
+		month = fmt.Sprintf("%d", time.Now().Month())
+	}
+
 	if req.TypeID != "" {
 		query.Where("type_id = ?", req.TypeID)
 	}
-	if req.Year != "" {
-		query.Where("year = ?", req.Year)
-	}
-	if req.Month != "" {
-		query.Where("month = ?", req.Month)
-	}
+	query.Where("year = ?", year)
+	query.Where("month = ?", month)
 	if req.Day != "" {
 		query.Where("day = ?", req.Day)
 	}
 
 	err = query.
-		Order("created_at ASC").
+		Order("date ASC").
 		Find(&res).Error
 	if err != nil {
 		err = merry.Wrap(err)
