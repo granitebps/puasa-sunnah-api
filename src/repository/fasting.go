@@ -111,3 +111,15 @@ func (r *FastingRepository) Update(ctx context.Context, fasting *model.Fasting) 
 
 	return
 }
+
+func (r *FastingRepository) Delete(ctx context.Context, fasting *model.Fasting) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Delete(&fasting).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}

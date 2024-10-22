@@ -364,3 +364,31 @@ func (c *AdminController) UpdateFasting(ctx *fiber.Ctx) error {
 
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update fasting", data)
 }
+
+// Delete Fasting	godoc
+// @Summary      	Delete fasting
+// @Description  	Delete fasting
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Fasting ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/fastings/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteFasting(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteFasting(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete fasting", nil)
+}

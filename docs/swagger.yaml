@@ -260,6 +260,32 @@ paths:
       tags:
       - Admin
   /api/v1/admin/fastings/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fasting
+      parameters:
+      - description: Fasting ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Delete fasting
+      tags:
+      - Admin
     put:
       consumes:
       - application/json

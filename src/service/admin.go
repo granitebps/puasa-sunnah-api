@@ -332,3 +332,19 @@ func (s *AdminService) UpdateFasting(ctx context.Context, req *requests.FastingC
 
 	return
 }
+
+func (s *AdminService) DeleteFasting(ctx context.Context, id uint) (err error) {
+	fasting, err := s.FastingRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.FastingRepo.Delete(ctx, &fasting)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}

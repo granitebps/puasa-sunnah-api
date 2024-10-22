@@ -24,4 +24,5 @@ func AdminRoutes(app fiber.Router, c *controller.ControllerStruct) {
 	fasting := app.Group("fastings")
 	fasting.Post("", c.AdminController.CreateFasting)
 	fasting.Put(":id", c.AdminController.UpdateFasting)
+	fasting.Delete(":id", c.AdminController.DeleteFasting)
 }
