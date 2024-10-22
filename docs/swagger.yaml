@@ -402,6 +402,32 @@ paths:
       tags:
       - Admin
   /api/v1/admin/types/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fasting type
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Delete type
+      tags:
+      - Admin
     put:
       consumes:
       - application/json

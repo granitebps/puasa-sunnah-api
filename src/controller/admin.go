@@ -245,6 +245,34 @@ func (c *AdminController) UpdateType(ctx *fiber.Ctx) error {
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update type", data)
 }
 
+// Delete Type	godoc
+// @Summary      	Delete type
+// @Description  	Delete fasting type
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Type ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/types/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteType(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteType(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete type", nil)
+}
+
 // Create Fasting	godoc
 // @Summary      	Create fasting
 // @Description  	Create fasting

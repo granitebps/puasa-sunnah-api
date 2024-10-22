@@ -19,6 +19,7 @@ func AdminRoutes(app fiber.Router, c *controller.ControllerStruct) {
 	types := app.Group("types")
 	types.Post("", c.AdminController.CreateType)
 	types.Put(":id", c.AdminController.UpdateType)
+	types.Delete(":id", c.AdminController.DeleteType)
 
 	fasting := app.Group("fastings")
 	fasting.Post("", c.AdminController.CreateFasting)

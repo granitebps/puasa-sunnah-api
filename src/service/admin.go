@@ -168,6 +168,22 @@ func (s *AdminService) UpdateType(ctx context.Context, id uint, req *requests.Ty
 	return
 }
 
+func (s *AdminService) DeleteType(ctx context.Context, id uint) (err error) {
+	types, err := s.TypeRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.TypeRepo.Delete(ctx, &types)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}
+
 func (s *AdminService) CreateFasting(ctx context.Context, req *requests.FastingCreateUpdateRequest) (trans transformer.FastingTransformer, err error) {
 	// Check if fasting already exists
 	_, err = s.FastingRepo.GetByDateAndType(ctx, req.Date, req.TypeID)
