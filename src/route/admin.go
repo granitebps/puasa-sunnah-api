@@ -7,9 +7,9 @@ import (
 
 func AdminRoutes(app fiber.Router, c *controller.ControllerStruct) {
 	category := app.Group("categories")
-
 	category.Post("", c.AdminController.CreateCategory)
 	category.Put(":id", c.AdminController.UpdateCategory)
+	category.Delete(":id", c.AdminController.DeleteCategory)
 
 	source := app.Group("sources")
 	source.Post("", c.AdminController.CreateSource)

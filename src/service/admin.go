@@ -72,6 +72,22 @@ func (s *AdminService) UpdateCategory(ctx context.Context, id uint, req *request
 	return
 }
 
+func (s *AdminService) DeleteCategory(ctx context.Context, id uint) (err error) {
+	cat, err := s.CategoryRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.CategoryRepo.Delete(ctx, &cat)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}
+
 func (s *AdminService) CreateSource(ctx context.Context, req *requests.SourceRequest) (trans transformer.SourceTransformer, err error) {
 	source := model.Source{
 		Url: req.Url,

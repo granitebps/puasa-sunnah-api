@@ -58,3 +58,14 @@ func (r *CategoryRepository) Update(ctx context.Context, category *model.Categor
 	}
 	return
 }
+
+func (r *CategoryRepository) Delete(ctx context.Context, category *model.Category) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Delete(&category).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+	return
+}

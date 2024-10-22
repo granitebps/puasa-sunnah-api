@@ -88,6 +88,34 @@ func (c *AdminController) UpdateCategory(ctx *fiber.Ctx) error {
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update category", data)
 }
 
+// Delete Category	godoc
+// @Summary      	Delete category
+// @Description  	Delete fasting category
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Category ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/categories/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteCategory(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteCategory(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete category", nil)
+}
+
 // Create Source	godoc
 // @Summary      	Create source
 // @Description  	Create fasting source
