@@ -27,22 +27,25 @@ func (r *FastingRepository) GetAll(ctx context.Context, req *requests.FastingReq
 		Preload("Category").
 		Preload("Type")
 
-	year := req.Year
-	month := req.Month
-	if year == "" {
-		year = fmt.Sprintf("%d", time.Now().Year())
-	}
-	if month == "" {
-		month = fmt.Sprintf("%d", time.Now().Month())
-	}
+	if req.Day == "" && req.Month == "" && req.TypeID == "" && req.Year == "" {
+		year := fmt.Sprintf("%d", time.Now().Year())
+		month := fmt.Sprintf("%d", time.Now().Month())
 
-	if req.TypeID != "" {
-		query.Where("type_id = ?", req.TypeID)
-	}
-	query.Where("year = ?", year)
-	query.Where("month = ?", month)
-	if req.Day != "" {
-		query.Where("day = ?", req.Day)
+		query.Where("year = ?", year)
+		query.Where("month = ?", month)
+	} else {
+		if req.Year != "" {
+			query.Where("year = ?", req.Year)
+		}
+		if req.Month != "" {
+			query.Where("month = ?", req.Month)
+		}
+		if req.TypeID != "" {
+			query.Where("type_id = ?", req.TypeID)
+		}
+		if req.Day != "" {
+			query.Where("day = ?", req.Day)
+		}
 	}
 
 	err = query.
@@ -104,6 +107,18 @@ func (r *FastingRepository) Update(ctx context.Context, fasting *model.Fasting) 
 	err = r.Core.Database.Db.
 		WithContext(ctx).
 		Updates(&fasting).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}
+
+func (r *FastingRepository) Delete(ctx context.Context, fasting *model.Fasting) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Delete(&fasting).Error
 	if err != nil {
 		err = merry.Wrap(err)
 		return

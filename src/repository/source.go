@@ -64,3 +64,14 @@ func (r *SourceRepository) Update(ctx context.Context, source *model.Source) (er
 	}
 	return
 }
+
+func (r *SourceRepository) Delete(ctx context.Context, source *model.Source) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Delete(&source).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+	return
+}
