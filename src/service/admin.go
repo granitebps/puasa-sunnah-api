@@ -72,6 +72,22 @@ func (s *AdminService) UpdateCategory(ctx context.Context, id uint, req *request
 	return
 }
 
+func (s *AdminService) DeleteCategory(ctx context.Context, id uint) (err error) {
+	cat, err := s.CategoryRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.CategoryRepo.Delete(ctx, &cat)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}
+
 func (s *AdminService) CreateSource(ctx context.Context, req *requests.SourceRequest) (trans transformer.SourceTransformer, err error) {
 	source := model.Source{
 		Url: req.Url,
@@ -106,6 +122,22 @@ func (s *AdminService) UpdateSource(ctx context.Context, id uint, req *requests.
 
 	trans.ID = source.ID
 	trans.URL = source.Url
+
+	return
+}
+
+func (s *AdminService) DeleteSource(ctx context.Context, id uint) (err error) {
+	source, err := s.SourceRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.SourceRepo.Delete(ctx, &source)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
 
 	return
 }
@@ -148,6 +180,22 @@ func (s *AdminService) UpdateType(ctx context.Context, id uint, req *requests.Ty
 	trans.ID = types.ID
 	trans.Name = types.Name
 	trans.Description = types.Description
+
+	return
+}
+
+func (s *AdminService) DeleteType(ctx context.Context, id uint) (err error) {
+	types, err := s.TypeRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.TypeRepo.Delete(ctx, &types)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
 
 	return
 }
@@ -280,6 +328,22 @@ func (s *AdminService) UpdateFasting(ctx context.Context, req *requests.FastingC
 		ID:          newFasting.Type.ID,
 		Name:        newFasting.Type.Name,
 		Description: newFasting.Type.Description,
+	}
+
+	return
+}
+
+func (s *AdminService) DeleteFasting(ctx context.Context, id uint) (err error) {
+	fasting, err := s.FastingRepo.GetByID(ctx, id)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	err = s.FastingRepo.Delete(ctx, &fasting)
+	if err != nil {
+		err = merry.Wrap(err)
+		return
 	}
 
 	return

@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/ansel1/merry/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
@@ -25,21 +27,29 @@ func (r *FastingRepository) GetAll(ctx context.Context, req *requests.FastingReq
 		Preload("Category").
 		Preload("Type")
 
-	if req.TypeID != "" {
-		query.Where("type_id = ?", req.TypeID)
-	}
-	if req.Year != "" {
-		query.Where("year = ?", req.Year)
-	}
-	if req.Month != "" {
-		query.Where("month = ?", req.Month)
-	}
-	if req.Day != "" {
-		query.Where("day = ?", req.Day)
+	if req.Day == "" && req.Month == "" && req.TypeID == "" && req.Year == "" {
+		year := fmt.Sprintf("%d", time.Now().Year())
+		month := fmt.Sprintf("%d", time.Now().Month())
+
+		query.Where("year = ?", year)
+		query.Where("month = ?", month)
+	} else {
+		if req.Year != "" {
+			query.Where("year = ?", req.Year)
+		}
+		if req.Month != "" {
+			query.Where("month = ?", req.Month)
+		}
+		if req.TypeID != "" {
+			query.Where("type_id = ?", req.TypeID)
+		}
+		if req.Day != "" {
+			query.Where("day = ?", req.Day)
+		}
 	}
 
 	err = query.
-		Order("created_at ASC").
+		Order("date ASC").
 		Find(&res).Error
 	if err != nil {
 		err = merry.Wrap(err)
@@ -97,6 +107,18 @@ func (r *FastingRepository) Update(ctx context.Context, fasting *model.Fasting) 
 	err = r.Core.Database.Db.
 		WithContext(ctx).
 		Updates(&fasting).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+
+	return
+}
+
+func (r *FastingRepository) Delete(ctx context.Context, fasting *model.Fasting) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Delete(&fasting).Error
 	if err != nil {
 		err = merry.Wrap(err)
 		return

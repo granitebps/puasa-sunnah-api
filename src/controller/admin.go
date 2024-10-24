@@ -88,6 +88,34 @@ func (c *AdminController) UpdateCategory(ctx *fiber.Ctx) error {
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update category", data)
 }
 
+// Delete Category	godoc
+// @Summary      	Delete category
+// @Description  	Delete fasting category
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Category ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/categories/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteCategory(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteCategory(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete category", nil)
+}
+
 // Create Source	godoc
 // @Summary      	Create source
 // @Description  	Create fasting source
@@ -151,6 +179,34 @@ func (c *AdminController) UpdateSource(ctx *fiber.Ctx) error {
 	}
 
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update source", data)
+}
+
+// Delete Source	godoc
+// @Summary      	Delete source
+// @Description  	Delete fasting source
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Source ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/sources/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteSource(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteSource(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete source", nil)
 }
 
 // Create Type	godoc
@@ -217,6 +273,34 @@ func (c *AdminController) UpdateType(ctx *fiber.Ctx) error {
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update type", data)
 }
 
+// Delete Type	godoc
+// @Summary      	Delete type
+// @Description  	Delete fasting type
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Type ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/types/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteType(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteType(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete type", nil)
+}
+
 // Create Fasting	godoc
 // @Summary      	Create fasting
 // @Description  	Create fasting
@@ -279,4 +363,32 @@ func (c *AdminController) UpdateFasting(ctx *fiber.Ctx) error {
 	}
 
 	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success update fasting", data)
+}
+
+// Delete Fasting	godoc
+// @Summary      	Delete fasting
+// @Description  	Delete fasting
+// @Tags         	Admin
+// @Accept       	json
+// @Produce      	json
+// @Param 			id path int true "Fasting ID"
+// @Success      	200  {object}  utils.JSONResponse{} "desc"
+// @Failure      	400  {object}  utils.JSONResponse
+// @Router       	/api/v1/admin/fastings/:id [delete]
+// @Security 		BasicAuth
+func (c *AdminController) DeleteFasting(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	err = c.AdminService.DeleteFasting(ctx.UserContext(), uint(id))
+	if err != nil {
+		err = merry.Wrap(err)
+		return utils.ReturnErrorResponse(ctx, err, nil)
+	}
+
+	return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, "Success delete fasting", nil)
 }

@@ -71,6 +71,8 @@ definitions:
       day:
         example: 1
         type: integer
+      human_date:
+        type: string
       id:
         example: 1
         type: integer
@@ -161,6 +163,32 @@ paths:
       tags:
       - Admin
   /api/v1/admin/categories/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fasting category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Delete category
+      tags:
+      - Admin
     put:
       consumes:
       - application/json
@@ -232,6 +260,32 @@ paths:
       tags:
       - Admin
   /api/v1/admin/fastings/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fasting
+      parameters:
+      - description: Fasting ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Delete fasting
+      tags:
+      - Admin
     put:
       consumes:
       - application/json
@@ -303,6 +357,32 @@ paths:
       tags:
       - Admin
   /api/v1/admin/sources/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fasting source
+      parameters:
+      - description: Source ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Delete source
+      tags:
+      - Admin
     put:
       consumes:
       - application/json
@@ -374,6 +454,32 @@ paths:
       tags:
       - Admin
   /api/v1/admin/types/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fasting type
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.JSONResponse'
+      security:
+      - BasicAuth: []
+      summary: Delete type
+      tags:
+      - Admin
     put:
       consumes:
       - application/json

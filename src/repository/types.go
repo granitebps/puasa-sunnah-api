@@ -61,3 +61,14 @@ func (r *TypesRepository) Update(ctx context.Context, types *model.Type) (err er
 	}
 	return
 }
+
+func (r *TypesRepository) Delete(ctx context.Context, types *model.Type) (err error) {
+	err = r.Core.Database.Db.
+		WithContext(ctx).
+		Delete(&types).Error
+	if err != nil {
+		err = merry.Wrap(err)
+		return
+	}
+	return
+}
