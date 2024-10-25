@@ -34,7 +34,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build app
-        run: make build
+        run: |
+          CGO_ENABLED=0 go build -ldflags="-w -s" -o api .
+          CGO_ENABLED=0 go build -ldflags="-w -s" -o backup cmd/backup.go
       - name: SCP to Linode instance (API)
         uses: appleboy/scp-action@master
         with:
