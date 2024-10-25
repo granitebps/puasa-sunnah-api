@@ -1,0 +1,68 @@
+name: CI/CD Test and Deploy API
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+          cache: false
+      - name: Install dependencies
+        run: go get .
+      - name: Build
+        run: make build-app
+      - name: Install test dependencies
+        run: make deps_i
+      - name: Test
+        run: make test
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.60
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    # if: github.ref_name == 'master' || github.ref_name == 'dev'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build app
+        run: make build
+      - name: SCP to Linode instance (API)
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          source: "api"
+          target: "/var/www/puasa-sunnah-api/build/api"
+      - name: SCP to Linode instance (Backup)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          source: "backup"
+          target: "/var/www/puasa-sunnah-api/build/backup"
+      - name: Deploy API to Linode
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "Deploying application ..."
+
+            # Restart the service
+            sudo service puasasunnah restart
+
+            echo "Application deployed!"
