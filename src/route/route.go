@@ -2,7 +2,6 @@ package route
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/ansel1/merry/v2"
 	"github.com/gofiber/fiber/v2"
@@ -15,7 +14,7 @@ import (
 
 func SetupRoute(a *fiber.App, c *controller.ControllerStruct) {
 	a.Get("", func(ctx *fiber.Ctx) error {
-		return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, fmt.Sprintf("%s API", viper.GetString(constants.APP_NAME)), nil)
+		return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, viper.GetString(constants.APP_NAME), nil)
 	})
 
 	route := a.Group("api")

@@ -8,6 +8,16 @@ You can find and compare releases at the GitHub release page.
 
 ## [Unreleased]
 
+## [1.2.1] - 2024-10-24
+
+### Added
+- Add request timeout
+- Add response cache using redis
+- Add delete API to fasting, category, type and source
+
+### Changed
+- Update default filter for fasting
+
 ## [1.2.0] - 2024-05-01
 
 ### Fixed
@@ -71,6 +81,7 @@ You can find and compare releases at the GitHub release page.
 - Prepare for deployment
 
 [Unreleased]: https://github.com/granitebps/puasa-sunnah-api/compare/main...dev
+[1.2.1]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v0.1.0...v1.0.0
