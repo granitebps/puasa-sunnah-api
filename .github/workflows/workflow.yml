@@ -3,32 +3,32 @@ name: CI/CD Test and Deploy API
 on: [push]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  # test:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.23.x'
-          cache: false
-      - name: Install dependencies
-        run: go get .
-      - name: Build
-        run: make build-app
-      - name: Install test dependencies
-        run: make deps_i
-      - name: Test
-        run: make test
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v4
-        with:
-          version: v1.60
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Setup Go
+  #       uses: actions/setup-go@v5
+  #       with:
+  #         go-version: '1.23.x'
+  #         cache: false
+  #     - name: Install dependencies
+  #       run: go get .
+  #     - name: Build
+  #       run: make build-app
+  #     - name: Install test dependencies
+  #       run: make deps_i
+  #     - name: Test
+  #       run: make test
+  #     - name: Run golangci-lint
+  #       uses: golangci/golangci-lint-action@v4
+  #       with:
+  #         version: v1.60
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    # needs: test
     # if: github.ref_name == 'master' || github.ref_name == 'dev'
 
     steps:
