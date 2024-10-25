@@ -45,8 +45,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           source: "api"
-          target: "/var/www/puasa-sunnah-api/build/api"
-          overwrite: true
+          target: "/root"
       - name: SCP to Linode instance (Backup)
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -55,8 +54,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           source: "backup"
-          target: "/var/www/puasa-sunnah-api/build/backup"
-          overwrite: true
+          target: "/root"
       - name: Deploy API to Linode
         uses: appleboy/ssh-action@master
         with:
@@ -65,6 +63,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo "Deploying application ..."
+
+            # Delete existing binary
+            sudo rm -R /var/www/puasa-sunnah-api/build/*
+
+            # Move binary
+            sudo mv /root/api /var/www/puasa-sunnah-api/build/
+            sudo mv /root/backup /var/www/puasa-sunnah-api/build/
 
             # Restart the service
             sudo service puasasunnah restart
