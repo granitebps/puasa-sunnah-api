@@ -27,7 +27,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: test
-    # if: github.ref_name == 'master'
+    if: github.ref_name == 'master'
 
     steps:
       - uses: actions/checkout@v4
@@ -63,13 +63,16 @@ jobs:
             echo "Deploying application ..."
 
             # Delete existing binary
+            echo "Delete existing binary"
             sudo rm -R /var/www/puasa-sunnah-api/build/*
 
             # Move binary
+            echo "Move new binary to build folder"
             sudo mv /root/api /var/www/puasa-sunnah-api/build/
             sudo mv /root/backup /var/www/puasa-sunnah-api/build/
 
             # Restart the service
+            echo "Restart Service"
             sudo service puasasunnah restart
 
             echo "Application deployed!"
