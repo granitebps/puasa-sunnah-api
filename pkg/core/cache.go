@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"log"
 
@@ -35,12 +34,13 @@ func SetupCache() *Cache {
 		Database: redisDb,
 	}
 
-	if viper.GetString(constants.APP_ENV) != constants.LOCAL {
-		//#nosec G402 -- Tested TLS version is 1.0
-		redisConfig.TLSConfig = &tls.Config{}
-		//#nosec G402 -- Tested TLS version is 1.0
-		redisStorageConfig.TLSConfig = &tls.Config{}
-	}
+	// Uncomment code below if you are not using local redis
+	// if viper.GetString(constants.APP_ENV) != constants.LOCAL {
+	// 	//#nosec G402 -- Tested TLS version is 1.0
+	// 	redisConfig.TLSConfig = &tls.Config{}
+	// 	//#nosec G402 -- Tested TLS version is 1.0
+	// 	redisStorageConfig.TLSConfig = &tls.Config{}
+	// }
 
 	return &Cache{
 		Redis:        setupRedis(redisConfig),
