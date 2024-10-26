@@ -42,12 +42,18 @@ definitions:
     type: object
   requests.TypeRequest:
     properties:
+      background_color:
+        type: string
       description:
         type: string
       name:
         type: string
+      text_color:
+        type: string
     required:
+    - background_color
     - name
+    - text_color
     type: object
   transformer.CategoryTransformer:
     properties:
@@ -99,6 +105,9 @@ definitions:
     type: object
   transformer.TypeTransformer:
     properties:
+      background_color:
+        example: '#FFFFFF'
+        type: string
       description:
         example: lorem ipsum
         type: string
@@ -107,6 +116,9 @@ definitions:
         type: integer
       name:
         example: lorem ipsum
+        type: string
+      text_color:
+        example: '#FFFFFF'
         type: string
     type: object
   utils.JSONResponse:

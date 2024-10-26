@@ -933,13 +933,21 @@ const docTemplate = `{
         "requests.TypeRequest": {
             "type": "object",
             "required": [
-                "name"
+                "background_color",
+                "name",
+                "text_color"
             ],
             "properties": {
+                "background_color": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "text_color": {
                     "type": "string"
                 }
             }
@@ -1015,6 +1023,10 @@ const docTemplate = `{
         "transformer.TypeTransformer": {
             "type": "object",
             "properties": {
+                "background_color": {
+                    "type": "string",
+                    "example": "#FFFFFF"
+                },
                 "description": {
                     "type": "string",
                     "example": "lorem ipsum"
@@ -1026,6 +1038,10 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "lorem ipsum"
+                },
+                "text_color": {
+                    "type": "string",
+                    "example": "#FFFFFF"
                 }
             }
         },
