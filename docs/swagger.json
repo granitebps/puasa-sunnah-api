@@ -926,13 +926,21 @@
         "requests.TypeRequest": {
             "type": "object",
             "required": [
-                "name"
+                "background_color",
+                "name",
+                "text_color"
             ],
             "properties": {
+                "background_color": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "text_color": {
                     "type": "string"
                 }
             }
@@ -1008,6 +1016,10 @@
         "transformer.TypeTransformer": {
             "type": "object",
             "properties": {
+                "background_color": {
+                    "type": "string",
+                    "example": "#FFFFFF"
+                },
                 "description": {
                     "type": "string",
                     "example": "lorem ipsum"
@@ -1019,6 +1031,10 @@
                 "name": {
                     "type": "string",
                     "example": "lorem ipsum"
+                },
+                "text_color": {
+                    "type": "string",
+                    "example": "#FFFFFF"
                 }
             }
         },

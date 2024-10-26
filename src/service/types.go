@@ -27,9 +27,11 @@ func (s *TypesService) GetAll(ctx context.Context) (res []transformer.TypeTransf
 
 	for _, t := range data {
 		res = append(res, transformer.TypeTransformer{
-			ID:          t.ID,
-			Name:        t.Name,
-			Description: t.Description,
+			ID:              t.ID,
+			Name:            t.Name,
+			Description:     t.Description,
+			BackgroundColor: t.BackgroundColor,
+			TextColor:       t.TextColor,
 		})
 	}
 
