@@ -48,8 +48,10 @@ func (s *FastingService) GetAll(ctx context.Context, req *requests.FastingReques
 				Name: f.Category.Name,
 			},
 			Type: transformer.TypeTransformer{
-				ID:   f.Type.ID,
-				Name: f.Type.Name,
+				ID:              f.Type.ID,
+				Name:            f.Type.Name,
+				BackgroundColor: f.Type.BackgroundColor,
+				TextColor:       f.Type.TextColor,
 			},
 		})
 	}
