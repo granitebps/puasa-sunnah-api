@@ -8,6 +8,12 @@ You can find and compare releases at the GitHub release page.
 
 ## [Unreleased]
 
+## [1.2.2] - 2024-10-27
+
+### Added
+- Add CI/CD for auto deployment
+- Add background color and text color to type
+
 ## [1.2.1] - 2024-10-24
 
 ### Added
@@ -81,6 +87,7 @@ You can find and compare releases at the GitHub release page.
 - Prepare for deployment
 
 [Unreleased]: https://github.com/granitebps/puasa-sunnah-api/compare/main...dev
+[1.2.2]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/granitebps/puasa-sunnah-api/compare/v1.0.0...v1.1.0

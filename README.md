@@ -17,7 +17,7 @@
 - [Fiber](https://gofiber.io)
 
 ## Build Note
-- Version 1.2.1
+- Version 1.2.2
 - Go 1.23
 - Fiber 2.52.5
 
