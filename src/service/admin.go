@@ -144,8 +144,10 @@ func (s *AdminService) DeleteSource(ctx context.Context, id uint) (err error) {
 
 func (s *AdminService) CreateType(ctx context.Context, req *requests.TypeRequest) (trans transformer.TypeTransformer, err error) {
 	types := model.Type{
-		Name:        req.Name,
-		Description: req.Description,
+		Name:            req.Name,
+		Description:     req.Description,
+		BackgroundColor: req.BackgroundColor,
+		TextColor:       req.TextColor,
 	}
 
 	err = s.TypeRepo.Create(ctx, &types)
@@ -157,6 +159,8 @@ func (s *AdminService) CreateType(ctx context.Context, req *requests.TypeRequest
 	trans.ID = types.ID
 	trans.Name = types.Name
 	trans.Description = types.Description
+	trans.BackgroundColor = types.BackgroundColor
+	trans.TextColor = types.TextColor
 
 	return
 }
@@ -170,6 +174,8 @@ func (s *AdminService) UpdateType(ctx context.Context, id uint, req *requests.Ty
 
 	types.Name = req.Name
 	types.Description = req.Description
+	types.BackgroundColor = req.BackgroundColor
+	types.TextColor = req.TextColor
 
 	err = s.TypeRepo.Update(ctx, &types)
 	if err != nil {
@@ -180,6 +186,8 @@ func (s *AdminService) UpdateType(ctx context.Context, id uint, req *requests.Ty
 	trans.ID = types.ID
 	trans.Name = types.Name
 	trans.Description = types.Description
+	trans.BackgroundColor = types.BackgroundColor
+	trans.TextColor = types.TextColor
 
 	return
 }

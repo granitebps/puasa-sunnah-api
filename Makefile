@@ -10,11 +10,15 @@ build-app:
 build-backup:
 	CGO_ENABLED=0 go build -ldflags="-w -s" -o $(BUILD_DIR)/backup cmd/backup.go
 
+build: build-app build-backup
+
 build-app-linux: 
 	GOOS=linux GOARCH=amd64 $(MAKE) build-app
 
 build-backup-linux: 
 	GOOS=linux GOARCH=amd64 $(MAKE) build-backup
+
+build-linux: build-app-linux build-backup-linux
 
 # install development dependencies ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
