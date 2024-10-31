@@ -7,7 +7,7 @@ import (
 	_ "github.com/granitebps/puasa-sunnah-api/docs"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
-	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
+	utilsPkg "github.com/granitebps/puasa-sunnah-api/pkg/utils"
 
 	"github.com/gofiber/contrib/fibernewrelic"
 	"github.com/gofiber/contrib/fibersentry"
@@ -22,6 +22,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/gofiber/fiber/v2/middleware/timeout"
+	"github.com/gofiber/fiber/v2/utils"
 	"github.com/gofiber/swagger"
 )
 
@@ -48,7 +49,7 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 		LimiterMiddleware: limiter.SlidingWindow{},
 		LimitReached: func(c *fiber.Ctx) error {
 			err := merry.New("Too many requests.", merry.WithHTTPCode(fiber.StatusTooManyRequests), merry.WithUserMessage("Too many requests."))
-			return utils.ReturnErrorResponse(c, err, nil)
+			return utilsPkg.ReturnErrorResponse(c, err, nil)
 		},
 	}))
 
@@ -78,5 +79,8 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 		Expiration:   24 * time.Hour, // 24 hour
 		Storage:      c.Cache.RedisStorage,
 		CacheControl: true,
+		KeyGenerator: func(c *fiber.Ctx) string {
+			return utils.CopyString(c.OriginalURL())
+		},
 	}))
 }
