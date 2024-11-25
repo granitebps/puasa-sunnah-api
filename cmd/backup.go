@@ -108,6 +108,7 @@ func sendSqlToS3(fileName string) (err error) {
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String(region),
 		Credentials: credentials.NewStaticCredentials(accessKey, secretKey, ""),
+		Endpoint:    aws.String("https://is3.cloudhost.id"),
 	})
 	if err != nil {
 		err = merry.Wrap(err)
