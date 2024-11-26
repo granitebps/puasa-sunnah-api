@@ -104,11 +104,13 @@ func sendSqlToS3(fileName string) (err error) {
 	bucket := viper.GetString(constants.AWS_BUCKET)
 	accessKey := viper.GetString(constants.AWS_ACCESS_KEY_ID)
 	secretKey := viper.GetString(constants.AWS_SECRET_ACCESS_KEY)
+	url := viper.GetString(constants.AWS_ENDPOINT)
+	appEnv := viper.GetString(constants.APP_ENV)
 
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String(region),
 		Credentials: credentials.NewStaticCredentials(accessKey, secretKey, ""),
-		Endpoint:    aws.String("https://is3.cloudhost.id"),
+		Endpoint:    aws.String(url),
 	})
 	if err != nil {
 		err = merry.Wrap(err)
@@ -138,7 +140,7 @@ func sendSqlToS3(fileName string) (err error) {
 	// This uploads the contents of the buffer to S3
 	_, err = svc.PutObject(&s3.PutObjectInput{
 		Bucket: aws.String(bucket),
-		Key:    aws.String(fileName),
+		Key:    aws.String(fmt.Sprintf("PSN_%s/%s", appEnv, fileName)),
 		Body:   bytes.NewReader(buf.Bytes()),
 	})
 	if err != nil {
