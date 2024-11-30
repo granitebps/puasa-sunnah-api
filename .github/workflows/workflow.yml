@@ -35,6 +35,12 @@ jobs:
         run: |
           CGO_ENABLED=0 go build -ldflags="-w -s" -o api .
           CGO_ENABLED=0 go build -ldflags="-w -s" -o backup cmd/backup.go
+      - name: Fetch .env File from Private Repo
+        env:
+          GIT_AUTH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          # Clone the private repo containing .env files
+          git clone https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/granitebps/env.git env-repo
       - name: SCP to Linode instance (API)
         uses: appleboy/scp-action@master
         with:
@@ -53,6 +59,14 @@ jobs:
           port: 22
           source: "backup"
           target: "/root"
+      - name: Transfer .env File to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: env-repo/puasa-sunnah/*
+          target: /tmp
       - name: Deploy API to Linode
         uses: appleboy/ssh-action@master
         with:
@@ -62,14 +76,26 @@ jobs:
           script: |
             echo "Deploying application ..."
 
+            DEPLOY_DIR="/var/www/puasa-sunnah-api"
+            TMP_ENV_DIR="/tmp/env-repo/puasa-sunnah"
+            ENV_FILE=".prod.env"
+
+            if [ "${{ github.ref_name }}" = "dev" ]; then
+              ENV_FILE=".dev.env"
+            fi
+
             # Delete existing binary
             echo "Delete existing binary"
-            sudo rm -R /var/www/puasa-sunnah-api/build/*
+            sudo rm -R $DEPLOY_DIR/build/*
 
             # Move binary
             echo "Move new binary to build folder"
-            sudo mv /root/api /var/www/puasa-sunnah-api/build/
-            sudo mv /root/backup /var/www/puasa-sunnah-api/build/
+            sudo mv /root/api $DEPLOY_DIR/build/
+            sudo mv /root/backup $DEPLOY_DIR/build/
+
+            # Move the .env file into the deployment directory
+            cp $TMP_ENV_DIR/$ENV_FILE $TMP_ENV_DIR/.env
+            mv -f $TMP_ENV_DIR/.env $DEPLOY_DIR/.env
 
             # Restart the service
             echo "Restart Service"
