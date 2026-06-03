@@ -14,7 +14,7 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/src/route"
 	"github.com/spf13/viper"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 // @title Puasa Sunnah API

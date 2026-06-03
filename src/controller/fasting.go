@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/ansel1/merry"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/requests"
 	"github.com/granitebps/puasa-sunnah-api/src/service"
@@ -31,15 +31,15 @@ func newFastingController(fastingService *service.FastingService) *FastingContro
 // @Success      200  {object}   utils.JSONResponse{data=[]transformer.FastingTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/fastings [get]
-func (c *FastingController) Index(ctx *fiber.Ctx) error {
+func (c *FastingController) Index(ctx fiber.Ctx) error {
 	var f requests.FastingRequest
 
-	if err := ctx.QueryParser(&f); err != nil {
+	if err := ctx.Bind().Query(&f); err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	data, err := c.FastingService.GetAll(ctx.UserContext(), &f)
+	data, err := c.FastingService.GetAll(ctx, &f)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)

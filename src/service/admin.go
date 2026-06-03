@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/ansel1/merry/v2"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/granitebps/puasa-sunnah-api/src/model"
 	"github.com/granitebps/puasa-sunnah-api/src/repository"
 	"github.com/granitebps/puasa-sunnah-api/src/requests"

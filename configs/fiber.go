@@ -9,7 +9,7 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/spf13/viper"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 func FiberConfig() fiber.Config {
@@ -18,7 +18,7 @@ func FiberConfig() fiber.Config {
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
 		ReadTimeout: constants.TIMEOUT,
-		ErrorHandler: func(c *fiber.Ctx, err error) error {
+		ErrorHandler: func(c fiber.Ctx, err error) error {
 			// Status code defaults to 500
 			code := fiber.StatusInternalServerError
 			message := err.Error()

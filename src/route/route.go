@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/ansel1/merry/v2"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/basicauth"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/basicauth"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/controller"
@@ -13,7 +13,7 @@ import (
 )
 
 func SetupRoute(a *fiber.App, c *controller.ControllerStruct) {
-	a.Get("", func(ctx *fiber.Ctx) error {
+	a.Get("", func(ctx fiber.Ctx) error {
 		return utils.ReturnSuccessResponse(ctx, fiber.StatusOK, viper.GetString(constants.APP_NAME), nil)
 	})
 
@@ -43,10 +43,14 @@ func adminRoute(route fiber.Router, c *controller.ControllerStruct) {
 		Users: map[string]string{
 			viper.GetString(constants.ADMIN_USERNAME): viper.GetString(constants.ADMIN_PASSWORD),
 		},
-		Unauthorized: func(c *fiber.Ctx) error {
+		Authorizer: func(user, pass string, ctx fiber.Ctx) bool {
+			username := viper.GetString(constants.ADMIN_USERNAME)
+			password := viper.GetString(constants.ADMIN_PASSWORD)
+			return user == username && pass == password
+		},
+		Unauthorized: func(c fiber.Ctx) error {
 			err := errors.New("Unauthorized")
 			err = merry.Wrap(err, merry.WithHTTPCode(fiber.StatusUnauthorized), merry.WithUserMessage("Unauthorized"))
-
 			return utils.ReturnErrorResponse(c, err, nil)
 		},
 	}))

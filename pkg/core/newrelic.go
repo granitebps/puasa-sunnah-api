@@ -3,7 +3,7 @@ package core
 import (
 	"log"
 
-	"github.com/gofiber/contrib/fibernewrelic"
+	fibernewrelic "github.com/gofiber/contrib/v3/newrelic"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/spf13/viper"

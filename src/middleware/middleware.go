@@ -9,21 +9,22 @@ import (
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
 	utilsPkg "github.com/granitebps/puasa-sunnah-api/pkg/utils"
 
-	"github.com/gofiber/contrib/fibernewrelic"
-	"github.com/gofiber/contrib/fibersentry"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cache"
-	"github.com/gofiber/fiber/v2/middleware/compress"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/etag"
-	"github.com/gofiber/fiber/v2/middleware/helmet"
-	"github.com/gofiber/fiber/v2/middleware/limiter"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/fiber/v2/middleware/requestid"
-	"github.com/gofiber/fiber/v2/middleware/timeout"
-	"github.com/gofiber/fiber/v2/utils"
-	"github.com/gofiber/swagger"
+	fibernewrelic "github.com/gofiber/contrib/v3/newrelic"
+	fibersentry "github.com/gofiber/contrib/v3/sentry"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cache"
+	"github.com/gofiber/fiber/v3/middleware/compress"
+	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/fiber/v3/middleware/etag"
+	"github.com/gofiber/fiber/v3/middleware/helmet"
+	"github.com/gofiber/fiber/v3/middleware/limiter"
+	"github.com/gofiber/fiber/v3/middleware/logger"
+	"github.com/gofiber/fiber/v3/middleware/recover"
+	"github.com/gofiber/fiber/v3/middleware/requestid"
+	"github.com/gofiber/fiber/v3/middleware/timeout"
+	fiberutils "github.com/gofiber/utils/v2"
+
+	swaggo "github.com/gofiber/contrib/v3/swaggo"
 )
 
 func SetupMiddleware(a *fiber.App, c *core.Core) {
@@ -34,8 +35,7 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 	}))
 
 	// Swagger
-	// We need to put swagger middleware in here to prevent collision with security middleware
-	a.Get("/swagger/*", swagger.HandlerDefault)
+	a.Get("/swagger/*", swaggo.HandlerDefault)
 
 	// Another Fiber Middleware
 	a.Use(etag.New())
@@ -47,7 +47,7 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 		Max:               100,
 		Expiration:        1 * time.Second,
 		LimiterMiddleware: limiter.SlidingWindow{},
-		LimitReached: func(c *fiber.Ctx) error {
+		LimitReached: func(c fiber.Ctx) error {
 			err := merry.New("Too many requests.", merry.WithHTTPCode(fiber.StatusTooManyRequests), merry.WithUserMessage("Too many requests."))
 			return utilsPkg.ReturnErrorResponse(c, err, nil)
 		},
@@ -63,24 +63,16 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 		Application: c.Newrelic,
 	}))
 
-	a.Use(
-		timeout.NewWithContext(func(c *fiber.Ctx) error {
-			return c.Next()
-		}, constants.TIMEOUT),
-	)
-
-	// Uncomment these code if you want to implement https://docs.gofiber.io/api/middleware/monitor
-	// a.Get("/metrics", monitor.New(monitor.Config{
-	// 	Title: fmt.Sprintf("%s Monitor", c.AppName),
-	// }))
+	a.Use(timeout.New(func(c fiber.Ctx) error {
+		return c.Next()
+	}, timeout.Config{Timeout: constants.TIMEOUT}))
 
 	// Response Cache
 	a.Use(cache.New(cache.Config{
-		Expiration:   24 * time.Hour, // 24 hour
-		Storage:      c.Cache.RedisStorage,
-		CacheControl: true,
-		KeyGenerator: func(c *fiber.Ctx) string {
-			return utils.CopyString(c.OriginalURL())
+		Expiration: 24 * time.Hour,
+		Storage:    c.Cache.RedisStorage,
+		KeyGenerator: func(c fiber.Ctx) string {
+			return fiberutils.CopyString(c.OriginalURL())
 		},
 	}))
 }

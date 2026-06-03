@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/ansel1/merry"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/service"
 )
@@ -26,8 +26,8 @@ func newCategoryController(categoryService *service.CategoryService) *CategoryCo
 // @Success      200  {object}   utils.JSONResponse{data=[]transformer.CategoryTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/categories [get]
-func (c *CategoryController) Index(ctx *fiber.Ctx) error {
-	data, err := c.CategoryService.GetAll(ctx.UserContext())
+func (c *CategoryController) Index(ctx fiber.Ctx) error {
+	data, err := c.CategoryService.GetAll(ctx)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)

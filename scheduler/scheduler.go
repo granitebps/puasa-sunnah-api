@@ -4,21 +4,25 @@ import (
 	"log"
 	"time"
 
-	"github.com/ansel1/merry/v2"
-	"github.com/go-co-op/gocron"
+	"github.com/go-co-op/gocron/v2"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
 )
 
 func SetupScheduler(c *core.Core) {
 	lc, _ := time.LoadLocation("Asia/Jakarta")
 
-	s := gocron.NewScheduler(lc)
-
-	_, err := s.Every(1).Minutes().Do(SendHealthCheckSignal, c)
+	s, err := gocron.NewScheduler(gocron.WithLocation(lc))
 	if err != nil {
-		err = merry.Wrap(err)
 		log.Panic(err)
 	}
 
-	s.StartAsync()
+	_, err = s.NewJob(
+		gocron.DurationJob(1*time.Minute),
+		gocron.NewTask(SendHealthCheckSignal, c),
+	)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	s.Start()
 }

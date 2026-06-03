@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/ansel1/merry/v2"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/granitebps/puasa-sunnah-api/pkg/core"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/requests"
@@ -34,7 +34,7 @@ func newAdminController(c *core.Core, adminService *service.AdminService) *Admin
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/admin/categories [post]
 // @Security BasicAuth
-func (c *AdminController) CreateCategory(ctx *fiber.Ctx) error {
+func (c *AdminController) CreateCategory(ctx fiber.Ctx) error {
 	var req requests.CategoryRequest
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
 	if err != nil {
@@ -42,7 +42,7 @@ func (c *AdminController) CreateCategory(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, errorField)
 	}
 
-	data, err := c.AdminService.CreateCategory(ctx.UserContext(), &req)
+	data, err := c.AdminService.CreateCategory(ctx, &req)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -63,7 +63,7 @@ func (c *AdminController) CreateCategory(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/categories/:id [put]
 // @Security 		BasicAuth
-func (c *AdminController) UpdateCategory(ctx *fiber.Ctx) error {
+func (c *AdminController) UpdateCategory(ctx fiber.Ctx) error {
 	var req requests.CategoryRequest
 
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
@@ -79,7 +79,7 @@ func (c *AdminController) UpdateCategory(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	data, err := c.AdminService.UpdateCategory(ctx.UserContext(), uint(id), &req)
+	data, err := c.AdminService.UpdateCategory(ctx, uint(id), &req)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -99,7 +99,7 @@ func (c *AdminController) UpdateCategory(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/categories/:id [delete]
 // @Security 		BasicAuth
-func (c *AdminController) DeleteCategory(ctx *fiber.Ctx) error {
+func (c *AdminController) DeleteCategory(ctx fiber.Ctx) error {
 	idString := ctx.Params("id")
 	id, err := strconv.Atoi(idString)
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *AdminController) DeleteCategory(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	err = c.AdminService.DeleteCategory(ctx.UserContext(), uint(id))
+	err = c.AdminService.DeleteCategory(ctx, uint(id))
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -127,7 +127,7 @@ func (c *AdminController) DeleteCategory(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/sources [post]
 // @Security 		BasicAuth
-func (c *AdminController) CreateSource(ctx *fiber.Ctx) error {
+func (c *AdminController) CreateSource(ctx fiber.Ctx) error {
 	var req requests.SourceRequest
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
 	if err != nil {
@@ -135,7 +135,7 @@ func (c *AdminController) CreateSource(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, errorField)
 	}
 
-	data, err := c.AdminService.CreateSource(ctx.UserContext(), &req)
+	data, err := c.AdminService.CreateSource(ctx, &req)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -156,7 +156,7 @@ func (c *AdminController) CreateSource(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/sources/:id [put]
 // @Security 		BasicAuth
-func (c *AdminController) UpdateSource(ctx *fiber.Ctx) error {
+func (c *AdminController) UpdateSource(ctx fiber.Ctx) error {
 	var req requests.SourceRequest
 
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
@@ -172,7 +172,7 @@ func (c *AdminController) UpdateSource(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	data, err := c.AdminService.UpdateSource(ctx.UserContext(), uint(id), &req)
+	data, err := c.AdminService.UpdateSource(ctx, uint(id), &req)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -192,7 +192,7 @@ func (c *AdminController) UpdateSource(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/sources/:id [delete]
 // @Security 		BasicAuth
-func (c *AdminController) DeleteSource(ctx *fiber.Ctx) error {
+func (c *AdminController) DeleteSource(ctx fiber.Ctx) error {
 	idString := ctx.Params("id")
 	id, err := strconv.Atoi(idString)
 	if err != nil {
@@ -200,7 +200,7 @@ func (c *AdminController) DeleteSource(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	err = c.AdminService.DeleteSource(ctx.UserContext(), uint(id))
+	err = c.AdminService.DeleteSource(ctx, uint(id))
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -220,7 +220,7 @@ func (c *AdminController) DeleteSource(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/types [post]
 // @Security 		BasicAuth
-func (c *AdminController) CreateType(ctx *fiber.Ctx) error {
+func (c *AdminController) CreateType(ctx fiber.Ctx) error {
 	var req requests.TypeRequest
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
 	if err != nil {
@@ -228,7 +228,7 @@ func (c *AdminController) CreateType(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, errorField)
 	}
 
-	data, err := c.AdminService.CreateType(ctx.UserContext(), &req)
+	data, err := c.AdminService.CreateType(ctx, &req)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -249,7 +249,7 @@ func (c *AdminController) CreateType(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/types/:id [put]
 // @Security 		BasicAuth
-func (c *AdminController) UpdateType(ctx *fiber.Ctx) error {
+func (c *AdminController) UpdateType(ctx fiber.Ctx) error {
 	var req requests.TypeRequest
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
 	if err != nil {
@@ -264,7 +264,7 @@ func (c *AdminController) UpdateType(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	data, err := c.AdminService.UpdateType(ctx.UserContext(), uint(id), &req)
+	data, err := c.AdminService.UpdateType(ctx, uint(id), &req)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -284,7 +284,7 @@ func (c *AdminController) UpdateType(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/types/:id [delete]
 // @Security 		BasicAuth
-func (c *AdminController) DeleteType(ctx *fiber.Ctx) error {
+func (c *AdminController) DeleteType(ctx fiber.Ctx) error {
 	idString := ctx.Params("id")
 	id, err := strconv.Atoi(idString)
 	if err != nil {
@@ -292,7 +292,7 @@ func (c *AdminController) DeleteType(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	err = c.AdminService.DeleteType(ctx.UserContext(), uint(id))
+	err = c.AdminService.DeleteType(ctx, uint(id))
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -312,7 +312,7 @@ func (c *AdminController) DeleteType(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/fastings [post]
 // @Security 		BasicAuth
-func (c *AdminController) CreateFasting(ctx *fiber.Ctx) error {
+func (c *AdminController) CreateFasting(ctx fiber.Ctx) error {
 	var req requests.FastingCreateUpdateRequest
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
 	if err != nil {
@@ -320,7 +320,7 @@ func (c *AdminController) CreateFasting(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, errorField)
 	}
 
-	data, err := c.AdminService.CreateFasting(ctx.UserContext(), &req)
+	data, err := c.AdminService.CreateFasting(ctx, &req)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -341,7 +341,7 @@ func (c *AdminController) CreateFasting(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/fastings/:id [put]
 // @Security 		BasicAuth
-func (c *AdminController) UpdateFasting(ctx *fiber.Ctx) error {
+func (c *AdminController) UpdateFasting(ctx fiber.Ctx) error {
 	var req requests.FastingCreateUpdateRequest
 	errorField, err := c.Core.Validator.Validate(ctx, &req)
 	if err != nil {
@@ -356,7 +356,7 @@ func (c *AdminController) UpdateFasting(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	data, err := c.AdminService.UpdateFasting(ctx.UserContext(), &req, uint(id))
+	data, err := c.AdminService.UpdateFasting(ctx, &req, uint(id))
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
@@ -376,7 +376,7 @@ func (c *AdminController) UpdateFasting(ctx *fiber.Ctx) error {
 // @Failure      	400  {object}  utils.JSONResponse
 // @Router       	/api/v1/admin/fastings/:id [delete]
 // @Security 		BasicAuth
-func (c *AdminController) DeleteFasting(ctx *fiber.Ctx) error {
+func (c *AdminController) DeleteFasting(ctx fiber.Ctx) error {
 	idString := ctx.Params("id")
 	id, err := strconv.Atoi(idString)
 	if err != nil {
@@ -384,7 +384,7 @@ func (c *AdminController) DeleteFasting(ctx *fiber.Ctx) error {
 		return utils.ReturnErrorResponse(ctx, err, nil)
 	}
 
-	err = c.AdminService.DeleteFasting(ctx.UserContext(), uint(id))
+	err = c.AdminService.DeleteFasting(ctx, uint(id))
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)

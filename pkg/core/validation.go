@@ -10,7 +10,7 @@ import (
 
 	"github.com/ansel1/merry/v2"
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 )
 
@@ -38,8 +38,8 @@ func SetupValidator() *AppValidator {
 	}
 }
 
-func (v *AppValidator) Validate(c *fiber.Ctx, payload any) (fields []ErrorField, err error) {
-	err = c.BodyParser(payload)
+func (v *AppValidator) Validate(c fiber.Ctx, payload any) (fields []ErrorField, err error) {
+	err = c.Bind().Body(payload)
 	if err != nil {
 		err = merry.Wrap(err)
 		return

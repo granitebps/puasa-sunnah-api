@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/ansel1/merry"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/service"
 )
@@ -26,8 +26,8 @@ func newSourceController(sourceService *service.SourceService) *SourceController
 // @Success      200  {object}   utils.JSONResponse{data=[]transformer.SourceTransformer} "desc"
 // @Failure      400  {object}  utils.JSONResponse
 // @Router       /api/v1/sources [get]
-func (c *SourceController) Index(ctx *fiber.Ctx) error {
-	data, err := c.SourceService.GetAll(ctx.UserContext())
+func (c *SourceController) Index(ctx fiber.Ctx) error {
+	data, err := c.SourceService.GetAll(ctx)
 	if err != nil {
 		err = merry.Wrap(err)
 		return utils.ReturnErrorResponse(ctx, err, nil)
