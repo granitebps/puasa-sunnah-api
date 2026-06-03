@@ -73,7 +73,8 @@ func createLogWriter() *os.File {
 
 func createLogFolder(logFolder string) {
 	if _, err := os.Stat(logFolder); errors.Is(err, os.ErrNotExist) {
-		err := os.MkdirAll(logFolder, 0640)
+		//#nosec G301 -- Directory needs execute bit to be traversable
+		err := os.MkdirAll(logFolder, 0o755)
 		if err != nil {
 			log.Panic(err)
 		}
