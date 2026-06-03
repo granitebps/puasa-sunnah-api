@@ -19,7 +19,7 @@ import (
 	"github.com/getsentry/sentry-go"
 	appconfig "github.com/granitebps/puasa-sunnah-api/configs"
 	"github.com/granitebps/puasa-sunnah-api/pkg/constants"
-	"github.com/mailgun/mailgun-go/v4"
+	"github.com/resend/resend-go/v3"
 	"github.com/spf13/viper"
 )
 
@@ -162,24 +162,22 @@ func sendSqlToS3(fileName string) (err error) {
 }
 
 func sendEmailNotification(fileName string) (err error) {
-	secret := viper.GetString(constants.MAILGUN_SECRET)
-	domain := viper.GetString(constants.MAILGUN_DOMAIN)
+	apiKey := viper.GetString(constants.RESEND_API_KEY)
+	from := viper.GetString(constants.RESEND_FROM)
+	to := viper.GetString(constants.RESEND_TO)
 	appName := viper.GetString(constants.APP_NAME)
 	appEnv := viper.GetString(constants.APP_ENV)
 
-	mg := mailgun.NewMailgun(domain, secret)
+	client := resend.NewClient(apiKey)
 
-	sender := "info@granitebps.com"
-	subject := fmt.Sprintf("Successful new backup of %s (%s)", appName, appEnv)
-	body := fmt.Sprintf("Hello! Great news, a new backup of %s (%s) was successfully created with filename %s!", appName, appEnv, fileName)
-	recipient := "granitebagas28@gmail.com"
+	params := &resend.SendEmailRequest{
+		From:    from,
+		To:      []string{to},
+		Subject: fmt.Sprintf("Successful new backup of %s (%s)", appName, appEnv),
+		Html:    fmt.Sprintf("<p>Hello! Great news, a new backup of <strong>%s</strong> (%s) was successfully created with filename <code>%s</code>!</p>", appName, appEnv, fileName),
+	}
 
-	message := mg.NewMessage(sender, subject, body, recipient)
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-	defer cancel()
-
-	_, _, err = mg.Send(ctx, message)
+	_, err = client.Emails.Send(params)
 	if err != nil {
 		err = merry.Wrap(err)
 		log.Println("Error sending email:", err)
