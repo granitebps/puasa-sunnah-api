@@ -16,13 +16,5 @@ func SetupScheduler(c *core.Core) {
 		log.Panic(err)
 	}
 
-	_, err = s.NewJob(
-		gocron.DurationJob(1*time.Minute),
-		gocron.NewTask(SendHealthCheckSignal, c),
-	)
-	if err != nil {
-		log.Panic(err)
-	}
-
 	s.Start()
 }
