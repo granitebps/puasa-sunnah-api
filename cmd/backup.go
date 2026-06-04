@@ -98,30 +98,30 @@ func sendSqlToS3(fileName string) (err error) {
 	accessKey := viper.GetString(constants.AWS_ACCESS_KEY_ID)
 	secretKey := viper.GetString(constants.AWS_SECRET_ACCESS_KEY)
 	endpoint := viper.GetString(constants.AWS_ENDPOINT)
+	usePathStyle := viper.GetBool(constants.AWS_USE_PATH_STYLE)
 	appEnv := viper.GetString(constants.APP_ENV)
 
 	ctx := context.Background()
 
-	optFns := []func(*config.LoadOptions) error{
+	cfg, err := config.LoadDefaultConfig(ctx,
 		config.WithRegion(region),
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(accessKey, secretKey, "")),
-	}
-
-	cfg, err := config.LoadDefaultConfig(ctx, optFns...)
+	)
 	if err != nil {
 		err = merry.Wrap(err)
 		log.Println("Error creating config:", err)
 		return
 	}
 
-	clientOptFns := []func(*s3.Options){}
-	if endpoint != "" {
-		clientOptFns = append(clientOptFns, func(o *s3.Options) {
+	svc := s3.NewFromConfig(cfg, func(o *s3.Options) {
+		if endpoint != "" {
 			o.BaseEndpoint = aws.String(endpoint)
-		})
-	}
-
-	svc := s3.NewFromConfig(cfg, clientOptFns...)
+		}
+		o.UsePathStyle = usePathStyle
+		// Required for S3-compatible providers that don't support signed payload checksums
+		o.RequestChecksumCalculation = aws.RequestChecksumCalculationWhenRequired
+		o.ResponseChecksumValidation = aws.ResponseChecksumValidationWhenRequired
+	})
 
 	file, err := os.Open(filepath.Clean(fileName))
 	if err != nil {
