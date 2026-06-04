@@ -1,74 +1,82 @@
 pipeline {
     agent any
 
-    tools {
-        // Specify the desired Go version defined in the Global Tool Configuration
-        go '1.21'
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Branch to deploy')
     }
 
     environment {
-        GOPATH = "${WORKSPACE}/go"
-        PATH = "${GOPATH}/bin:${PATH}"
-        CGO_ENABLED = 0  // Disable CGO for static binary
-    }
-
-    options {
-        // Skip checkout for existing changes to speed up the build
-        skipDefaultCheckout true
+        APP_PATH    = '/var/www/puasa-sunnah-api'
+        TMP_ENV_DIR = "/tmp/puasa-sunnah-api-env-${env.BUILD_NUMBER}"
+        // Ensure jenkins uses its own SSH key for all git operations
+        GIT_SSH_COMMAND = 'ssh -i /var/lib/jenkins/.ssh/id_ed25519 -o StrictHostKeyChecking=no'
     }
 
     stages {
-        stage('Checkout') {
+
+        stage('Fetch Environment File') {
             steps {
-                // Checkout the source code from your version control system (e.g., Git)
-                checkout scm
+                sh '''
+                    mkdir -p ${TMP_ENV_DIR}
+                    git clone --depth=1 git@github.com:granitebps/env.git ${TMP_ENV_DIR}
+                '''
             }
         }
 
-        stage('Dependencies') {
+        stage('Pull') {
             steps {
-                // Fetch dependencies using a vendoring tool like Go Modules
-                sh 'go mod download'
+                sh """
+                    cd ${APP_PATH}
+                    git fetch origin ${params.BRANCH}
+                    git reset --hard origin/${params.BRANCH}
+                """
             }
         }
 
-        /*
-        // Commenting out the build step for now
         stage('Build') {
             steps {
-                // Set up Go environment
-                script {
-                    sh 'mkdir -p ${GOPATH}/src'
-                    sh 'ln -s ${WORKSPACE} ${GOPATH}/src/puasa-sunnah-api'
-                }
-
-                // Build the Golang application with optimizations and set the output filename
-                sh 'go build -o puasa-sunnah-api -ldflags="-s -w" ./...'
+                sh """
+                    cd ${APP_PATH}
+                    make build
+                """
             }
         }
-        */
 
-        stage('Test') {
+        stage('Deploy') {
             steps {
-                // Run tests
-                sh 'go test ./...'
+                sh """
+                    # Update .env from private env repo
+                    cp ${TMP_ENV_DIR}/puasa-sunnah-api/.prod.env ${APP_PATH}/.env
+
+                    # Restart service
+                    sudo systemctl restart puasa-sunnah-api
+                """
             }
         }
     }
 
     post {
-        success {
-            // Notify success and trigger other downstream jobs or processes
-            emailext body: "Build successful! Version ${env.BUILD_NUMBER}",
-                     subject: "Success: Build ${env.BUILD_NUMBER}",
-                     to: "granitebagas28@gmail.com"
-        }
+        always {
+            sh 'rm -rf ${TMP_ENV_DIR}'
+            cleanWs()
 
-        failure {
-            // Notify failure and take appropriate actions
-            emailext body: "Build failed for version ${env.BUILD_NUMBER}",
-                     subject: "Failure: Build ${env.BUILD_NUMBER}",
-                     to: "granitebagas28@gmail.com"
+            script {
+                def mins     = (currentBuild.duration / 60000) as int
+                def secs     = ((currentBuild.duration % 60000) / 1000) as int
+                def duration = String.format('%02d:%02d', mins, secs)
+
+                emailext(
+                    to: 'granitebagas28@gmail.com',
+                    subject: "Jenkins ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                        <p><b>Status:</b> ${currentBuild.currentResult}</p>
+                        <p><b>Branch:</b> ${params.BRANCH}</p>
+                        <p><b>Build:</b> <a href="${env.BUILD_URL}">${currentBuild.fullDisplayName}</a></p>
+                        <p><b>Duration:</b> ${duration} (mm:ss)</p>
+                    """,
+                    mimeType: 'text/html'
+                )
+            }
         }
     }
 }
