@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/ansel1/merry"
+	"github.com/ansel1/merry/v2"
 	"github.com/gofiber/fiber/v3"
 	"github.com/granitebps/puasa-sunnah-api/pkg/utils"
 	"github.com/granitebps/puasa-sunnah-api/src/service"
