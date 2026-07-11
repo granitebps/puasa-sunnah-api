@@ -27,6 +27,30 @@ import (
 	swaggo "github.com/gofiber/contrib/v3/swaggo"
 )
 
+const (
+	apiClientHeader          = "X-API-Client"
+	officialAPIClient        = "official-app"
+	requestSourceAttribute   = "request_source"
+	requestSourceOfficialApp = "official_app"
+	requestSourcePublic      = "public"
+)
+
+func classifyRequestSource(apiClient string) string {
+	if apiClient == officialAPIClient {
+		return requestSourceOfficialApp
+	}
+
+	return requestSourcePublic
+}
+
+func addRequestSourceAttribute(c fiber.Ctx) error {
+	if txn := fibernewrelic.FromContext(c); txn != nil {
+		txn.AddAttribute(requestSourceAttribute, classifyRequestSource(c.Get(apiClientHeader)))
+	}
+
+	return c.Next()
+}
+
 func SetupMiddleware(a *fiber.App, c *core.Core) {
 	// Fiber Middleware
 	a.Use(logger.New())
@@ -62,6 +86,7 @@ func SetupMiddleware(a *fiber.App, c *core.Core) {
 	a.Use(fibernewrelic.New(fibernewrelic.Config{
 		Application: c.Newrelic,
 	}))
+	a.Use(addRequestSourceAttribute)
 
 	a.Use(timeout.New(func(c fiber.Ctx) error {
 		return c.Next()
